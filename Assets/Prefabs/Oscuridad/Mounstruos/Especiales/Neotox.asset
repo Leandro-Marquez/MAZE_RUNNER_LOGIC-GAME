@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 108e8794aca6d084db806d371863e4c3, type: 3}
+  m_Name: Neotox
+  m_EditorClassIdentifier: 
+  Name: Neotox
+  Power: 0
+  CardPhoto: {fileID: 21300000, guid: 8de5e5f734104ec4ba325491ef095fee, type: 3}
+  Owner: 0
+  Type: 5
+  Faction: 1
+  Range: 
+  EffectType: 2
+  OnActivation: 
