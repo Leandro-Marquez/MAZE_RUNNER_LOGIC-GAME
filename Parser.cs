@@ -1,9 +1,26 @@
+using System.Collections.Generic;
+
 public class Parser
 {
     private List<Token> tokens; // lista de tokens a analizar 
     int position;
     private Token CurrentToken => position < tokens.Count ? tokens[position] : null!;
     private Context context = new Context();
+    public static readonly Dictionary<string,(int procedencia,bool associaDerecha)> Operadores = new Dictionary<string,(int , bool associaDerecha)>{
+    {"+",(4,false)},
+    {"-",(4,false)},
+    {"*",(5,false)},
+    {"/",(5,false)},
+    {"&&",(1,false)},
+    {"||",(2,false)},
+    {"==",(3,false)},
+    {"!=",(3,false)},
+    {"<=",(3,false)},
+    {">=",(3,false)},
+    {">",(3,false)},
+    {"<",(3,false)},
+    {"!",(1,true)},
+    };
     public Parser(List<Token> tokens)
     {
         this.tokens = tokens;
@@ -42,7 +59,7 @@ public class Parser
     {
         Expect("PalabrasReservadas"); //effect
         Expect("Delimitadores"); //{
-
+        // crear el nodo de efecto 
         EffectNode effect = new EffectNode();
         Context effectContext = new Context();
 
@@ -72,7 +89,6 @@ public class Parser
                 // effectContext.DefineVariable(paramsName,paramsType);
                 context.DefineVariable(paramsName,paramsType);
 
-
                 if(CurrentToken.TokenType == "Coma") Expect("Coma"); 
             }
             Expect("Delimitadores");
@@ -88,14 +104,298 @@ public class Parser
         Expect("Delimitadores"); // se acaba el metodo
         Expect("OperadorLanda"); // =>
         Expect("Delimitadores"); // { empieza el cuerpo del metodo
-        ParseAction();
-        Expect("Delimitadores"); // se acaba el cuerpo de efecto
+        // parsear el cuerpo del action
+        while(CurrentToken.TokenValue != "}")
+        {
+            effect.Action.Hijos = ParseAction(effectContext);
+        }
 
         return effect;
     }
-    void ParseAction()
+    private List<ASTNode> ParseAction(Context effectcontext)
     {
+        List<ASTNode> aSTNodes = new List<ASTNode>();
+
+        while(CurrentToken.TokenValue != "}")
+        {
+            if(CurrentToken.TokenValue == "for")
+            {
+                aSTNodes.Add(ParseFor(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "while")
+            {
+                aSTNodes.Add(ParseWhile(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "if")
+            {
+                aSTNodes.Add(ParseIf(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "Identificadores" && PeekNexToken().TokenValue == ".")
+            {
+                aSTNodes.Add(ParseMemberAccess(effectcontext));
+            }
+            else if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenType == "OperadoresDeAsignacion")
+            {
+                aSTNodes.Add(ParseAssignment(null , effectcontext));
+            }
+            else throw new Exception("Current expression is not valid in the current context");
+        }
         Expect("Delimitadores");
+        return aSTNodes;
+    }
+    private AssignmentNode ParseAssignment(List<string> accessChain , Context effectontext)
+    {
+        AssignmentNode assignmentNode = new AssignmentNode();
+        // asignar el nombre de la variable 
+        string variableName = CurrentToken.TokenValue;
+        assignmentNode.VariableName = CurrentToken.TokenValue;
+        Expect("Identificadores");
+        assignmentNode.Operator = CurrentToken.TokenValue;
+        Expect("OperadoresDeAsignacion");
+
+        if(PeekNexToken().TokenValue == ".")
+        {
+            var valueExpression = ParseMemberAccess(effectontext);
+            assignmentNode.ValueExpression = valueExpression;
+            assignmentNode.CadenaDeAcceso = accessChain;
+            return assignmentNode;
+        }
+        else
+        {
+            var valueExpression = ParseExpressions(ExpressionsTokens(),false,effectontext);
+            Expect("PuntoComa");
+            AssignmentNode assignmentNode1 = new AssignmentNode{ValueExpression = valueExpression , CadenaDeAcceso = accessChain};
+            if (effectontext.Variables.ContainsKey(variableName))
+            {
+                effectontext.SetVariable(variableName, valueExpression);
+            }
+            else
+            {
+                effectontext.DefineVariable(variableName, valueExpression);
+            }
+            return assignmentNode;
+        }
+
+    }
+    private ASTNode ParseMemberAccess(Context context)
+    {
+        string objectName = CurrentToken.TokenValue;
+        List<string> accessChain = new List<string>{objectName};
+        
+        // procesar los accesos anidados 
+        while(PeekNexToken().TokenValue != ";")
+        {
+            Expect("Identificadores");
+            Expect("Punto");
+            string accessMember = CurrentToken.TokenValue;
+            accessChain.Add(accessMember);
+            
+        }
+        bool is_property = false;
+        
+        List<ExpressionNode> expressions = new List<ExpressionNode>();
+        if(PeekNexToken().TokenValue == ";")
+        {
+            is_property = true;
+            Expect("Identificadores");
+            Expect("PuntoComa");
+        }
+        else if(PeekNexToken().TokenValue == "(")
+        {
+            is_property = false;
+            Expect("Identificadores");
+            Expect("Delimitadores");
+            expressions = ParseArguments();
+            Expect("Delimitadores");
+            Expect("PuntoComa");
+        }
+        else if(PeekNexToken().TokenType == "OperadoresDeAsignacion")
+        {
+            var assignmentNode = ParseAssignment(accessChain,context);
+            return assignmentNode;
+        }
+        return new MemberAccessNode{AccessChain = accessChain, Arguments = expressions , IsProperty = is_property};
+        
+    }
+    private List<ExpressionNode> ParseArguments()
+    {
+        List<ExpressionNode> expressions = new List<ExpressionNode>();
+
+        while(CurrentToken.TokenValue != ")")
+        {
+            if(CurrentToken.TokenType == "PatronDeNumero")
+            {
+                // agregar a la lista un nodo de numero
+                expressions.Add(new NumberNode{Value = int.Parse(CurrentToken.TokenValue)});
+                NextToken(); // avanzar en tokens
+            }
+            else if(CurrentToken.TokenType == "Booleano")
+            {
+                // agregar a la lista un nodo de booleano
+                expressions.Add(new BooleanNode{Value = bool.Parse(CurrentToken.TokenValue)});
+                NextToken();
+            }
+            else if(CurrentToken.TokenType == "Delimitadores")
+            {
+                NextToken();
+            }
+            else if(CurrentToken.TokenType == "Identificadores")
+            {
+                //agregar a la lista un nodo de referencia a variable
+                expressions.Add(new VariableReferenceNode{Name = CurrentToken.TokenValue});
+                NextToken();
+            }
+            else throw new Exception("Not implemented exception");
+        }
+        return expressions;
+    }
+    //arreglarrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+    // private ASTNode ParseFor(Context effectcontext)
+    // {
+    //     ForNode forNode = new ForNode();
+
+    //     Expect("PalabrasReservadas"); // for
+    //     Expect("Delimitadores"); // (
+    //     // asignar la variable del for
+    //     forNode.Item = CurrentToken.TokenValue;
+    //     Expect("Identificadores"); // target // item u algo asi
+    //     Expect("PalabrasReservadas"); //in 
+
+    //     forNode.Collection = new VariableReferenceNode {Name = CurrentToken.TokenValue};
+    //     Expect("Identificadores"); //targets
+    //     Expect("Delimitadores");// )
+    //     Expect("Delimitadores"); //{
+    //     //parsear el cuerpo del for
+    //     while(CurrentToken.TokenValue != "}")
+    //     {
+    //         if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenType == "OperadoresDeAsignacion")
+    //         {
+    //             forNode.Body.Add(ParseAsignaciones(effectcontext));
+    //         }
+    //         else if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenValue == ".")
+    //         {
+    //             forNode.Body.Add(ParseLLamadas(effectcontext));
+    //         }
+    //         else if(CurrentToken.TokenValue == "for")
+    //         {
+    //             forNode.Body.Add(ParseFor(effectcontext));
+    //         }
+    //         else if(CurrentToken.TokenValue == "while")
+    //         {
+    //             forNode.Body.Add(ParseWhile(effectcontext));
+    //         }
+    //         else if(CurrentToken.TokenValue == "if")
+    //         {
+    //             forNode.Body.Add(ParseIf(effectcontext));
+    //         }
+    //         else throw new Exception($"{CurrentToken.TokenValue} is not implemented");
+    //     }
+    //     Expect("Delimitadores"); // } se cierra el cuerpo del ciclo
+    //     return forNode;
+    // }
+    // private IfNode ParseIf(Context effectcontext)
+    // {
+    //     IfNode ifNode = new IfNode();
+        
+    //     Expect("PalabrasReservadas"); //if
+    //     Expect("Delimitadores"); //comienza el cuerpo de la condicional 
+    //     ifNode.Condition = ParseExpressions(ExpressionsTokens(),true,effectcontext);
+    //     Expect("Delimitadores");//
+    //     while(CurrentToken.TokenValue != ")")
+    //     {
+
+    //     }
+
+
+    //     return ifNode;
+    // }
+ 
+    public ExpressionNode ParseExpressions(List<Token> analizar , bool isCondition, Context currentcontext)
+    {
+        List<Token> PostFijo = ConvertPostFijo(analizar);
+        var astnodes = ParsePostFijo(PostFijo,currentcontext);
+
+        return astnodes;
+    }
+    public ExpressionNode ParsePostFijo(List<Token> PostFijo , Context currentcontext)
+    {
+        Stack<ExpressionNode> expressionNode = new Stack<ExpressionNode>();
+        foreach (var item in PostFijo)
+        {
+            if(item.TokenValue == "PatronDeNumero")
+            {
+                expressionNode.Push(new NumberNode{Value = int.Parse(item.TokenValue)});
+            }
+            else if(item.TokenValue == "Booleano")
+            {
+                expressionNode.Push(new BooleanNode{ Value = bool.Parse(item.TokenValue)});
+            }
+            else if(item.TokenValue == "Identificadores")
+            {
+                if(currentcontext.Variables.ContainsKey(item.TokenValue))
+                {
+                    var valuenow = currentcontext.GetVariable(item.TokenValue);
+                    expressionNode.Push(new VariableReferenceNode{Name = item.TokenValue , Value = valuenow});
+                }
+                else throw new Exception ("There is not an instance of current variable");
+            }
+            else if(Operadores.ContainsKey(item.TokenValue))
+            {
+                var right = expressionNode.Pop();
+                var left = expressionNode.Pop();
+                expressionNode.Push(new BinaryOperationNode {MiembroIzq = left , MiembroDer = right , Operator = CurrentToken.TokenValue}); 
+            }
+        }
+        return expressionNode.Pop();
+    }
+    public List<Token> ExpressionsTokens()
+    {
+        List<Token> retornar = new List<Token>();
+        while(CurrentToken.TokenValue != ";" && CurrentToken.TokenValue != ")" && CurrentToken.TokenValue != "}" )
+        {
+            retornar.Add(CurrentToken);
+            NextToken();
+        }
+        return retornar;
+    }
+    public List<Token> ConvertPostFijo(List<Token> convertir)
+    {
+        List<Token> retorn = new List<Token>();
+        Stack<Token> tokens = new Stack<Token>();
+        foreach(var item in convertir)
+        {
+            if(item.TokenValue == "PatronDeNumero" || item.TokenValue == "Identificadores" || item.TokenValue == "Booleano")
+            {
+                retorn.Add(item);
+            }
+            else if(Operadores.ContainsKey(item.TokenValue))
+            {
+                while(tokens.Any() && Operadores.ContainsKey(tokens.Peek().TokenValue) && ((Operadores[item.TokenValue].associaDerecha && Operadores[item.TokenValue].procedencia 
+                < Operadores[tokens.Peek().TokenValue].procedencia) 
+                || ((!Operadores[item.TokenValue].associaDerecha && Operadores[item.TokenValue].procedencia <= Operadores[tokens.Peek().TokenValue].procedencia)) ))
+                {
+                    retorn.Add(tokens.Pop());
+                }
+                tokens.Push(item);
+            }
+            else if(item.TokenValue == "(")
+            {
+                tokens.Push(item);
+            }
+            else if(item.TokenValue == ")" )
+            {
+                while(tokens.Peek().TokenValue != "(")
+                {
+                    retorn.Add(tokens.Pop());
+                }
+                tokens.Pop();
+            } 
+        }
+        while(tokens.Any())
+        {
+            retorn.Add(tokens.Pop());
+        }
+        return retorn;
     }
     public CardNode Cards_Parse()
     {
@@ -205,23 +505,20 @@ public class Parser
             }
             else if(CurrentToken.TokenValue == "Selector")
             {
-                SelectorNode selectorNode = new SelectorNode();
-                PredicateNode predicateNode = new PredicateNode();
-
                 Expect("Identificadores");
                 Expect("OperadoresDeAsignacion");
                 Expect("Delimitadores");
                 //Source
                 Expect("Identificadores");
                 Expect("OperadoresDeAsignacion");
-                selectorNode.Source = CurrentToken.TokenValue;
+                onActivationNode.selector.Source = CurrentToken.TokenValue;
                 Expect("Identificadorestring");
                 Expect("Coma");
                 //Single
                 Expect("Identificadores");
                 Expect("OperadoresDeAsignacion");
-                if(CurrentToken.TokenValue == "true") selectorNode.Single = true;
-                else if(CurrentToken.TokenValue == "false") selectorNode.Single = false;
+                if(CurrentToken.TokenValue == "true") onActivationNode.selector.Single = true;
+                else if(CurrentToken.TokenValue == "false") onActivationNode.selector.Single = false;
                 Expect("Booleano");
                 Expect("Coma");
                 //Predicate
@@ -239,19 +536,17 @@ public class Parser
                 Expect("Punto");
                 mIzq += CurrentToken.TokenValue;
                 // actualizar Miembro Izquierdo
-                predicateNode.MiembroIzq = mIzq;
-                System.Console.WriteLine(predicateNode.MiembroIzq);
+                onActivationNode.selector.Predicate.MiembroIzq = mIzq;
                 Expect("Identificadores");
                 operador = CurrentToken.TokenValue;
-                predicateNode.Operador = operador;
+                onActivationNode.selector.Predicate.Operador = operador;
                 Expect("OperadoresDeComparacion");
                 Object mDer = CurrentToken.TokenValue;
-                predicateNode.MiembroDer = mDer;
+                onActivationNode.selector.Predicate.MiembroDer = mDer;
                 if(CurrentToken.TokenType == "PatronDeNumero") Expect("PatronDeNumero");
                 else if(CurrentToken.TokenType == "Booleano") Expect("Booleano");
                 else if(CurrentToken.TokenType == "Identificadorestring") Expect("Identificadorestring");
                 Expect("Delimitadores");
-                onActivationNode.selector = selectorNode;
                 Expect("Coma");
             }
         }

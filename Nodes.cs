@@ -1,5 +1,6 @@
 using System.Dynamic;
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 public abstract class ASTNode
 {
@@ -12,7 +13,7 @@ public class EffectNode : ASTNode
 
     public Dictionary<string,object> Params{get; set;} = new Dictionary<string, object>();
 
-    public string Action{get; set;} // arreglarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 
+    public ActionNode Action{get; set;} // arreglarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 
     public override void Print(int indent = 0)
         {
             string indentation = new string(' ', indent);
@@ -29,6 +30,13 @@ public class EffectNode : ASTNode
             // }
         }
 }
+
+public class ActionNode
+{
+    public List<ASTNode> Hijos { get; set; } = new List<ASTNode>();
+
+}
+
 public class CardNode : ASTNode
 {
     public string Type{get; set;}
@@ -105,11 +113,105 @@ public class PredicateNode : ASTNode
 {
     public string MiembroIzq{get; set;}
 
+    public void Imprimir()
+    {
+        System.Console.WriteLine(MiembroIzq);
+    }
     public string Operador{get; set;}
     public object MiembroDer{get; set;}
     public override void Print(int indent = 0)
         {
+            Imprimir();
             string indentation = new string(' ', indent);
             Console.WriteLine($"{indentation}Predicate: {MiembroIzq} {Operador} {MiembroDer}");
         }
 }
+public abstract class ExpressionNode : ASTNode
+{
+
+}
+public class NumberNode : ExpressionNode
+{
+    public int Value{get; set;}
+
+    public override void Print(int index)
+    {
+        throw new NotImplementedException();
+    }
+}
+public class BooleanNode : ExpressionNode
+{
+    public bool Value{get; set;}
+
+    public override void Print(int index)
+    {
+        throw new NotImplementedException();
+    }
+}
+public class VariableReferenceNode : ExpressionNode
+{
+    public string Name{get; set;}
+    public object Value{get; set;}
+
+    public override void Print(int index)
+    {
+        throw new NotImplementedException();
+    }
+}
+public class BinaryOperationNode : ExpressionNode
+{
+    public ExpressionNode MiembroIzq{get; set;}
+    public ExpressionNode MiembroDer{get; set;}
+    public string Operator{get; set;}
+    public override void Print(int index)
+    {
+        // throw new NotImplementedException();
+    }
+}
+public class ForNode : ASTNode
+{
+    public string Item { get; set; }
+    public VariableReferenceNode Collection { get; set; }
+    public List<ASTNode> Body { get; set; } = new List<ASTNode>();
+
+    public override void Print(int index)
+    {
+        throw new NotImplementedException();
+    }
+}
+public class AssignmentNode : ASTNode
+{
+    public string VariableName { get; set; }
+    public ASTNode ValueExpression { get; set; }
+    public List<string> CadenaDeAcceso { get; set; } = new List<string>();
+    public string Operator { get; set; }
+
+    public override void Print(int indent = 0)
+    {
+
+    }
+
+}
+public class MemberAccessNode : ASTNode 
+{
+    public List<string> AccessChain { get; set; } = new List<string>();
+    public List<ExpressionNode> Arguments { get; set; } =  new List<ExpressionNode>();
+    public bool IsProperty { get; set; }
+
+    public override void Print(int index)
+    {
+        throw new NotImplementedException();
+    }
+}
+public class IfNode : ASTNode
+{
+    public ExpressionNode Condition { get; set; }
+    public List<ASTNode> Body { get; set; } = new List<ASTNode>();
+    public List<ASTNode> ElseBody { get; set; } = new List<ASTNode>();
+    
+    public override void Print(int indent = 0)
+    {
+
+    } 
+}
+
