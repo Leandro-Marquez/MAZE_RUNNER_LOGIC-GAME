@@ -249,66 +249,153 @@ public class Parser
         }
         return expressions;
     }
-    //arreglarrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-    // private ASTNode ParseFor(Context effectcontext)
-    // {
-    //     ForNode forNode = new ForNode();
+    // arreglarrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+    public ASTNode ParseFor(Context effectcontext)
+    {
+        ForNode forNode = new ForNode();
 
-    //     Expect("PalabrasReservadas"); // for
-    //     Expect("Delimitadores"); // (
-    //     // asignar la variable del for
-    //     forNode.Item = CurrentToken.TokenValue;
-    //     Expect("Identificadores"); // target // item u algo asi
-    //     Expect("PalabrasReservadas"); //in 
+        Expect("PalabrasReservadas"); // for
+        Expect("Delimitadores"); // (
+        // asignar la variable del for
+        forNode.Item = CurrentToken.TokenValue;
+        Expect("Identificadores"); // target // item u algo asi
+        Expect("PalabrasReservadas"); //in 
 
-    //     forNode.Collection = new VariableReferenceNode {Name = CurrentToken.TokenValue};
-    //     Expect("Identificadores"); //targets
-    //     Expect("Delimitadores");// )
-    //     Expect("Delimitadores"); //{
-    //     //parsear el cuerpo del for
-    //     while(CurrentToken.TokenValue != "}")
-    //     {
-    //         if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenType == "OperadoresDeAsignacion")
-    //         {
-    //             forNode.Body.Add(ParseAsignaciones(effectcontext));
-    //         }
-    //         else if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenValue == ".")
-    //         {
-    //             forNode.Body.Add(ParseLLamadas(effectcontext));
-    //         }
-    //         else if(CurrentToken.TokenValue == "for")
-    //         {
-    //             forNode.Body.Add(ParseFor(effectcontext));
-    //         }
-    //         else if(CurrentToken.TokenValue == "while")
-    //         {
-    //             forNode.Body.Add(ParseWhile(effectcontext));
-    //         }
-    //         else if(CurrentToken.TokenValue == "if")
-    //         {
-    //             forNode.Body.Add(ParseIf(effectcontext));
-    //         }
-    //         else throw new Exception($"{CurrentToken.TokenValue} is not implemented");
-    //     }
-    //     Expect("Delimitadores"); // } se cierra el cuerpo del ciclo
-    //     return forNode;
-    // }
-    // private IfNode ParseIf(Context effectcontext)
-    // {
-    //     IfNode ifNode = new IfNode();
+        forNode.Collection = new VariableReferenceNode {Name = CurrentToken.TokenValue};
+        Expect("Identificadores"); //targets
+        Expect("Delimitadores");// )
+        Expect("Delimitadores"); //{
+        //parsear el cuerpo del for
+        while(CurrentToken.TokenValue != "}")
+        {
+            if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenType == "OperadoresDeAsignacion")
+            {
+                forNode.Body.Add(ParseAssignment(null,effectcontext));
+            }
+            else if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenValue == ".")
+            {
+                forNode.Body.Add(ParseMemberAccess(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "for")
+            {
+                forNode.Body.Add(ParseFor(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "while")
+            {
+                forNode.Body.Add(ParseWhile(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "if")
+            {
+                forNode.Body.Add(ParseIf(effectcontext));
+            }
+            else throw new Exception($"{CurrentToken.TokenValue} is not implemented");
+        }
+        Expect("Delimitadores"); // } se cierra el cuerpo del ciclo
+        return forNode;
+    }
+    private WhileNode ParseWhile(Context effectcontext)
+    {
+        WhileNode whileNode = new WhileNode();
+        Expect("PalabrasReservadas"); //while
+        Expect("Delimitadores"); // (
+        //parsear la condicion del while
+        whileNode.Condition = ParseExpressions(ExpressionsTokens(), true, effectcontext);
+        Expect("Delimitadores"); // ) se acaba la condicion de ejecucion y comienza el cuerpo
+        Expect("Delimittadores"); // {
+        while(CurrentToken.TokenValue != "}")
+        {
+            if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenType == "OperadoresDeAsignacion")
+            {
+                whileNode.Body.Add(ParseAssignment(null,effectcontext));
+            }
+            else if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenValue == ".")
+            {
+                whileNode.Body.Add(ParseMemberAccess(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "for")
+            {
+                whileNode.Body.Add(ParseFor(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "while")
+            {
+                whileNode.Body.Add(ParseWhile(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "if")
+            {
+                whileNode.Body.Add(ParseIf(effectcontext));
+            }
+            else throw new Exception($"{CurrentToken.TokenValue} is not implemented");
+        }
+        Expect("Delimitadores");
+        return whileNode;
+    }
+    private IfNode ParseIf(Context effectcontext)
+    {
+        IfNode ifNode = new IfNode();
         
-    //     Expect("PalabrasReservadas"); //if
-    //     Expect("Delimitadores"); //comienza el cuerpo de la condicional 
-    //     ifNode.Condition = ParseExpressions(ExpressionsTokens(),true,effectcontext);
-    //     Expect("Delimitadores");//
-    //     while(CurrentToken.TokenValue != ")")
-    //     {
+        Expect("PalabrasReservadas"); //if
+        Expect("Delimitadores"); //comienza el cuerpo de la condicional 
+        //parsear la condicion
+        ifNode.Condition = ParseExpressions(ExpressionsTokens(),true,effectcontext);
+        Expect("Delimitadores");
 
-    //     }
+        while(CurrentToken.TokenValue != "}" && CurrentToken.TokenValue != "else")
+        {
+            if(CurrentToken.TokenValue == "for")
+            {
+                ifNode.Body.Add(ParseFor(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "while")
+            {
+                ifNode.Body.Add(ParseWhile(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "if")
+            {
+                ifNode.Body.Add(ParseIf(effectcontext));
+            }
+            else if(CurrentToken.TokenValue == "Identificadores" && PeekNexToken().TokenValue == ".")
+            {
+                ifNode.Body.Add(ParseMemberAccess(effectcontext));
+            }
+            else if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenType == "OperadoresDeAsignacion")
+            {
+                ifNode.Body.Add(ParseAssignment(null , effectcontext));
+            }
+            else throw new Exception("Current expression is not valid in the current context");
+        }
 
-
-    //     return ifNode;
-    // }
+        Expect("Delimitadores"); // } se acaba el cuerpo del if 
+        if(CurrentToken.TokenValue == "else")
+        {
+            Expect("Delimitadores"); // {
+            while(CurrentToken.TokenValue != "}")
+            {
+                if(CurrentToken.TokenValue == "for")
+                {
+                    ifNode.ElseBody.Add(ParseFor(effectcontext));
+                }
+                else if(CurrentToken.TokenValue == "while")
+                {
+                    ifNode.ElseBody.Add(ParseWhile(effectcontext));
+                }
+                else if(CurrentToken.TokenValue == "if")
+                {
+                    ifNode.ElseBody.Add(ParseIf(effectcontext));
+                }
+                else if(CurrentToken.TokenValue == "Identificadores" && PeekNexToken().TokenValue == ".")
+                {
+                    ifNode.ElseBody.Add(ParseMemberAccess(effectcontext));
+                }
+                else if(CurrentToken.TokenType == "Identificadores" && PeekNexToken().TokenType == "OperadoresDeAsignacion")
+                {
+                    ifNode.ElseBody.Add(ParseAssignment(null , effectcontext));
+                }
+                else throw new Exception("Current expression is not valid in the current context");
+            }
+            Expect("Delimitadores"); // }
+        }
+        return ifNode;
+    }
  
     public ExpressionNode ParseExpressions(List<Token> analizar , bool isCondition, Context currentcontext)
     {

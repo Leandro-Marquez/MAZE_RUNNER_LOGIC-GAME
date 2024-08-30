@@ -51,32 +51,31 @@ public class CardNode : ASTNode
         Effects = new List<OnActivationNode>();
     }
     public override void Print(int indent = 0)
+    {
+        string indentation = new string(' ', indent);
+        Console.WriteLine($"{indentation}Card: {Name}");
+        Console.WriteLine($"{indentation}  Type: {Type}");
+        Console.WriteLine($"{indentation}  Faction: {Faction}");
+        Console.WriteLine($"{indentation}  Power: {Power}");
+        Console.WriteLine($"{indentation}  Range: [{string.Join(", ", Range)}]");
+        Console.WriteLine($"{indentation}  OnActivation:");
+        foreach (var activation in Effects)
         {
-            string indentation = new string(' ', indent);
-            Console.WriteLine($"{indentation}Card: {Name}");
-            Console.WriteLine($"{indentation}  Type: {Type}");
-            Console.WriteLine($"{indentation}  Faction: {Faction}");
-            Console.WriteLine($"{indentation}  Power: {Power}");
-            Console.WriteLine($"{indentation}  Range: [{string.Join(", ", Range)}]");
-            Console.WriteLine($"{indentation}  OnActivation:");
-            foreach (var activation in Effects)
-            {
-                activation.Print(indent + 2);
-            }
+            activation.Print(indent + 2);
         }
+    }
 }
 public class OnActivationNode : ASTNode
 {
     public CardEffectNode effect{get; set;} = new CardEffectNode();
     public SelectorNode selector{get; set;} = new SelectorNode();
     public override void Print(int indent = 0)
-        {
-            string indentation = new string(' ', indent);
-            Console.WriteLine($"{indentation}Activation:");
-            effect.Print(indent + 2);
-            selector.Print(indent + 2);
-
-        }
+    {
+        string indentation = new string(' ', indent);
+        Console.WriteLine($"{indentation}Activation:");
+        effect.Print(indent + 2);
+        selector.Print(indent + 2);
+    }
 }
 public class CardEffectNode : ASTNode
 {
@@ -84,15 +83,15 @@ public class CardEffectNode : ASTNode
     public List<object> Params{get; set;} = new List<object>();
 
     public override void Print(int indent = 0)
+    {
+        string indentation = new string(' ', indent);
+        Console.WriteLine($"{indentation}Effect:");
+        Console.WriteLine($"{indentation}  Name: {Name}");
+        foreach (var item in Params)
         {
-            string indentation = new string(' ', indent);
-            Console.WriteLine($"{indentation}Effect:");
-            Console.WriteLine($"{indentation}  Name: {Name}");
-            foreach (var item in Params)
-            {
-                Console.WriteLine($"{indentation}  Amount: {item}");
-            }
+            Console.WriteLine($"{indentation}  Amount: {item}");
         }
+    }
 }
 public class SelectorNode : ASTNode
 {
@@ -177,6 +176,16 @@ public class ForNode : ASTNode
     public override void Print(int index)
     {
         throw new NotImplementedException();
+    }
+}
+public class WhileNode : ASTNode
+{
+    public ExpressionNode Condition { get; set; }
+    public List<ASTNode> Body { get; set; } = new List<ASTNode>();
+
+    public override void Print(int indent = 0)
+    {
+
     }
 }
 public class AssignmentNode : ASTNode
