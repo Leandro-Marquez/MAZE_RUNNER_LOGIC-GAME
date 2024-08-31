@@ -22,8 +22,6 @@ namespace GwentPlus
             {
                 writer.WriteLine("namespace GwentPlus");
                 writer.WriteLine("{");
-
-
                 // Escribir la definición de la clase EffectCreated
                 writer.WriteLine("public class EffectCreated");
                 writer.WriteLine("{");
@@ -112,7 +110,8 @@ namespace GwentPlus
                 writer.WriteLine($"        {variableDeclaration} {access} {assignmentNode.Operator} {GenerateValueExpressionCode(assignmentNode.ValueExpression)};");
                 if (!context.Variables.ContainsKey(assignmentNode.VariableName))
                 {
-                    context.DefineVariable(assignmentNode.VariableName, null); // Asumiendo que el valor se asignará más adelante o es irrelevante en este contexto
+                    //asumir que el valor se asignará más adelante
+                    context.DefineVariable(assignmentNode.VariableName, null);
                 }
             }
             else if (action is IfNode ifNode)
@@ -147,32 +146,29 @@ namespace GwentPlus
             }
             else if (action is MemberAccessNode memberAccessNode)
             {
-                // Aquí puedes manejar el acceso a miembros y llamadas a métodos
+                //miembros de acceso, a metdos y propiedades
                 if (memberAccessNode.IsProperty)
                 {
-                    // Si es una propiedad, simplemente accede a la propiedad
+                    //acceder a la propiedad
                     writer.WriteLine($"        {string.Join(".", memberAccessNode.AccessChain)}");
                 }
                 else
                 {
-                    /// Si no es una propiedad y tiene argumentos, es una llamada a método
                     string arguments = string.Join(", ", memberAccessNode.Arguments.Select(arg => GenerateValueExpressionCode(arg)));
                     writer.WriteLine($"        {string.Join(".", memberAccessNode.AccessChain)}({arguments});");
                 }
             }
-            
-            // Agrega más tipos de nodos según sea necesario
         }
 
         private string GenerateValueExpressionCode(ASTNode valueExpression)
         {
             if (valueExpression is NumberNode numberLiteral)
             {
-                return numberLiteral.Value.ToString(); // Asumiendo que Value es un número
+                return numberLiteral.Value.ToString(); // Asumiendo un número
             }
             else if (valueExpression is BooleanNode booleanLiteral)
             {
-                return booleanLiteral.Value.ToString().ToLower(); // Asumiendo que Value es un bool
+                return booleanLiteral.Value.ToString().ToLower(); // Asumir que es true or false
             }
             else if (valueExpression is VariableReferenceNode variableReferenceNode)
             {
@@ -184,7 +180,6 @@ namespace GwentPlus
             }
             else if (valueExpression is MemberAccessNode memberAccessNode)
             {
-                // Aquí puedes manejar el acceso a miembros y llamadas a métodos
                 if (memberAccessNode.IsProperty)
                 {
                     // Si es una propiedad, simplemente accede a la propiedad
@@ -217,8 +212,7 @@ namespace GwentPlus
             cardData.OnActivation = new List<Effects>();
             cardData.EffectCreated = new EffectCreated();
 
-            // Aquí puedes manejar los efectos de activación si es necesario
-            foreach (var activation in cardNode.OnActivation)
+            foreach (var activation in cardNode.Effects)
             {
                 cardData.OnActivation.Add(CreateEffect(activation));
             }
@@ -226,19 +220,19 @@ namespace GwentPlus
             _cards.Add(cardData);
         }
 
-        private Effects CreateEffect(ActivationNode activation)
+        private Effects CreateEffect(OnActivationNode activation)
         {
             Effects effect = new Effects
             {
-                Name = activation.Effect?.Name ?? "DefaultEffectName", // Provide a default value or handle null differently
-                Params = activation.Effect != null ? activation.Effect.Params : new List<object>(),
-                Source = activation.Selector?.Source ?? "DefaultSource",
-                Single = activation.Selector?.Single ?? false,
+                Name = activation.effect?.Name ?? "DefaultEffectName", // Provide a default value or handle null differently
+                Params = activation.effect != null ? activation.effect.Params : new List<object>(),
+                Source = activation.selector?.Source ?? "DefaultSource",
+                Single = activation.selector?.Single ?? false,
                 Predicate = new Predicate // Aquí se crea una nueva instancia de Predicate y se asignan sus propiedades
                 {
-                    LeftMember = activation.Selector?.Predicate?.LeftMember ?? "DefaultLeftMember",
-                    Operator = activation.Selector?.Predicate?.Operator ?? "DefaultOperator",
-                    RightMember = activation.Selector?.Predicate?.RightMember ?? "DefaultValue"
+                    LeftMember = activation.selector?.Predicate?.MiembroIzq ?? "DefaultLeftMember",
+                    Operator = activation.selector?.Predicate?.Operador ?? "DefaultOperator",
+                    RightMember = activation.selector?.Predicate?.MiembroDer ?? "DefaultValue"
                 },                    
             };
             

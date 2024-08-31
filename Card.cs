@@ -63,8 +63,5 @@ namespace GwentPlus
                 Console.WriteLine($"Efecto no encontrado: {effect.Name}");
             }
         }
-        
-
-        
     }
 }
