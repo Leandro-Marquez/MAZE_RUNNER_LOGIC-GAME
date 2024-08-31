@@ -18,10 +18,8 @@ class Lexer
         // con esto estaremos eliminando los espacios en blanco antes y despues del primer y ultimo caracter respectivamene
         a_analizar = a_analizar.Trim();
         // con esto estaremos separando cada fragmento del codigo atendiendo al lenguaje para su posterior uso
-        string PalabrasReservadas = @"\b (if | else | while | for | in | effect | card) \b";
-        string TiposDeVariables = @" int | long | double | float | string | bool | char | var ";
-        string Metodos = @" Find | Push | SendBottom | Pop | Remove | Shuffle ";
-        string OperadorFor = "in";
+        string PalabrasReservadas = @"if|else|while|for|in|effect|card";
+        string Booleano = @"true|false";
         string Identificadores = @"^[a-zA-Z_][a-zA-Z0-9_]*";
         string Delimitadores = @"[\(\)\{\}\[\]]";
         string OperadoresAritmeticos = @"(?:[+\-*/%])";
@@ -40,9 +38,7 @@ class Lexer
     var Diccionario = new Dictionary<string, string>
     {
         { PalabrasReservadas, "PalabrasReservadas" },
-        { TiposDeVariables, "TiposDeVariables" },
-        { Metodos, "Metodos" },
-        { OperadorFor , "OperadorFor" },
+        { Booleano , "Booleano"},
         { Identificadores, "Identificadores" },
         { Delimitadores, "Delimitadores" },
         { OperadoresAritmeticos, "OperadoresAritmeticos" },

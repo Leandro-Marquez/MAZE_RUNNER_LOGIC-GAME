@@ -31,9 +31,18 @@ public class EffectNode : ASTNode
         }
 }
 
-public class ActionNode
+public class ActionNode : ASTNode 
 {
     public List<ASTNode> Hijos { get; set; } = new List<ASTNode>();
+     public override void Print(int indent = 0)
+        {
+            string indentation = new string(' ', indent);
+            Console.WriteLine($"{indentation}Action:");
+            foreach (var child in Hijos)
+            {
+                child.Print(indent + 2);
+            }
+        }
 
 }
 
@@ -133,39 +142,41 @@ public class NumberNode : ExpressionNode
 {
     public int Value{get; set;}
 
-    public override void Print(int index)
-    {
-        throw new NotImplementedException();
-    }
+    public override void Print(int indent = 0)
+        {
+            Console.WriteLine($"{new string(' ', indent)}NumberLiteral: {Value}");
+        }
 }
 public class BooleanNode : ExpressionNode
 {
     public bool Value{get; set;}
 
-    public override void Print(int index)
-    {
-        throw new NotImplementedException();
-    }
+    public override void Print(int indent = 0)
+        {
+            Console.WriteLine($"{new string(' ', indent)}BooleanLiteral: {Value}");
+        }
 }
 public class VariableReferenceNode : ExpressionNode
 {
     public string Name{get; set;}
     public object Value{get; set;}
 
-    public override void Print(int index)
-    {
-        throw new NotImplementedException();
-    }
+    public override void Print(int indent = 0)
+        {
+            Console.WriteLine($"{new string(' ', indent)}VariableReference: {Name}");
+        }
 }
 public class BinaryOperationNode : ExpressionNode
 {
     public ExpressionNode MiembroIzq{get; set;}
     public ExpressionNode MiembroDer{get; set;}
     public string Operator{get; set;}
-    public override void Print(int index)
-    {
-        // throw new NotImplementedException();
-    }
+    public override void Print(int indent = 0)
+        {
+            Console.WriteLine($"{new string(' ', indent)}Binary Operation: {Operator}");
+            MiembroIzq.Print(indent + 2);
+            MiembroDer.Print(indent + 2);
+        }
 }
 public class ForNode : ASTNode
 {
@@ -173,10 +184,19 @@ public class ForNode : ASTNode
     public VariableReferenceNode Collection { get; set; }
     public List<ASTNode> Body { get; set; } = new List<ASTNode>();
 
-    public override void Print(int index)
-    {
-        throw new NotImplementedException();
-    }
+    public override void Print(int indent = 0)
+        {
+            string indentation = new string(' ', indent);
+            Console.WriteLine($"{indentation}For:");
+            Console.WriteLine($"{indentation}  Item: {Item}");
+            Console.WriteLine($"{indentation}  Collection:");
+            Collection.Print(indent + 2);
+            Console.WriteLine($"{indentation}  Body:");
+            foreach (var statement in Body)
+            {
+                statement.Print(indent + 2);
+            }
+        }
 }
 public class WhileNode : ASTNode
 {
@@ -184,9 +204,17 @@ public class WhileNode : ASTNode
     public List<ASTNode> Body { get; set; } = new List<ASTNode>();
 
     public override void Print(int indent = 0)
-    {
-
-    }
+        {
+            string indentation = new string(' ', indent);
+            Console.WriteLine($"{indentation}While:");
+            Console.WriteLine($"{indentation}  Condition:");
+            Condition.Print(indent + 2);
+            Console.WriteLine($"{indentation}  Body:");
+            foreach (var statement in Body)
+            {
+                statement.Print(indent + 2);
+            }
+        }
 }
 public class AssignmentNode : ASTNode
 {
@@ -196,9 +224,22 @@ public class AssignmentNode : ASTNode
     public string Operator { get; set; }
 
     public override void Print(int indent = 0)
-    {
+        {
+            string indentation = new string(' ', indent);
 
-    }
+            // Imprimir la cadena de accesos anidados si existe
+            if (CadenaDeAcceso != null && CadenaDeAcceso.Any())
+            {
+                Console.WriteLine($"{indentation}Access: {string.Join(".", CadenaDeAcceso)}");
+            }
+
+            // Imprimir el nombre de la variable, el operador y el valor de la expresión
+            Console.WriteLine($"{indentation}Assignment: {VariableName} {Operator}");
+
+            // Imprimir el valor de la expresión en una nueva línea
+            Console.Write($"{indentation}");
+            ValueExpression.Print(indent + 2); // Aumentar la indentación para el valor
+        }
 
 }
 public class MemberAccessNode : ASTNode 
@@ -207,10 +248,22 @@ public class MemberAccessNode : ASTNode
     public List<ExpressionNode> Arguments { get; set; } =  new List<ExpressionNode>();
     public bool IsProperty { get; set; }
 
-    public override void Print(int index)
-    {
-        throw new NotImplementedException();
-    }
+    public override void Print(int indent = 0)
+        {
+            string indentation = new string(' ', indent);
+            string memberType = IsProperty ? "PropertyAccess" : "MethodCall";
+            Console.WriteLine($"{indentation}{memberType}: {string.Join(".", AccessChain)}");
+
+            if (!IsProperty && Arguments.Count > 0)
+            {
+                Console.WriteLine($"{indentation}Arguments:");
+                foreach (var arg in Arguments)
+                {
+                    arg.Print(indent + 4); 
+                }
+            }
+        }
+
 }
 public class IfNode : ASTNode
 {
@@ -218,9 +271,25 @@ public class IfNode : ASTNode
     public List<ASTNode> Body { get; set; } = new List<ASTNode>();
     public List<ASTNode> ElseBody { get; set; } = new List<ASTNode>();
     
-    public override void Print(int indent = 0)
-    {
-
-    } 
+     public override void Print(int indent = 0)
+        {
+            string indentation = new string(' ', indent);
+            Console.WriteLine($"{indentation}If:");
+            Console.WriteLine($"{indentation}  Condition:");
+            Condition.Print(indent + 2);
+            Console.WriteLine($"{indentation}  Body:");
+            foreach (var statement in Body)
+            {
+                statement.Print(indent + 2);
+            }
+            if (ElseBody.Any())
+            {
+                Console.WriteLine($"{indentation}Else:");
+                foreach (var statement in ElseBody)
+                {
+                    statement.Print(indent + 2);
+                }
+            }
+        }
 }
 

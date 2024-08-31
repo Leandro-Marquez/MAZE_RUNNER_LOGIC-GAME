@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
         private Context _parent;
 
-        public Context(Context parent = null)
+        public Context(Context parent = null!)
         {
             _parent = parent;
         }

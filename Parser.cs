@@ -43,15 +43,20 @@ public class Parser
         List<ASTNode> ToReturn = new List<ASTNode>();
         while(CurrentToken is not null)
         {
-            if(CurrentToken.TokenValue == "effect") 
+            if(CurrentToken.TokenValue == "effect")
             {
+                System.Console.WriteLine("Entrooooooooo");
                 ToReturn.Add(Effect_Parse());
             }
             else if(CurrentToken.TokenValue == "card")
             {
                 ToReturn.Add(Cards_Parse());
             }
-            else throw new Exception("unexpected Token value, token have been expected (card) or (effect)" + $"  {CurrentToken.TokenValue}" + $"{tokens.IndexOf(CurrentToken)}");
+            else
+            {
+                throw new Exception("Unexpected Token value, token have been expected (card) or (effect)" 
+                + $"  {CurrentToken.TokenValue}" + $"{tokens.IndexOf(CurrentToken)}");
+            }
         }
         return ToReturn;
     }
@@ -74,7 +79,7 @@ public class Parser
         //parsear params 
         if(CurrentToken.TokenValue == "Params")
         {
-            Expect("Identificadores"); // Params 
+            Expect("Identificadores"); // Params
             Expect("OperadoresDeAsignacion"); // :
             Expect("Delimitadores"); // {
             while(CurrentToken.TokenValue != "}")
@@ -82,14 +87,21 @@ public class Parser
                 string paramsName = CurrentToken.TokenValue;
                 Expect("Identificadores");
                 Expect("OperadoresDeAsignacion");
+                string variableType = CurrentToken.TokenValue;
                 object paramsType = CurrentToken.TokenValue;
                 Expect("Identificadores");
                 effect.Params [paramsName] = paramsType;
 
                 // effectContext.DefineVariable(paramsName,paramsType);
-                context.DefineVariable(paramsName,paramsType);
+                if(!effectContext.Variables.ContainsKey(paramsName))
+                {
+                    if(variableType == "Bool") context.DefineVariable(variableType,false);
+                    else if(variableType == "Number") context.DefineVariable(variableType,0);
+                    else if(variableType == "String") context.DefineVariable(variableType,"");
+                }
 
-                if(CurrentToken.TokenType == "Coma") Expect("Coma"); 
+                if(CurrentToken.TokenType == "Coma") Expect("Coma");
+                // System.Console.WriteLine("Entroooo");
             }
             Expect("Delimitadores");
             Expect("Coma");
@@ -107,9 +119,10 @@ public class Parser
         // parsear el cuerpo del action
         while(CurrentToken.TokenValue != "}")
         {
+            System.Console.WriteLine("entroooooooooooooooooooooooooooooooooo");
             effect.Action.Hijos = ParseAction(effectContext);
         }
-
+        // Expect("Delimitadores");
         return effect;
     }
     private List<ASTNode> ParseAction(Context effectcontext)
@@ -162,6 +175,8 @@ public class Parser
         }
         else
         {
+            // Expect("Delimitadores");
+            // Expect("PatronDeNumero");
             var valueExpression = ParseExpressions(ExpressionsTokens(),false,effectontext);
             Expect("PuntoComa");
             AssignmentNode assignmentNode1 = new AssignmentNode{ValueExpression = valueExpression , CadenaDeAcceso = accessChain};
@@ -255,7 +270,7 @@ public class Parser
         ForNode forNode = new ForNode();
 
         Expect("PalabrasReservadas"); // for
-        Expect("Delimitadores"); // (
+        // Expect("Delimitadores");
         // asignar la variable del for
         forNode.Item = CurrentToken.TokenValue;
         Expect("Identificadores"); // target // item u algo asi
@@ -263,7 +278,7 @@ public class Parser
 
         forNode.Collection = new VariableReferenceNode {Name = CurrentToken.TokenValue};
         Expect("Identificadores"); //targets
-        Expect("Delimitadores");// )
+        // Expect("Delimitadores");
         Expect("Delimitadores"); //{
         //parsear el cuerpo del for
         while(CurrentToken.TokenValue != "}")
@@ -397,34 +412,34 @@ public class Parser
         return ifNode;
     }
  
-    public ExpressionNode ParseExpressions(List<Token> analizar , bool isCondition, Context currentcontext)
+    public ExpressionNode ParseExpressions(List<Token> analizar , bool isCondition, Context effectcontext)
     {
         List<Token> PostFijo = ConvertPostFijo(analizar);
-        var astnodes = ParsePostFijo(PostFijo,currentcontext);
+        var astnodes = ParsePostFijo(PostFijo,effectcontext);
 
         return astnodes;
     }
-    public ExpressionNode ParsePostFijo(List<Token> PostFijo , Context currentcontext)
+    public ExpressionNode ParsePostFijo(List<Token> PostFijo , Context effectcontext)
     {
         Stack<ExpressionNode> expressionNode = new Stack<ExpressionNode>();
         foreach (var item in PostFijo)
         {
-            if(item.TokenValue == "PatronDeNumero")
+            if(item.TokenType == "PatronDeNumero")
             {
                 expressionNode.Push(new NumberNode{Value = int.Parse(item.TokenValue)});
             }
-            else if(item.TokenValue == "Booleano")
+            else if(item.TokenType == "Booleano")
             {
                 expressionNode.Push(new BooleanNode{ Value = bool.Parse(item.TokenValue)});
             }
-            else if(item.TokenValue == "Identificadores")
+            else if(item.TokenType == "Identificadores")
             {
-                if(currentcontext.Variables.ContainsKey(item.TokenValue))
+                if(effectcontext.Variables.ContainsKey(item.TokenValue))
                 {
-                    var valuenow = currentcontext.GetVariable(item.TokenValue);
+                    var valuenow = effectcontext.GetVariable(item.TokenValue);
                     expressionNode.Push(new VariableReferenceNode{Name = item.TokenValue , Value = valuenow});
                 }
-                else throw new Exception ("There is not an instance of current variable");
+                else throw new Exception ($"There is not an instance of current variable {CurrentToken.TokenValue}");
             }
             else if(Operadores.ContainsKey(item.TokenValue))
             {
@@ -451,7 +466,7 @@ public class Parser
         Stack<Token> tokens = new Stack<Token>();
         foreach(var item in convertir)
         {
-            if(item.TokenValue == "PatronDeNumero" || item.TokenValue == "Identificadores" || item.TokenValue == "Booleano")
+            if(item.TokenType == "PatronDeNumero" || item.TokenType == "Identificadores" || item.TokenType == "Booleano")
             {
                 retorn.Add(item);
             }
