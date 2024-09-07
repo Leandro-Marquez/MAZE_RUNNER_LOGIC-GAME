@@ -67,19 +67,6 @@ public class RoundsControler : MonoBehaviour
         }
         GameManager.Instancia.StarGame(GameManager.Instancia.CurrentPlayer);
     }
+
 }
-   // if(Counter > 1 && Rounds == 3)
-        // {
-        //     if()
-        //     {
-
-        //     }
-        //     else if()
-        //     {
-
-        //     }
-        //     else 
-        //     {
-
-        //     }
-        // }
+   

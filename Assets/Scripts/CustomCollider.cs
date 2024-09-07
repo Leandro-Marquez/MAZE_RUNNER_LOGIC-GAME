@@ -29,7 +29,6 @@ public class CustomCollider : MonoBehaviour
                 else if((otherCard.card.Type == CardType.oro || otherCard.card.Type == CardType.plata) && OnMyMouse.card.Type == CardType.senuelo)
                 {   
                     IsCalling = true;
-                    UnityEngine.Debug.Log("coaliciono correctamente el senuelo con el oro o plata");
                 }
            }
         }
