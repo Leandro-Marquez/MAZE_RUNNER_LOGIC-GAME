@@ -9,12 +9,6 @@ public class MenuGame : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
-
-    public void OnCreateCardClikedButton()
-    {
-        SceneManager.LoadScene(2);
-    }
-
     public void OnExitClikedButton()
     {
         Application.Quit();

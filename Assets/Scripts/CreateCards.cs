@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -39,19 +40,25 @@ public class CardCreationHandler : MonoBehaviour
         // Call the Tokenizar method to tokenize the input
         List<Token> tokens = lexer.Tokenizar();
 
-        // Debug.Log(userInput);
-
-        // imprimir cada token de momento 
-        // foreach (var item in tokens)
-        // {
-        //     Debug.Log(item.ToString());
-        // }
-
         Parser parser = new Parser(tokens);
         List<ASTNode> aSTNodes = parser.Parse();
 
-        CodeGenerator codeGenerator = new CodeGenerator(aSTNodes);
-        codeGenerator.GenerateCode("Assets/Scripts/EffectCreated.cs");
+        // string filePath = Path.Combine(Application.dataPath, "Scripts/EffectCreatedRef.cs");
+        // // Crear una instancia de CodeGenerator y generar el código
+        // CodeGenerator codeGenerator = new CodeGenerator(aSTNodes);
+        // codeGenerator.GenerateCode(filePath);
+
+
+    // Definir la ruta completa del archivo en la carpeta "Compiler Scripts"
+    string filePath = Path.Combine(Application.dataPath, "Scripts/Compiler Scripts/EffectCreatedRef.cs");
+
+    // Crear una instancia de CodeGenerator y generar el código
+    CodeGenerator codeGenerator = new CodeGenerator(aSTNodes);
+    codeGenerator.GenerateCode(filePath);
+
+
+
+
 
         // Ocultar el cuadro de texto y el botón de procesar después de procesar el texto
         inputFieldObject.SetActive(false);

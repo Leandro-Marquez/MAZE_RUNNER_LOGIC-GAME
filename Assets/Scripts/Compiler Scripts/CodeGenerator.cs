@@ -7,8 +7,8 @@ using UnityEngine;
     public class CodeGenerator
     {
         private List<ASTNode> _nodes;
-        public List<Card> _cards = new List<Card>(); // Almacena las cartas creadas
-        public Context context = new Context(null!); //para llevar las variables
+        public static List<Card> _cards = new List<Card>(); // Almacena las cartas creadas
+        public Context context = new Context(null!);
 
         public CodeGenerator(List<ASTNode> nodes)
         {
@@ -53,16 +53,16 @@ using UnityEngine;
                 var parameters = new List<string>();
                 foreach (var param in effectNode.Params)
                 {
-                    var type = param.Value;
-                    if (type == "Number")
+                    var fulanito = param.Value;
+                    if (fulanito is int)
                     {
                         parameters.Add($"int {param.Key}");
                     }
-                    else if (type == "String")
+                    else if (fulanito is string)
                     {
                         parameters.Add($"string {param.Key}");
                     }
-                    else if (type == "Bool")
+                    else if (fulanito is bool)
                     {
                         parameters.Add($"bool {param.Key}");
                     }
@@ -153,7 +153,6 @@ using UnityEngine;
                     writer.WriteLine($"        {string.Join(".", memberAccessNode.AccessChain)}({arguments});");
                 }
             }
-            
         }
 
         private string GenerateValueExpressionCode(ASTNode valueExpression)
@@ -194,6 +193,51 @@ using UnityEngine;
             // Si no se reconoce el tipo, simplemente devuelve una cadena vacía o un valor predeterminado
             return "";
         }
+
+        private void CreateCardInstance(CardNode cardNode)
+        {
+            // Crear una nueva instancia de CardData
+            Card cardData = ScriptableObject.CreateInstance<Card>();
+
+            // Asignar las propiedades
+            cardData.IsCreated = true;
+            cardData.Name = cardNode.Name.Substring(1, cardNode.Name.Length - 2);
+            cardData.Type = (CardType)Enum.Parse(typeof(CardType), cardNode.Type.Substring(1, cardNode.Type.Length - 2).ToLower());
+            cardData.Faction = (Faction)Enum.Parse(typeof(Faction), cardNode.Faction.Substring(1, cardNode.Faction.Length - 2));
+            cardData.Power = cardNode.Power;
+            cardData.Owner = 1;
+            cardData.Range = Array.ConvertAll(cardNode.Range.ToArray(), r => (Range)Enum.Parse(typeof(Range), r.Substring(1, r.Length - 2)));
+            cardData.OnActivation = new List<EffectsDefinition>();
+            cardData.EffectCreated = new EffectCreated();
+
+            //manejar los efectos de activación si es necesario
+            foreach (var activation in cardNode.Effects)
+            {
+                cardData.OnActivation.Add(CreateEffect(activation));
+            }
+            cardData.EffectType = CardEffects.Created;
+            _cards.Add(cardData);
+        }
+
+        private EffectsDefinition CreateEffect(OnActivationNode activation)
+        {
+            EffectsDefinition effect = new EffectsDefinition()
+            {
+                Name = activation.effect?.Name ?? "DefaultEffectName", // Provide a default value or handle null differently
+                Params = activation.effect != null ? activation.effect.Params : new List<object>(),
+                Source = activation.selector?.Source ?? "DefaultSource",
+                Single = activation.selector?.Single ?? false,
+                Predicate = new Predicate //crear una nueva instancia de Predicate y se asignan sus propiedades
+                {
+                    LeftMember = activation.selector?.Predicate?.MiembroIzq ?? "DefaultLeftMember",
+                    Operator = activation.selector?.Predicate?.Operador ?? "DefaultOperator",
+                    RightMember = activation.selector?.Predicate?.MiembroDer ?? "DefaultValue"
+                },                    
+            };
+            
+            return effect;
+        }
+    }
         // effect
         // {
         //     Name: "Damage",
@@ -277,47 +321,3 @@ using UnityEngine;
         //         },
         //     ]
         // }
-
-        private void CreateCardInstance(CardNode cardNode)
-        {
-            // Crea una nueva instancia de CardData
-            Card cardData = ScriptableObject.CreateInstance<Card>();
-
-            // Asigna las propiedades
-            cardData.IsCreated = true;
-            cardData.Name = cardNode.Name.Substring(1, cardNode.Name.Length - 2);
-            cardData.Type = (CardType)Enum.Parse(typeof(CardType), cardNode.Type.Substring(1, cardNode.Type.Length - 2));
-            cardData.Faction = (Faction)Enum.Parse(typeof(Faction), cardNode.Faction.Substring(1, cardNode.Faction.Length - 2));
-            cardData.Power = cardNode.Power;
-            cardData.Range = Array.ConvertAll(cardNode.Range.ToArray(), r => (Range)Enum.Parse(typeof(Range), r.Substring(1, r.Length - 2)));
-            cardData.OnActivation = new List<EffectsDefinition>();
-            cardData.EffectCreated = new EffectCreated();
-
-            // Aquí puedes manejar los efectos de activación si es necesario
-            foreach (var activation in cardNode.Effects)
-            {
-                cardData.OnActivation.Add(CreateEffect(activation));
-            }
-
-            _cards.Add(cardData);
-        }
-
-        private EffectsDefinition CreateEffect(OnActivationNode activation)
-        {
-            EffectsDefinition effect = new EffectsDefinition()
-            {
-                Name = activation.effect?.Name ?? "DefaultEffectName", // Provide a default value or handle null differently
-                Params = activation.effect != null ? activation.effect.Params : new List<object>(),
-                Source = activation.selector?.Source ?? "DefaultSource",
-                Single = activation.selector?.Single ?? false,
-                Predicate = new Predicate // Aquí se crea una nueva instancia de Predicate y se asignan sus propiedades
-                {
-                    LeftMember = activation.selector?.Predicate?.MiembroIzq ?? "DefaultLeftMember",
-                    Operator = activation.selector?.Predicate?.Operador ?? "DefaultOperator",
-                    RightMember = activation.selector?.Predicate?.MiembroDer ?? "DefaultValue"
-                },                    
-            };
-            
-            return effect;
-        }
-    }

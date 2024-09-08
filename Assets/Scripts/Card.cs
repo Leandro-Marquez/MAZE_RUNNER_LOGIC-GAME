@@ -7,7 +7,7 @@ using UnityEngine;
 public enum CardType {oro,plata,clima,aumento,despeje,senuelo,lider}
 public enum Faction {Elementales , Oscuridad}
 public enum Range {M,R,S}
-public enum CardEffects{oro,plata,senuelo,despeje,clima,aumento,No_Effect}
+public enum CardEffects{oro,plata,senuelo,despeje,clima,aumento,No_Effect, Created}
 public enum LiderEffects{Destruccion,Recuperacion}
 
 [CreateAssetMenu(fileName = "New Card" , menuName = "Card")]
@@ -17,7 +17,7 @@ public class Card : ScriptableObject
     public int Power;
     public bool IsCreated;
     public Sprite CardPhoto;
-    public bool Owner;
+    public int Owner;
     public CardType Type;
     public Faction Faction;
     public Range [] Range;
@@ -27,7 +27,7 @@ public class Card : ScriptableObject
     public EffectCreated EffectCreated;
     public void ActivateEffect(GameObject DroppedCard)
     {
-        if (IsCreated)
+        if (DroppedCard.GetComponent<VisualCard>().card.IsCreated)
         {
             foreach (var effect in OnActivation)
             {

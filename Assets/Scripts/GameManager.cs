@@ -36,6 +36,15 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        // agregar cartas a los deck de los jugadores
+        if(CodeGenerator._cards.Count != 0)
+        {
+            for( int x = 0 ; x < CodeGenerator._cards.Count ; x+=2 )
+            {
+                CardsPlayer1.Add(CodeGenerator._cards[x]);
+                CardsPlayer1.Add(CodeGenerator._cards[x+1]);
+            }
+        }
         PrepareGame(CardsPlayer1,Deck1);
         PrepareGame(CardsPlayer2,Deck2);
         InstanciarLideres();

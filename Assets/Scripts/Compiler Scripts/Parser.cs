@@ -37,7 +37,7 @@ public class Parser
     void Expect(string TokenType)
     {
         if(CurrentToken.TokenType == TokenType) NextToken();
-        else throw new Exception($"Not expected token ({CurrentToken.TokenType}), token have been expected is {TokenType}" + $"  {CurrentToken.TokenValue}" + $"{tokens.IndexOf(CurrentToken)}");
+        else throw new Exception($"Not expected token ({CurrentToken.TokenValue}), token have been expected is {TokenType}" + $"  {CurrentToken.TokenValue}" + $"{tokens.IndexOf(CurrentToken)}");
     }
     
     public List<ASTNode> Parse()
@@ -634,9 +634,21 @@ public class Parser
                     if(!context.Variables.ContainsKey(CurrentToken.TokenValue)) throw new Exception($"Current Variable is not instance yet {CurrentToken.TokenValue}");
                     Expect("Identificadores");
                     Expect("OperadoresDeAsignacion");
-                    if(CurrentToken.TokenType == "PatronDeNumero") Expect("PatronDeNumero");
-                    else if(CurrentToken.TokenType == "Identificadorestring") Expect("Identificadorestring");
-                    else if(CurrentToken.TokenType == "Booleano") Expect("Booleano");
+                    if(CurrentToken.TokenType == "PatronDeNumero")
+                    {
+                        cardEffectNode.Params.Add(int.Parse(CurrentToken.TokenValue));
+                        Expect("PatronDeNumero");
+                    }
+                    else if(CurrentToken.TokenType == "Identificadorestring")
+                    {
+                        cardEffectNode.Params.Add(CurrentToken.TokenValue);
+                        Expect("Identificadorestring");
+                    } 
+                    else if(CurrentToken.TokenType == "Booleano")
+                    {
+                        cardEffectNode.Params.Add(bool.Parse(CurrentToken.TokenValue));
+                        Expect("Booleano");
+                    }
                     Expect("Coma");
                 }
             }
