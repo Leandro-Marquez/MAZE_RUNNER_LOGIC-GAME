@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Unity.VisualStudio.Editor;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +12,11 @@ public class GameManager : MonoBehaviour
     public GameObject Prefab;
     public GameObject Hand1;
     public GameObject Hand2;
+    public GameObject RowM1,RowR1,RowS1;
+    public GameObject RowM2,RowR2,RowS2;
+    public GameObject ClimaM1,ClimaR1,ClimaS1;
+
+    public GameObject ClimaM2,ClimaR2,ClimaS2;
     public GameObject Deck1;
     public GameObject Deck2;
     public GameObject Cementery1;
@@ -22,8 +29,10 @@ public class GameManager : MonoBehaviour
     public List<Card> CardsPlayer2 = new List<Card>();
     public Card LiderIlai;
     public Card LiderTork;
+
     public bool CurrentPlayer = false;
     public static int playedcard;
+
     void Awake()
     {
         if(Instancia is null)
@@ -54,6 +63,7 @@ public class GameManager : MonoBehaviour
         Stole(Deck2.transform,10,true);
         StarGame(CurrentPlayer);
         CurrentPlayer = false;
+
     }
     public void InstanciarLideres()
     {
@@ -181,5 +191,16 @@ public class GameManager : MonoBehaviour
     {
         Actualizacion.Actualizar();
     }
+    public void ActualiceContext()
+    {
+        context.Instance.ActualiceContext(1,Hand1,Deck1,Cementery1,RowM1,RowR1,RowS1,ClimaM1,ClimaR1,ClimaS1);
+        context.Instance.ActualiceContext(2,Hand2,Deck2,Cementery2,RowM2,RowR2,RowS2,ClimaM2,ClimaR2,ClimaS2);
+    }
+    public void ActualiceVisual()
+    {
+        context.Instance.ActualiceVisual(1,Hand1,Deck1,Cementery1,RowM1,RowR1,RowS1,ClimaM1,ClimaR1,ClimaS1,Prefab);
+        context.Instance.ActualiceVisual(2,Hand2,Deck2,Cementery2,RowM2,RowR2,RowS2,ClimaM2,ClimaR2,ClimaS2,Prefab);
+    }
+
     
 }

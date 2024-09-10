@@ -587,10 +587,10 @@ public class Parser
                 Expect("Delimitadores");
                 Expect("OperadorLanda");
 
-                string mIzq = CurrentToken.TokenValue;
+                string mIzq = "";
                 string operador;
                 Expect("Identificadores");
-                mIzq += CurrentToken.TokenValue;
+                // mIzq += CurrentToken.TokenValue;
                 Expect("Punto");
                 mIzq += CurrentToken.TokenValue;
                 // actualizar Miembro Izquierdo

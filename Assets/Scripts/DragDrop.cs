@@ -104,7 +104,12 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             RoundsControler.Counter = 0;
             if (!GameManager.Instancia.CurrentPlayer) GameManager.Instancia.CurrentPlayer = true;
             else GameManager.Instancia.CurrentPlayer = false;
+            GameManager.Instancia.ActualiceContext();
+            
             draggedObject.GetComponent<VisualCard>().card.ActivateEffect(draggedObject);
+
+            GameManager.Instancia.ActualiceContext();
+            GameManager.Instancia.ActualiceVisual();
             GameManager.Instancia.StarGame(GameManager.Instancia.CurrentPlayer);
         }
 
@@ -123,8 +128,14 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                 RoundsControler.Counter = 0;
                 if (!GameManager.Instancia.CurrentPlayer) GameManager.Instancia.CurrentPlayer = true;
                 else GameManager.Instancia.CurrentPlayer = false;
-                GameManager.Instancia.StarGame(GameManager.Instancia.CurrentPlayer);
+
+                GameManager.Instancia.ActualiceContext();
+
                 draggedObject.GetComponent<VisualCard>().card.ActivateEffect(draggedObject);
+                GameManager.Instancia.ActualiceContext();
+                GameManager.Instancia.ActualiceVisual();
+                GameManager.Instancia.StarGame(GameManager.Instancia.CurrentPlayer);
+
             }
             
         }

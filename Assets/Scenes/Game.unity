@@ -3045,6 +3045,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Prefab: {fileID: 6322147493879926948, guid: d501aac2894fa6f44a951165634c5dd2, type: 3}
   Hand1: {fileID: 458537518}
+  RowM1: {fileID: 2109357323}
+  RowR1: {fileID: 279837978}
+  RowS1: {fileID: 143153523}
+  RowM2: {fileID: 1966523467}
+  RowR2: {fileID: 551581509}
+  RowS2: {fileID: 291226029}
+  ClimaM1: {fileID: 2081565971}
+  ClimaR1: {fileID: 698753895}
+  ClimaS1: {fileID: 1462568473}
+  ClimaM2: {fileID: 1299385878}
+  ClimaR2: {fileID: 1934116956}
+  ClimaS2: {fileID: 1639971343}
   Hand2: {fileID: 1291691833}
   Deck1: {fileID: 396180751}
   Deck2: {fileID: 1684984179}
