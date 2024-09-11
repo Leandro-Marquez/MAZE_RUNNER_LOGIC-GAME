@@ -20,5 +20,9 @@ public class VisualCard : MonoBehaviour
         Power.text = card.Power.ToString();
         CardPhoto.sprite = card.CardPhoto;
     }
+    public void Update()
+    {
+      if(Power!=null && card !=null)  Power.text = card.Power.ToString();
+    }
     
 }

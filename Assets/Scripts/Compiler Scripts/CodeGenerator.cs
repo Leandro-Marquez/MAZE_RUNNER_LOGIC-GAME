@@ -79,6 +79,7 @@ using UnityEngine;
             writer.WriteLine($"    public void {effectNode.Name.Substring(1, effectNode.Name.Length - 2)}Effect(CardList targets, context context {parametersString})");
             writer.WriteLine("    {");
             writer.WriteLine("         UnityEngine.Debug.Log(\"EffectoEjecutado\");");
+            writer.WriteLine("          UnityEngine.Debug.Log(targets.Count());");
             writer.WriteLine("         UnityEngine.Debug.Log(\"Current:\" + GameManager.Instancia.CurrentPlayer);");
 
 
@@ -209,6 +210,7 @@ using UnityEngine;
             cardData.Range = Array.ConvertAll(cardNode.Range.ToArray(), r => (Range)Enum.Parse(typeof(Range), r.Substring(1, r.Length - 2)));
             cardData.OnActivation = new List<EffectsDefinition>();
             cardData.EffectCreated = new EffectCreated();
+            cardData.EffectType = CardEffects.Created;
 
             //manejar los efectos de activación si es necesario
             foreach (var activation in cardNode.Effects)
@@ -232,92 +234,9 @@ using UnityEngine;
                     LeftMember = activation.selector?.Predicate?.MiembroIzq ?? "DefaultLeftMember",
                     Operator = activation.selector?.Predicate?.Operador ?? "DefaultOperator",
                     RightMember = activation.selector?.Predicate?.MiembroDer ?? "DefaultValue"
-                },                    
+                },       
             };
-            
+
             return effect;
         }
     }
-        // effect
-        // {
-        //     Name: "Damage",
-        //     Params:
-        //     {
-        //         Amount: Number,
-        //     },
-        //     Action: (targets, context) =>
-        //     {
-        //         for target in targets
-        //         {
-        //             i = 0;
-        //             while (i < Amount)
-        //             {
-        //                 target.Power -= 1;
-        //                 i+=1;
-        //             }
-        //         };
-        //     }
-        // }
-
-        // effect
-        // {
-        //     Name: "Draw",
-        //     Action: (targets, context) =>
-        //     {
-        //         topCard = context.Deck.Pop();
-        //         context.Hand.Add(topCard);
-        //         context.Hand.Shuffle();
-        //     }
-        // }
-
-        // effect
-        // {
-        //     Name: "ReturnToDeck",
-        //     Action: (targets, context) =>
-        //     {
-        //         for target in targets
-        //         {
-        //             owner = target.Owner;
-        //             deck = context.DeckOfPlayer(owner);
-        //             deck.Push(target);
-        //             deck.Shuffle();
-        //             context.Board.Remove(target);
-        //         };
-        //     }
-        // }
-
-        // card {
-        //     Type: "oro",
-        //     Name: "Beluga",
-        //     Faction: "Elementales",
-        //     Power: 10,
-        //     Range: ["M", "R"],
-        //     OnActivation: [
-        //         {
-        //             Effect: {
-        //                 Name: "Damage",
-        //                 Amount: 5,
-        //             },
-        //             Selector: {
-        //                 Source: "board",
-        //                 Single: false,
-        //                 Predicate: (unit) => unit.Faction == "Northern Realms"
-        //             },
-        //             PostAction: {
-        //                 Effect: {
-        //                     Name: "ReturnToDeck",
-        //                 },
-        //                 Selector: {
-        //                     Source: "parent",
-        //                     Single: false,
-        //                     Predicate: (unit) => unit.Power < 1
-        //                 },
-        //                 PostAction: {
-        //                     Effect: {
-        //                         Name: "Draw",
-        //                     },
-        //                 },
-        //             },
-        //         },
-        //     ]
-        // }

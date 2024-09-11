@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-
-    public class EffectsDefinition
+using Unity.VisualScripting;
+public class EffectsDefinition 
     {
         public string Name { get; set; } 
         public List<object> Params { get; set; } 
@@ -17,11 +18,17 @@ using System.Linq;
         
             if (Source == "\"board\"")
             {
+                UnityEngine.Debug.Log("entroooo");
                 foreach (Card unit in context.Instance.Board)
                 {
+                UnityEngine.Debug.Log("entro");
+                        UnityEngine.Debug.Log("Faction : " + unit.Faction);
+
                     if (Predicate == null || EvaluatePredicate(unit))
                     {
                         cards.Add(unit);
+                Console.WriteLine("agrego target" + cards.Count());
+
                     }
                 }
             }
@@ -87,7 +94,7 @@ using System.Linq;
                 case "Type":
                     return unit.Type.ToString() == Predicate.RightMember.ToString();
                 case "Faction":
-                    return unit.Faction.ToString() == Predicate.RightMember.ToString();
+                    return "\"" + unit.Faction.ToString() + "\"" == Predicate.RightMember.ToString();
                 case "Power":
                     return unit.Power.ToString() == Predicate.RightMember.ToString();
                 case "Range":
@@ -104,7 +111,7 @@ using System.Linq;
                 case "Type":
                     return unit.Type.ToString() != Predicate.RightMember.ToString();
                 case "Faction":
-                    return unit.Faction.ToString() != Predicate.RightMember.ToString();
+                    return "\"" + unit.Faction.ToString() + "\"" != Predicate.RightMember.ToString();
                 case "Power":
                     return unit.Power.ToString() != Predicate.RightMember.ToString();
                 case "Range":
@@ -164,4 +171,6 @@ using System.Linq;
         public string LeftMember { get; set; }
         public string Operator { get; set; }
         public object RightMember { get; set; }
+
+
     }

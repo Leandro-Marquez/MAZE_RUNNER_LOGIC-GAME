@@ -108,7 +108,6 @@ using UnityEngine.XR;
                     VisualCard cardDisplay = cardObject.GetComponent<VisualCard>();
                     cardDisplay.card = card;
                     cardDisplay.InicializaCarta();
-                
                 }
             }
 
@@ -123,7 +122,6 @@ using UnityEngine.XR;
             AddCardsToGameObject(owner == 1 ? weatherRangeP1 : weatherRangeP2, weatherRange, cardPrefab);
             AddCardsToGameObject(owner == 1 ? weatherSiegeP1 : weatherSiegeP2, weatherSiege, cardPrefab);
         }
-
 
         public void ActualiceContext(int owner, GameObject hand, GameObject deck, GameObject cementery, GameObject rowMelee, GameObject rowRange, GameObject rowSiege, GameObject weatherMelee, GameObject weatherRange, GameObject weatherSiege)
         {

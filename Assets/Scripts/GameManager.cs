@@ -54,6 +54,15 @@ public class GameManager : MonoBehaviour
                 CardsPlayer1.Add(CodeGenerator._cards[x+1]);
             }
         }
+        context.Instance.Hands[1] = new CardList();
+        context.Instance.Hands[2] = new CardList();
+        context.Instance.Decks[1] = new CardList();
+        context.Instance.Decks[2] = new CardList();
+        context.Instance.Graveyards[1] = new CardList();
+        context.Instance.Graveyards[2] = new CardList();
+        context.Instance.Fields[1] = new CardList();
+        context.Instance.Fields[2] = new CardList();
+
         PrepareGame(CardsPlayer1,Deck1);
         PrepareGame(CardsPlayer2,Deck2);
         InstanciarLideres();
@@ -103,7 +112,7 @@ public class GameManager : MonoBehaviour
             int n = Random.Next(0,transforms.Length-1);
             Transform Temporal = transforms[n];
             transforms[n] = transforms[x];
-            transforms[x] = Temporal; 
+            transforms[x] = Temporal;
         }
         for(int x=0 ; x<transforms.Length ; x++)
         {
@@ -191,16 +200,15 @@ public class GameManager : MonoBehaviour
     {
         Actualizacion.Actualizar();
     }
-    public void ActualiceContext()
+     public void ActualiceContext()
     {
-        context.Instance.ActualiceContext(1,Hand1,Deck1,Cementery1,RowM1,RowR1,RowS1,ClimaM1,ClimaR1,ClimaS1);
-        context.Instance.ActualiceContext(2,Hand2,Deck2,Cementery2,RowM2,RowR2,RowS2,ClimaM2,ClimaR2,ClimaS2);
-    }
-    public void ActualiceVisual()
-    {
-        context.Instance.ActualiceVisual(1,Hand1,Deck1,Cementery1,RowM1,RowR1,RowS1,ClimaM1,ClimaR1,ClimaS1,Prefab);
-        context.Instance.ActualiceVisual(2,Hand2,Deck2,Cementery2,RowM2,RowR2,RowS2,ClimaM2,ClimaR2,ClimaS2,Prefab);
+        context.Instance.ActualiceContext(1, Hand1, Deck1, Cementery1, RowM1, RowR1, RowS1, ClimaM1, ClimaR1, ClimaS1);
+        context.Instance.ActualiceContext(2, Hand2, Deck2, Cementery2, RowM2, RowR2, RowS2, ClimaM2, ClimaR2, ClimaS2);
     }
 
-    
+    public void ActualiceVisual()
+    {
+        context.Instance.ActualiceVisual(1,Hand1, Deck1, Cementery1, RowM1, RowR1, RowS1, ClimaM1, ClimaR1, ClimaS1, Prefab);
+        context.Instance.ActualiceVisual(2, Hand2, Deck2, Cementery2, RowM2, RowR2, RowS2, ClimaM2, ClimaR2, ClimaS2, Prefab);
+    }
 }

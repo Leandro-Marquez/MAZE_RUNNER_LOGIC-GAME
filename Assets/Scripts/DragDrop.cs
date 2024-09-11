@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Accessibility;
 using UnityEngine.EventSystems;
@@ -96,7 +97,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         canvasGroup.alpha = 1f;
         // Bloquea las interacciones con otros objetos
         canvasGroup.blocksRaycasts = true;
-        
+
         if(CustomCollider.IsCalling)
         {
             draggedObject.transform.SetParent(CustomCollider.otherCard.transform.parent);
@@ -104,11 +105,10 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             RoundsControler.Counter = 0;
             if (!GameManager.Instancia.CurrentPlayer) GameManager.Instancia.CurrentPlayer = true;
             else GameManager.Instancia.CurrentPlayer = false;
-            GameManager.Instancia.ActualiceContext();
-            
-            draggedObject.GetComponent<VisualCard>().card.ActivateEffect(draggedObject);
 
+            //activar efecto
             GameManager.Instancia.ActualiceContext();
+            draggedObject.GetComponent<VisualCard>().card.ActivateEffect(draggedObject);
             GameManager.Instancia.ActualiceVisual();
             GameManager.Instancia.StarGame(GameManager.Instancia.CurrentPlayer);
         }
@@ -129,10 +129,9 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                 if (!GameManager.Instancia.CurrentPlayer) GameManager.Instancia.CurrentPlayer = true;
                 else GameManager.Instancia.CurrentPlayer = false;
 
+                //activar efecto
                 GameManager.Instancia.ActualiceContext();
-
                 draggedObject.GetComponent<VisualCard>().card.ActivateEffect(draggedObject);
-                GameManager.Instancia.ActualiceContext();
                 GameManager.Instancia.ActualiceVisual();
                 GameManager.Instancia.StarGame(GameManager.Instancia.CurrentPlayer);
 

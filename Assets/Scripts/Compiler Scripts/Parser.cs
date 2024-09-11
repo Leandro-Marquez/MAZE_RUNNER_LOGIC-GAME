@@ -7,7 +7,7 @@ public class Parser
     private List<Token> tokens; // lista de tokens a analizar 
     int position;
     private Token CurrentToken => position < tokens.Count ? tokens[position] : null!;
-    private Context context = new Context();
+    public static Context context = new Context();
     public static readonly Dictionary<string,(int procedencia,bool associaDerecha)> Operadores = new Dictionary<string,(int , bool associaDerecha)>{
     {"+",(4,false)},
     {"-",(4,false)},

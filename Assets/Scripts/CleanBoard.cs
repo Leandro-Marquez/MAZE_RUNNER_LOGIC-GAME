@@ -34,7 +34,7 @@ public class CleanBoard : MonoBehaviour
         MoverClima("ClimaF3P1", cementery1, nuevaescala);
         MoverClima("ClimaF1P2", cementery2, nuevaescala);
         MoverClima("ClimaF2P2", cementery2, nuevaescala);
-        MoverClima("ClimaF3P2", cementery2, nuevaescala);
+        MoverClima("ClimaF3P2", cementery2, nuevaescala); 
     }
     private static void MoverHijos(Transform padre, Transform nuevaPosicion, Vector2 nuevaEscala)
     {

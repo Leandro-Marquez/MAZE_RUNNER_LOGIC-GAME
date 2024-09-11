@@ -3,13 +3,14 @@ public class EffectCreated
     public void DamageEffect(CardList targets, context context , int Amount)
     {
          UnityEngine.Debug.Log("EffectoEjecutado");
+          UnityEngine.Debug.Log(targets.Count());
          UnityEngine.Debug.Log("Current:" + GameManager.Instancia.CurrentPlayer);
         foreach (Card target in targets)
         {
         var i = 0;
         while (i < Amount)
         {
-         target.Power -= 1;
+         target.Power -= 5;
          i += 1;
         }
         }
@@ -18,6 +19,7 @@ public class EffectCreated
     public void AumentoEffect(CardList targets, context context , int Amount)
     {
          UnityEngine.Debug.Log("EffectoEjecutado");
+          UnityEngine.Debug.Log(targets.Count());
          UnityEngine.Debug.Log("Current:" + GameManager.Instancia.CurrentPlayer);
         foreach (Card target in targets)
         {
@@ -33,6 +35,7 @@ public class EffectCreated
     public void DrawEffect(CardList targets, context context )
     {
          UnityEngine.Debug.Log("EffectoEjecutado");
+          UnityEngine.Debug.Log(targets.Count());
          UnityEngine.Debug.Log("Current:" + GameManager.Instancia.CurrentPlayer);
         var topCard = context.Deck.Pop();
         context.Hand.Add(topCard);
@@ -42,6 +45,7 @@ public class EffectCreated
     public void ReturnToDeckEffect(CardList targets, context context )
     {
          UnityEngine.Debug.Log("EffectoEjecutado");
+          UnityEngine.Debug.Log(targets.Count());
          UnityEngine.Debug.Log("Current:" + GameManager.Instancia.CurrentPlayer);
         foreach (Card target in targets)
         {

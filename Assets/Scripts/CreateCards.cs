@@ -43,117 +43,15 @@ public class CardCreationHandler : MonoBehaviour
         Parser parser = new Parser(tokens);
         List<ASTNode> aSTNodes = parser.Parse();
 
-        // string filePath = Path.Combine(Application.dataPath, "Scripts/EffectCreatedRef.cs");
-        // // Crear una instancia de CodeGenerator y generar el código
-        // CodeGenerator codeGenerator = new CodeGenerator(aSTNodes);
-        // codeGenerator.GenerateCode(filePath);
+        // Definir la ruta completa del archivo en la carpeta "Compiler Scripts"
+        string filePath = Path.Combine(Application.dataPath, "Scripts/Compiler Scripts/EffectCreatedRef.cs");
 
-
-    // Definir la ruta completa del archivo en la carpeta "Compiler Scripts"
-    string filePath = Path.Combine(Application.dataPath, "Scripts/Compiler Scripts/EffectCreatedRef.cs");
-
-    // Crear una instancia de CodeGenerator y generar el código
-    CodeGenerator codeGenerator = new CodeGenerator(aSTNodes);
-    codeGenerator.GenerateCode(filePath);
-
-
-
-
+        // Crear una instancia de CodeGenerator y generar el código
+        CodeGenerator codeGenerator = new CodeGenerator(aSTNodes);
+        codeGenerator.GenerateCode(filePath);
 
         // Ocultar el cuadro de texto y el botón de procesar después de procesar el texto
         inputFieldObject.SetActive(false);
         processButton.gameObject.SetActive(false);
     }
 }
-// @"
-//         effect
-//         {
-//             Name: "Damage",
-//             Params:
-//             {
-//                 Amount: Number,
-//             },
-//              Action: (targets, context) =>
-//              {
-//                 for target in targets
-//                 {
-//                     i = 0;
-//                     while (i < Amount)
-//                     {
-//                         target.Power -= 1;
-//                         i+=1;
-//                     }
-//                 };
-//             }
-//         }
-
-//         effect
-//         {
-//              Name: "Draw",
-//              Action: (targets, context) =>
-//              {
-//                 topCard = context.Deck.Pop();
-//                 context.Hand.Add(topCard);
-//                 context.Hand.Shuffle();
-//              }
-//         }
-
-//          effect
-//         {
-//             Name: "ReturnToDeck",
-//             Action: (targets, context) =>
-//             {
-//                  for target in targets
-//                  {
-//                     owner = target.Owner;
-//                     deck = context.DeckOfPlayer(owner);
-//                     deck.Push(target);
-//                     deck.Shuffle();
-//                     context.Board.Remove(target);
-//                 };
-//             }
-//         }
-
-//         card
-//         {
-//             Type: "Oro",
-//             Name: "Beluga",
-//             Faction: "Northern Realms",
-//             Power: 10,
-//             Range: ["Melee", "Ranged"],
-//             OnActivation: [
-//                 {
-//                     Effect:
-//                     {
-//                         Name: "Damage",
-//                         Amount: 5,
-//                     },
-//                     Selector:
-//                      {
-//                         Source: "board",
-//                         Single: false,
-//                         Predicate: (unit) => unit.Faction == "Northern Realms"
-//                     },
-//                     PostAction:
-//                     {
-//                       Effect:
-//                       {
-//                         Name: "ReturnToDeck",
-//                         },
-//                         Selector:
-//                         {
-//                             Source: "parent",
-//                             Single: false,
-//                             Predicate: (unit) => unit.Power < 1
-//                         },
-//                         PostAction:
-//                         {
-//                             Effect:
-//                             {
-//                                 Name: "Draw",
-//                             },
-//                         },
-//                     },
-//                  },
-//             ]
-//         }"
