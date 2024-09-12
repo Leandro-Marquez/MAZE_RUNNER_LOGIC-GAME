@@ -40,7 +40,7 @@ public class Effects : MonoBehaviour
     }
     public static void Senuelo(Transform Father)
     {
-        if(Father.tag == "Clima1" || Father.tag == "Clima2" || Father.tag == "Clima2")
+        if(Father.tag == "Clima1" || Father.tag == "Clima2" || Father.tag == "Clima3")
         {
             CustomCollider.otherCard.transform.SetParent(GameObject.Find("HandPlayer1").transform);
         }
@@ -53,7 +53,7 @@ public class Effects : MonoBehaviour
     {
         Vector2 nuevaescala = new Vector2(1,1);
 
-        if(Father.tag == "Clima1" || Father.tag == "Clima2" || Father.tag == "Clima2")
+        if(Father.tag == "Clima1" || Father.tag == "Clima2" || Father.tag == "Clima3")
         {
             MoverObjeto(CustomCollider.otherCard.transform,GameManager.Instancia.Cementery2.transform,nuevaescala);
             MoverObjeto(Father.GetChild(0),GameManager.Instancia.Cementery1.transform,nuevaescala);

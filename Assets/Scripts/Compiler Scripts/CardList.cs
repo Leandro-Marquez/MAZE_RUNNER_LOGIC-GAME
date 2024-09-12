@@ -70,7 +70,7 @@ using System.Linq;
         {
             cards.Add(card);
         }
-
+        //elimina todos los elementos de la lista
         public void Clear()
         {
             cards.Clear();
@@ -80,17 +80,19 @@ using System.Linq;
         {
             this.cards.AddRange(cards.cards);
         }
-
+        
+        //devolver el total de elementos de la lista
         public int Count()
         {
             return cards.Count;
         }
 
+        //colocar una carta en un lugar especifico
         public void Instert(int index, Card card)
         {
             cards.Insert(index, card);
         }
-
+        //verificar si pertenece el elemento
         public bool Contains(Card card)
         {
             return cards.Contains(card);

@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
     public class CodeGenerator
     {
-        private List<ASTNode> _nodes;
+        private List<ASTNode> _nodes; // lista de nodos devuelta por el parser
         public static List<Card> _cards = new List<Card>(); // Almacena las cartas creadas
         public Context context = new Context(null!);
 
@@ -15,12 +15,12 @@ using UnityEngine;
             _nodes = nodes;
         }
 
+        //generar codigo de dos maneras cartas o efectos 
         public void GenerateCode(string outputPath)
         {
+            //definir la direccion del archivo a sobreescribir 
             using (StreamWriter writer = new StreamWriter(outputPath))
             {
-                // writer.WriteLine("{");
-
 
                 // Escribir la definición de la clase EffectCreated
                 writer.WriteLine("public class EffectCreated");
@@ -39,8 +39,6 @@ using UnityEngine;
                 }
 
                 writer.WriteLine("}");
-                // writer.WriteLine("}");
-
             }
         }
 
@@ -66,23 +64,18 @@ using UnityEngine;
                     {
                         parameters.Add($"bool {param.Key}");
                     }
-
                 }
-
                 parametersString = ", " + string.Join(", ", parameters);
             }
             else
             {
                 parametersString = "";
             }
-
+            //escribir el metodo con sus correspondientes parametros
             writer.WriteLine($"    public void {effectNode.Name.Substring(1, effectNode.Name.Length - 2)}Effect(CardList targets, context context {parametersString})");
             writer.WriteLine("    {");
             writer.WriteLine("         UnityEngine.Debug.Log(\"EffectoEjecutado\");");
-            writer.WriteLine("          UnityEngine.Debug.Log(targets.Count());");
             writer.WriteLine("         UnityEngine.Debug.Log(\"Current:\" + GameManager.Instancia.CurrentPlayer);");
-
-
 
             foreach (var action in effectNode.Action.Hijos)
             {
@@ -92,9 +85,10 @@ using UnityEngine;
             writer.WriteLine("    }");
             writer.WriteLine();
         }
-
+        // escribir el cuerpo de accion del metodo
         private void GenerateActionCode(StreamWriter writer, ASTNode action)
         {
+            //verificar cada tipo de nodo en el primer momento del cuerpo de accion 
             if (action is AssignmentNode assignmentNode)
             {
                 string variableDeclaration = context.Variables.ContainsKey(assignmentNode.VariableName) ? "" : "var";
@@ -115,7 +109,7 @@ using UnityEngine;
                 writer.WriteLine($"        {variableDeclaration} {access} {assignmentNode.Operator} {GenerateValueExpressionCode(assignmentNode.ValueExpression)};");
                 if (!context.Variables.ContainsKey(assignmentNode.VariableName))
                 {
-                    context.DefineVariable(assignmentNode.VariableName, null); // Asumiendo que el valor se asignará más adelante o es irrelevante en este contexto
+                    context.DefineVariable(assignmentNode.VariableName, null); // Asumir el valor se asignará más adelante o es irrelevante en este contexto
                 }
             }
 
@@ -141,7 +135,7 @@ using UnityEngine;
             }
             else if (action is MemberAccessNode memberAccessNode)
             {
-                // Aquí puedes manejar el acceso a miembros y llamadas a métodos
+                //manejar el acceso a miembros y llamadas a métodos
                 if (memberAccessNode.IsProperty)
                 {
                     // Si es una propiedad, simplemente accede a la propiedad
@@ -155,20 +149,20 @@ using UnityEngine;
                 }
             }
         }
-
+        //generar el valor de la expresion que vaya a generar de ser posible 
         private string GenerateValueExpressionCode(ASTNode valueExpression)
         {
             if (valueExpression is NumberNode numberLiteral)
             {
-                return numberLiteral.Value.ToString(); // Asumiendo que Value es un número
+                return numberLiteral.Value.ToString(); // Asumir que Value es un número
             }
             else if (valueExpression is BooleanNode booleanLiteral)
             {
-                return booleanLiteral.Value.ToString().ToLower(); // Asumiendo que Value es un bool
+                return booleanLiteral.Value.ToString().ToLower(); // Asumir que Value es un bool
             }
             else if (valueExpression is VariableReferenceNode variableReferenceNode)
             {
-                return variableReferenceNode.Name;
+                return variableReferenceNode.Name; // Asumir que Value es un string osea una variable 
             }
             else if (valueExpression is BinaryOperationNode binaryOperationNode)
             {
@@ -189,15 +183,16 @@ using UnityEngine;
                     return $"{string.Join(".", memberAccessNode.AccessChain)}({arguments})";
                 }
             }
-            // Agrega más casos según sea necesario
+            // Agregar más casos según sea necesario
 
-            // Si no se reconoce el tipo, simplemente devuelve una cadena vacía o un valor predeterminado
+            // Si no se reconoce el tipo,devolver una cadena vacía o un valor predeterminado
             return "";
         }
 
+        //crear instancias de scriptable objects (cartas)
         private void CreateCardInstance(CardNode cardNode)
         {
-            // Crear una nueva instancia de CardData
+            // Crear una nueva instancia Data
             Card cardData = ScriptableObject.CreateInstance<Card>();
 
             // Asignar las propiedades
@@ -220,7 +215,8 @@ using UnityEngine;
             cardData.EffectType = CardEffects.Created;
             _cards.Add(cardData);
         }
-
+        
+        //crear la definicion de efecto para con la carta 
         private EffectsDefinition CreateEffect(OnActivationNode activation)
         {
             EffectsDefinition effect = new EffectsDefinition()
@@ -234,9 +230,8 @@ using UnityEngine;
                     LeftMember = activation.selector?.Predicate?.MiembroIzq ?? "DefaultLeftMember",
                     Operator = activation.selector?.Predicate?.Operador ?? "DefaultOperator",
                     RightMember = activation.selector?.Predicate?.MiembroDer ?? "DefaultValue"
-                },       
+                },
             };
-
             return effect;
         }
     }

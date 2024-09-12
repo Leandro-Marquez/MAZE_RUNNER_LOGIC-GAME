@@ -9,14 +9,14 @@ public abstract class ASTNode
     public abstract void Print(int index);
     public abstract object Evaluate(Context context);
 }
-
+//nodo de efecto general 
 public class EffectNode : ASTNode
 {
     public string Name{get; set;}
-
+    //guardar nombres y valores por default de los parametros definidos para con el metodo
     public Dictionary<string,object> Params{get; set;} = new Dictionary<string, object>();
 
-    public ActionNode Action{get; set;} = new ActionNode();// arreglarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr 
+    public ActionNode Action{get; set;} = new ActionNode(); //cuerpo de accion del efecto osea el metodo!!!
 
     public override object Evaluate(Context context)
     {
@@ -25,20 +25,10 @@ public class EffectNode : ASTNode
 
         public override void Print(int indent = 0)
         {
-            string indentation = new string(' ', indent);
-            Console.WriteLine($"{indentation}Effect: {Name}");
-            foreach (var param in Params)
-            {
-                Console.WriteLine($"{indentation}  Param: {param.Key} = {param.Value}");
-            }
-            Console.WriteLine($"{indentation}  Action:");
-            foreach (var action in Action.Hijos)
-            {
-                action.Print(indent + 3); 
-            }
+            throw new NotImplementedException();
         }
 }
-
+// nodo de accion del efecto
 public class ActionNode : ASTNode 
 {
     public List<ASTNode> Hijos { get; set; } = new List<ASTNode>();
@@ -50,16 +40,11 @@ public class ActionNode : ASTNode
 
         public override void Print(int indent = 0)
         {
-            string indentation = new string(' ', indent);
-            Console.WriteLine($"{indentation}Action:");
-            foreach (var child in Hijos)
-            {
-                child.Print(indent + 2);
-            }
+           throw new NotImplementedException();
         }
 
 }
-
+//nodo carta 
 public class CardNode : ASTNode
 {
     public string Type{get; set;}
@@ -75,17 +60,7 @@ public class CardNode : ASTNode
     }
     public override void Print(int indent = 0)
     {
-        string indentation = new string(' ', indent);
-        Console.WriteLine($"{indentation}Card: {Name}");
-        Console.WriteLine($"{indentation}  Type: {Type}");
-        Console.WriteLine($"{indentation}  Faction: {Faction}");
-        Console.WriteLine($"{indentation}  Power: {Power}");
-        Console.WriteLine($"{indentation}  Range: [{string.Join(", ", Range)}]");
-        Console.WriteLine($"{indentation}  OnActivation:");
-        foreach (var activation in Effects)
-        {
-            activation.Print(indent + 2);
-        }
+       throw new NotImplementedException();
     }
 
     public override object Evaluate(Context context)
@@ -93,6 +68,7 @@ public class CardNode : ASTNode
         throw new NotImplementedException();
     }
 }
+//nodo on activation
 public class OnActivationNode : ASTNode
 {
     public CardEffectNode effect{get; set;} = new CardEffectNode();
@@ -105,12 +81,10 @@ public class OnActivationNode : ASTNode
 
     public override void Print(int indent = 0)
     {
-        string indentation = new string(' ', indent);
-        Console.WriteLine($"{indentation}Activation:");
-        effect.Print(indent + 2);
-        selector.Print(indent + 2);
+        throw new NotImplementedException();
     }
 }
+//nodo de efecto de la carta 
 public class CardEffectNode : ASTNode
 {
     public string Name{get; set;}
@@ -123,15 +97,10 @@ public class CardEffectNode : ASTNode
 
     public override void Print(int indent = 0)
     {
-        string indentation = new string(' ', indent);
-        Console.WriteLine($"{indentation}Effect:");
-        Console.WriteLine($"{indentation}  Name: {Name}");
-        foreach (var item in Params)
-        {
-            Console.WriteLine($"{indentation}  Amount: {item}");
-        }
+        throw new NotFiniteNumberException();
     }
 }
+// nodo selector de la carta para con el efecto
 public class SelectorNode : ASTNode
 {
     public string Source{get; set;}
@@ -152,28 +121,25 @@ public class SelectorNode : ASTNode
             Predicate.Print(indent);
         }
 }
+// nodo predicate del selector
 public class PredicateNode : ASTNode
 {
     public string MiembroIzq{get; set;}
 
-    public void Imprimir()
-    {
-        System.Console.WriteLine(MiembroIzq);
-    }
     public string Operador{get; set;}
     public object MiembroDer{get; set;}
     public override void Print(int indent = 0)
-        {
-            Imprimir();
-            string indentation = new string(' ', indent);
-            Console.WriteLine($"{indentation}Predicate: {MiembroIzq} {Operador} {MiembroDer}");
-        }
+    {
+        throw new NotImplementedException();
+    }
 
     public override object Evaluate(Context context)
     {
         throw new NotImplementedException();
     }
 }
+
+// nodo abstracto de expresiones
 public abstract class ExpressionNode : ASTNode
 {
     public static implicit operator ExpressionNode(MemberAccessNode v)
@@ -181,6 +147,7 @@ public abstract class ExpressionNode : ASTNode
         throw new NotImplementedException();
     }
 }
+// nodo literal para numero y su evaluate
 public class NumberNode : ExpressionNode
 {
     public int Value{get; set;}
@@ -189,12 +156,12 @@ public class NumberNode : ExpressionNode
     {
         return Value;
     }
-
-        public override void Print(int indent = 0)
-        {
-            Console.WriteLine($"{new string(' ', indent)}NumberLiteral: {Value}");
-        }
+    public override void Print(int indent = 0)
+    {
+        throw new NotImplementedException();
+    }
 }
+//nodo literal para booleano y su evaluate
 public class BooleanNode : ExpressionNode
 {        
     public bool Value{get; set;}
@@ -204,11 +171,12 @@ public class BooleanNode : ExpressionNode
         return Value;
     }
 
-        public override void Print(int indent = 0)
-        {
-            Console.WriteLine($"{new string(' ', indent)}BooleanLiteral: {Value}");
-        }
+    public override void Print(int indent = 0)
+    {
+        throw new NotImplementedException();
+    }
 }
+//nodo de refrencia a variable y su evaluate
 public class VariableReferenceNode : ExpressionNode
 {
     public string Name{get; set;}
@@ -219,11 +187,12 @@ public class VariableReferenceNode : ExpressionNode
          return context.GetVariable(Name);
     }
 
-        public override void Print(int indent = 0)
-        {
-            Console.WriteLine($"{new string(' ', indent)}VariableReference: {Name}");
-        }
+    public override void Print(int indent = 0)
+    {
+        throw new NotImplementedException();
+    }
 }
+//nodo de operacion binaria y su evaluate
 public class BinaryOperationNode : ExpressionNode
 {
     public ExpressionNode MiembroIzq{get; set;}
@@ -231,55 +200,52 @@ public class BinaryOperationNode : ExpressionNode
     public string Operator{get; set;}
     public override void Print(int indent = 0)
     {
-        Console.WriteLine($"{new string(' ', indent)}Binary Operation: {Operator}");
-        MiembroIzq.Print(indent + 2);
-        MiembroDer.Print(indent + 2);
+        throw new NotImplementedException();
     }
 
-            public override object Evaluate(Context context)
-            {
-                var leftValue = MiembroIzq.Evaluate(context);
-                var rightValue = MiembroDer.Evaluate(context);
+    public override object Evaluate(Context context)
+    {
+         var leftValue = MiembroIzq.Evaluate(context);
+        var rightValue = MiembroDer.Evaluate(context);
 
-                switch (Operator)
-                {
-                    case "+":
-                        return (int)leftValue + (int)rightValue;
-                    case "-":
-                        return (int)leftValue - (int)rightValue;
-                    case "*":
-                        return (int)leftValue * (int)rightValue;
-                    case "/":
-                        return (int)leftValue / (int)rightValue;
-                    case "&&":
-                        return (bool)leftValue && (bool)rightValue;
-                    case "||":
-                        return (bool)leftValue || (bool)rightValue;
-                    case "!":
-                        return !(bool)leftValue;
-                    case "==":
-                        return (int)leftValue == (int)rightValue;
-                    case "!=":
-                        return (int)leftValue != (int)rightValue;
-                    case ">":
-                        return (int)leftValue > (int)rightValue;
-                    case "<":
-                        return (int)leftValue < (int)rightValue;
-                    case ">=":
-                        return (int)leftValue >= (int)rightValue;
-                    case "<=":
-                        return (int)leftValue <= (int)rightValue;
-                    
-                    
-                    default:
-                        throw new InvalidOperationException($"Operador desconocido: {Operator}");
-                }
-            }
+        switch (Operator)
+        {
+            case "+":
+                return (int)leftValue + (int)rightValue;
+            case "-":
+                return (int)leftValue - (int)rightValue;
+            case "*":
+                return (int)leftValue * (int)rightValue;
+            case "/":
+                return (int)leftValue / (int)rightValue;
+            case "&&":
+                return (bool)leftValue && (bool)rightValue;
+            case "||":
+                return (bool)leftValue || (bool)rightValue;
+            case "!":
+                return !(bool)leftValue;
+            case "==":
+                return (int)leftValue == (int)rightValue;
+            case "!=":
+                return (int)leftValue != (int)rightValue;
+            case ">":
+                return (int)leftValue > (int)rightValue;
+            case "<":
+                return (int)leftValue < (int)rightValue;
+            case ">=":
+                return (int)leftValue >= (int)rightValue;
+            case "<=":
+                return (int)leftValue <= (int)rightValue;  
+            default:
+                throw new InvalidOperationException($"Operador desconocido: {Operator}");
+        }
+    }
 }
+//nodo foreach
 public class ForNode : ASTNode
 {
     public string Item { get; set; }
-    public VariableReferenceNode Collection { get; set; }
+    public VariableReferenceNode Collection { get; set; } // coleccion para el foreach
     public List<ASTNode> Body { get; set; } = new List<ASTNode>();
 
     public override object Evaluate(Context context)
@@ -287,20 +253,12 @@ public class ForNode : ASTNode
         throw new NotImplementedException();
     }
 
-        public override void Print(int indent = 0)
-        {
-            string indentation = new string(' ', indent);
-            Console.WriteLine($"{indentation}For:");
-            Console.WriteLine($"{indentation}  Item: {Item}");
-            Console.WriteLine($"{indentation}  Collection:");
-            Collection.Print(indent + 2);
-            Console.WriteLine($"{indentation}  Body:");
-            foreach (var statement in Body)
-            {
-                statement.Print(indent + 2);
-            }
-        }
+    public override void Print(int indent = 0)
+    {
+        throw new NotImplementedException();
+    }
 }
+// nodo while
 public class WhileNode : ASTNode
 {
     public ExpressionNode Condition { get; set; }
@@ -311,19 +269,12 @@ public class WhileNode : ASTNode
         throw new NotImplementedException();
     }
 
-        public override void Print(int indent = 0)
-        {
-            string indentation = new string(' ', indent);
-            Console.WriteLine($"{indentation}While:");
-            Console.WriteLine($"{indentation}  Condition:");
-            Condition.Print(indent + 2);
-            Console.WriteLine($"{indentation}  Body:");
-            foreach (var statement in Body)
-            {
-                statement.Print(indent + 2);
-            }
-        }
+    public override void Print(int indent = 0)
+    {
+         throw new NotImplementedException();
+    }
 }
+// nodo de assiganacion a variable y su evaluate
 public class AssignmentNode : ASTNode
 {
     public string VariableName { get; set; }
@@ -348,24 +299,11 @@ public class AssignmentNode : ASTNode
     }
 
     public override void Print(int indent = 0)
-        {
-            string indentation = new string(' ', indent);
-
-            // Imprimir la cadena de accesos anidados si existe
-            if (CadenaDeAcceso != null && CadenaDeAcceso.Any())
-            {
-                Console.WriteLine($"{indentation}Access: {string.Join(".", CadenaDeAcceso)}");
-            }
-
-            // Imprimir el nombre de la variable, el operador y el valor de la expresión
-            Console.WriteLine($"{indentation}Assignment: {VariableName} {Operator}");
-
-            // Imprimir el valor de la expresión en una nueva línea
-            Console.Write($"{indentation}");
-            ValueExpression.Print(indent + 2); // Aumentar la indentación para el valor
-        }
-
+    {
+        throw new NotImplementedException();
+    }
 }
+// nodo miembro de acceso
 public class MemberAccessNode : ASTNode 
 {
     public List<string> AccessChain { get; set; } = new List<string>();
@@ -378,18 +316,7 @@ public class MemberAccessNode : ASTNode
     }
 
     public override void Print(int indent = 0)
-        {
-            string indentation = new string(' ', indent);
-            string memberType = IsProperty ? "PropertyAccess" : "MethodCall";
-            Console.WriteLine($"{indentation}{memberType}: {string.Join(".", AccessChain)}");
-
-            if (!IsProperty && Arguments.Count > 0)
-            {
-                Console.WriteLine($"{indentation}Arguments:");
-                foreach (var arg in Arguments)
-                {
-                    arg.Print(indent + 4); 
-                }
-            }
-        }
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CounterPoints : MonoBehaviour
 {
-    public GameObject p1Row_M, p1Row_R, p1Row_S, p2Row_M, p2Row_R, p2Row_S;    
+    public GameObject p1Row_M, p1Row_R, p1Row_S, p2Row_M, p2Row_R, p2Row_S;
     public TextMeshProUGUI p1TotalCounter, p2TotalCounter; 
     public TextMeshProUGUI _p1TotalCounter, _p2TotalCounter; //Estos para las sombras
 
@@ -15,11 +15,11 @@ public class CounterPoints : MonoBehaviour
 
     private int pointsM_P1 = 0, pointsR_P1 = 0, pointsS_P1 = 0, pointsM_P2 = 0, pointsR_P2 = 0, pointsS_P2 = 0;
 
-    public static int totalPoints_P1;
-    public static int totalPoints_P2;
+    public static int totalPoints_P1 {get; set;} = 0;
+    public static int totalPoints_P2 {get; set;} = 0;
 
-    public static int totalRound_P1;
-    public static int totalRound_P2;
+    public static int totalRound_P1 {get; set;} = 0;
+    public static int totalRound_P2 {get; set;} = 0;
 
 
     public void ActualizePoints()
@@ -56,7 +56,7 @@ public class CounterPoints : MonoBehaviour
 
     public void ActualizeVisual()
     {
-        //Actualizar la cantidad de rondas ganadas por  cada jugador 
+        // Actualizar la cantidad de rondas ganadas por  cada jugador
         p1RoundCounter.text = "Rounds: " + totalRound_P1.ToString();
         _p1RoundCounter.text = "Rounds: " + totalRound_P1.ToString();
 

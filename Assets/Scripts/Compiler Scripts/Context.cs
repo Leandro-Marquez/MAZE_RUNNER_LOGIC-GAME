@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
     public class Context
     {
+        //tener refrencia a todas las variables creadas en el codigo 
         public Dictionary<string, object> Variables { get; } = new Dictionary<string, object>();
+        //guardar los nodos efectos para verificar en la creacion de cartas si dichos efectos existen
         public Dictionary<string, EffectNode> Effects { get; } = new Dictionary<string, EffectNode>();
+        //guardar los nodos de carta creados
         public Dictionary<string, CardNode> Cards { get; } = new Dictionary<string, CardNode>();
 
         private Context _parent;
@@ -12,7 +15,7 @@ using System.Collections.Generic;
         {
             _parent = parent;
         }
-
+        //definir variable en el diccionario
         public void DefineVariable(string name, object value)
         {
             if (Variables.ContainsKey(name))
@@ -21,7 +24,7 @@ using System.Collections.Generic;
             }
             Variables[name] = value;
         }
-        
+        //obtener valor de la variable en el diccionario
         public object GetVariable(string name)
         {
             if (Variables.ContainsKey(name))
@@ -35,7 +38,7 @@ using System.Collections.Generic;
 
             throw new Exception($"Variable '{name}' no definida.");
         }
-
+        //modificar valor de la variable 
         public void SetVariable(string name, object value)
         {
             if (!Variables.ContainsKey(name))
@@ -52,7 +55,7 @@ using System.Collections.Generic;
 
             Variables[name] = value;
         }
-
+        //definir un efecto en el diccionario con su respectivo nodo
         public void DeffineEffect(string name, EffectNode effect)
         {
             if (Effects.ContainsKey(name))
@@ -61,7 +64,7 @@ using System.Collections.Generic;
             }
             Effects[name] = effect;
         }
-
+        //obtener un nodo efecto del diccionario a traves del nombre 
         public EffectNode GetEffect(string name)
         {
             if (Effects.ContainsKey(name))
@@ -74,7 +77,7 @@ using System.Collections.Generic;
             }
             throw new Exception($"El efecto '{name}' no esta definido.");
         }
-
+        //definir una carta con su respectivo nodo
         public void DeffineCard(string name, CardNode card)
         {
             if (Cards.ContainsKey(name))
@@ -83,7 +86,7 @@ using System.Collections.Generic;
             }
             Cards[name] = card;
         }
-
+        //obtener un nodo carta a traves de su nombre 
         public CardNode GetCard(string name)
         {
             if (Cards.ContainsKey(name))
@@ -96,7 +99,7 @@ using System.Collections.Generic;
             }
             throw new Exception($"La carta '{name}' no esta definida.");
         }
-
+        
         public void PrintVariables()
         {
             Console.WriteLine("Variables:");

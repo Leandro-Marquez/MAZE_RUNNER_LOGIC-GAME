@@ -5,9 +5,12 @@ using UnityEngine.XR;
 
     public class context : MonoBehaviour
     {
-        public  static context Instance = new context(); //instancia estatica de la clase para poder usarla un unity
+        //instancia estatica de la clase para poder acceder a traves de la misma a todas las propiedades y metodos dentro de la clase
+        public  static context Instance = new context(); 
         public int TriggerPlayer { get; set; } = 1;
-        public Dictionary<int, CardList> Boards { get; set; } = new Dictionary<int, CardList>(); // Representa el tablero completo, con IDs de jugadores como clave
+
+        // Representa el tablero completo, con IDs de jugadores como clave
+        public Dictionary<int, CardList> Boards { get; set; } = new Dictionary<int, CardList>();
         public Dictionary<int, CardList> Hands { get; set; } = new Dictionary<int, CardList>();
         public Dictionary<int, CardList> Fields { get; set; } = new Dictionary<int, CardList>();
         public Dictionary<int, CardList> Graveyards { get; set; } = new Dictionary<int, CardList>();
@@ -36,6 +39,7 @@ using UnityEngine.XR;
         public CardList weatherRangeP2 =  new CardList();
         public CardList weatherSiegeP2 =  new CardList();
 
+        //constructor para inicializar el contezto del juego
         public context()
         {
             Hands[1] = new CardList();
@@ -78,6 +82,7 @@ using UnityEngine.XR;
             return Decks[playerId];
         }
 
+        //metodo encargado de actualizar las instancias en el vidual en el momento despues que se llame a activar efecto
         public void ActualiceVisual(int owner, GameObject hand, GameObject deck, GameObject cementery, GameObject rowMelee, GameObject rowRange, GameObject rowSiege, GameObject weatherMelee, GameObject weatherRange, GameObject weatherSiege, GameObject cardPrefab)
         {
             // Limpiar los hijos de cada GameObject
@@ -122,7 +127,7 @@ using UnityEngine.XR;
             AddCardsToGameObject(owner == 1 ? weatherRangeP1 : weatherRangeP2, weatherRange, cardPrefab);
             AddCardsToGameObject(owner == 1 ? weatherSiegeP1 : weatherSiegeP2, weatherSiege, cardPrefab);
         }
-
+        //metodo encargado de actualizar las instancias en el momento en que se llame a activar efecto
         public void ActualiceContext(int owner, GameObject hand, GameObject deck, GameObject cementery, GameObject rowMelee, GameObject rowRange, GameObject rowSiege, GameObject weatherMelee, GameObject weatherRange, GameObject weatherSiege)
         {
             // Limpiar las listas actuales

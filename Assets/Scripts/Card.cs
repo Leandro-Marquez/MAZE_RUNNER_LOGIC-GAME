@@ -63,12 +63,6 @@ public class Card : ScriptableObject
         private void ActivateSpecificEffect(EffectsDefinition effect, List<object> prms)
         {
             var effectMethod = typeof(EffectCreated).GetMethod(effect.Name.Substring(1, effect.Name.Length - 2) + "Effect");
-            foreach (var item in OnActivation)
-            {
-                Debug.Log("Predicate  : "  +  item.Predicate.RightMember);
-                Debug.Log("PredicateLeft  : "  +  item.Predicate.LeftMember);
-
-            }
             if (effectMethod != null)
             {
 

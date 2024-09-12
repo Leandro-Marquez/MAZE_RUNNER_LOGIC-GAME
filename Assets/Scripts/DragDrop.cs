@@ -49,11 +49,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         return currentDraggingCard;
     }
     public static bool IsDragDrop = false;
-    // public static bool GetIsDragDrop()
-    // {
-    //     return IsDragDrop;
-    // } 
-    // Se llama al inicio del arrastre
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         IsDragDrop = true;

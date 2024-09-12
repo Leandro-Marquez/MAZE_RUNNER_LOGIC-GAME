@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class RoundsControler : MonoBehaviour
 {
@@ -12,7 +15,6 @@ public class RoundsControler : MonoBehaviour
         Counter += 1;
         if(Counter > 1 && Rounds < 3)
         {
-            CleanBoard.Clean();
             if(GameManager.Instancia.CurrentPlayer) 
             {
                 GameManager.Instancia.CurrentPlayer = false;
@@ -30,7 +32,7 @@ public class RoundsControler : MonoBehaviour
                     GameManager.Instancia.Stole(GameManager.Instancia.Deck2.transform,n2,true);
                 }
                 else GameManager.Instancia.Stole(GameManager.Instancia.Deck2.transform,2,true);
-
+        
                 GameManager.Instancia.StarGame(GameManager.Instancia.CurrentPlayer);
                 Counter = 0;
             }
@@ -50,11 +52,21 @@ public class RoundsControler : MonoBehaviour
                     GameManager.Instancia.Stole(GameManager.Instancia.Deck2.transform,n2,GameManager.Instancia.CurrentPlayer);
                 }
                 else GameManager.Instancia.Stole(GameManager.Instancia.Deck2.transform,2,GameManager.Instancia.CurrentPlayer);
-                
+   
                 GameManager.Instancia.StarGame(GameManager.Instancia.CurrentPlayer);
                 Counter = 0;
             }
             Rounds += 1;
+            CleanBoard.Clean();
+            StartRounds.UpdateRounds();
+            if(CounterPoints.totalRound_P1 == 2)
+            {
+                SceneManager.LoadScene(2);
+            }
+            else if(CounterPoints.totalRound_P2 == 2)
+            {
+                SceneManager.LoadScene(3);
+            }
             return;
         }
         else if(GameManager.Instancia.CurrentPlayer)
@@ -65,6 +77,16 @@ public class RoundsControler : MonoBehaviour
         {
             GameManager.Instancia.CurrentPlayer = true;
         }
+            //cargar escenas acorde a los ganadores
+            if(CounterPoints.totalRound_P1 == CounterPoints.totalRound_P2 && CounterPoints.totalRound_P2 == 2)SceneManager.LoadScene(4);
+            else if(CounterPoints.totalRound_P1 == 2)
+            {
+                SceneManager.LoadScene(2);
+            }
+            else if(CounterPoints.totalRound_P2 == 2)
+            {
+                SceneManager.LoadScene(3);
+            }
         GameManager.Instancia.StarGame(GameManager.Instancia.CurrentPlayer);
     }
 
