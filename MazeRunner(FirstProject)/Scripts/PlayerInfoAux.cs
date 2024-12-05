@@ -47,14 +47,15 @@ public class PlayerInfoAux : MonoBehaviour
             }
         }
     }
+
     //apagar las luces verdes de los demas objetos 
-    public void PowerOnLights(string tag)
+    public void PowerOnLights(string tag) //recibir la targeta actual
     {
-        for (int i = 0; i < lights.Count ; i++)
+        for (int i = 0; i < lights.Count ; i++) //buscar entre todas las luces la correspondiente a dicha tarjeta 
         {
             if(lights[i].tag != tag) //verificar q los objetos tenga la tarjeta distinta al q ya se instancio 
             {
-                lights[i].SetActive(false);
+                lights[i].SetActive(false); //activar la luz 
             }
         }
     }
