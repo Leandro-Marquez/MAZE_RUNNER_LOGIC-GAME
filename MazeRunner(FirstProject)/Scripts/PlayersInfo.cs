@@ -31,14 +31,20 @@ public class PlayersInfo : MonoBehaviour
         string limpio = aux.Trim();
         if(limpio.Length == 6) return;
         //verificar q no contenga el mismo heroe y se le agrega al correspondiente jugador 
-        if(currentPlayer == 1 && !player1Heros.Contains(selectedHero.text.ToString().Substring(5)) && !player2Heros.Contains(selectedHero.text.ToString().Substring(5)))
+        if(currentPlayer == 1 && !player1Heros.Contains(selectedHero.text.ToString().Substring(5)) && !player2Heros.Contains(selectedHero.text.ToString().Substring(5)) && player1Heros.Count < 3)
         {
             player1Heros.Add(selectedHero.text.ToString().Substring(5));//agregar el heroe seleccionado a su lista correspondiente
+            string name = selectedHero.text.ToString().Substring(6);
+            string clearname = name.Trim();
+            GameObject.Find(clearname).SetActive(false);
         }
         //verificar que aun se le puedan agregar heroes al segundo jugador a partir de la primera cantidad de jugadores instanciados 
-        else if(currentPlayer == 2 && player2Heros.Count < player1Heros.Count && !player2Heros.Contains(selectedHero.text.ToString().Substring(5)) && !player1Heros.Contains(selectedHero.text.ToString().Substring(5)))
+        else if(currentPlayer == 2 && player2Heros.Count < player1Heros.Count && !player2Heros.Contains(selectedHero.text.ToString().Substring(5)) && !player1Heros.Contains(selectedHero.text.ToString().Substring(5)) && player2Heros.Count < 3) 
         {
             player2Heros.Add(selectedHero.text.ToString().Substring(5));//agregar el heore seleccionador a su lista correspondiente
+            string name = selectedHero.text.ToString().Substring(6);
+            string clearname = name.Trim();
+            GameObject.Find(clearname).SetActive(false);
         }
         
     }

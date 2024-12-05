@@ -17,7 +17,9 @@ public class GameManager : MonoBehaviour
     public static List<string> player2Heros; //lista de heores del player 2
     public List<Hero> heros; //guardar los scriptables para su puesta en escena
     public GameObject maze; //guardar el objeto padre de todos los objetos(Padre de la matriz)
-    public static GameManager instancia;//tener una instancia estatica para poder tener acceso a ella desde cualquier script
+    public UnityEngine.UI.Image currentPlayer1Image; //para mayor legibilidad a la hora de saber a quien le toca jugar 
+    public UnityEngine.UI.Image currentPlayer2Image; // ...
+    public static GameManager instancia;//tener una instancia estatica para poder tener acceso a la clase desde cualquier script
     public bool currentPlayer;//valor booleano para representar los juadore(false para player 1) y (true para player 2)
     public List<GameObject> herosPlayer1; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public List<GameObject> herosPlayer2; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
@@ -87,6 +89,8 @@ public class GameManager : MonoBehaviour
                 herosPlayer1[i].GetComponent<NPCMove>().enabled = true;
             }
             NPCMove.seMovio = false; //restablecer el valor de movimiento para que cada jugador se pueda seguir moviendo
+            currentPlayer1Image.enabled = true;
+            currentPlayer2Image.enabled = false;
         }
         else //el caso de que le toca al jugador 2
         {
@@ -99,6 +103,8 @@ public class GameManager : MonoBehaviour
                 herosPlayer2[i].GetComponent<NPCMove>().enabled = true;
             }
             NPCMove.seMovio = false; //restablecer el valor de movimiento para que cada jugador se pueda seguir moviendo
+            currentPlayer1Image.enabled = false;
+            currentPlayer2Image.enabled = true;
         }
     }
 }

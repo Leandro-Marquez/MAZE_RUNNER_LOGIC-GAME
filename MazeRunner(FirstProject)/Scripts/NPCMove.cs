@@ -1,20 +1,27 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class NPCMove : MonoBehaviour , IPointerDownHandler
 {
     private Hero currentHero; //guardar el heroe actual
     private int x;//cordenada x del heroe actual
     private int y;//coordenada y del heroe actual
-    public static bool seMovio;
+    public static bool seMovio;//booleano para verificar si se movio un objeto o no 
+    public Image clikedObjectImage; //imagen del objeto clickeado en la escena 
     private bool [,] maze; //guardar el laberinto completo de la escena
     private bool [,] posibleMoves; //guardar las posiciones accesibles acorde a cada heroe;
-    public void Start()
+    public void Start() // inicializar los objetos en el primer momento del juego 
     {
         maze = new bool[17,19];
         posibleMoves = new bool[17,19];
         currentHero = null;
         seMovio = false;
+        clikedObjectImage = GameObject.Find("CliskedObjectImage").GetComponent<Image>(); //asignar la imagen que le corresponde en la escena ya que no tengo objeto alguno con este script hasta que se inicialicen los heroes
     }
     public void OnPointerDown(PointerEventData eventData) //cuando se hace click 
     {
@@ -23,8 +30,12 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         if(clickedHero is not null ) //verificar si el componente hero no es nulo osea que es un heroe
         {
             currentHero = clickedHero;//actualizar el heroe actual con el heroe clickeado
+            clikedObjectImage.sprite = currentHero.heroPhoto;
             Debug.Log(currentHero.name);
+            seMovio = false;
             UpdatePosition();//actualizar la posicion con la posicion del heroe clickeado
+            UpdatePosibleMoves(); // marcar las celdas accesibles 
+            InvalidOperationsWithOthers();//invalidar el la habilidad de movimiento a los otros Heroes
         }
     }
     private void UpdatePosition() //actualizar la posicion del heroe clickeado
@@ -63,8 +74,6 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
         if(!seMovio) //si no ha habido movimiento necesita actualizarce el laberinto e invalidad el componente a los demas heroes 
         {
-            UpdatePosibleMoves(); // marcar las celdas accesibles
-            InvalidOperationsWithOthers();//invalidar el la habilidad de movimiento a los otros Heroes
             UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
             seMovio = true;//si llamo al metodo es que hubo movimiento
         }
@@ -83,8 +92,6 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
         if(!seMovio)//si no ha habido movimiento necesita actualizarce el laberinto e invalidad el componente a los demas heroes 
         {
-            UpdatePosibleMoves(); // marcar las celdas accesibles 
-            InvalidOperationsWithOthers();//invalidar el la habilidad de movimiento a los otros Heroes
             UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
             seMovio = true;//si llamo al metodo es que hubo movimiento
         }
@@ -102,8 +109,6 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
         if(!seMovio)//si no ha habido movimiento necesita actualizarce el laberinto e invalidad el componente a los demas heroes 
         {
-            UpdatePosibleMoves(); // marcar las celdas accesibles 
-            InvalidOperationsWithOthers();//invalidar el la habilidad de movimiento a los otros Heroes
             UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
             seMovio = true;//si llamo al metodo es que hubo movimiento
         }
@@ -121,8 +126,6 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         if(currentHero is null) return; //verificar que no se haga nada si no hay heroe alguno seleccionado
         if(!seMovio) //si no ha habido movimiento necesita actualizarce el laberinto e invalidad el componente a los demas heroes 
         {
-            UpdatePosibleMoves(); // marcar las celdas accesibles 
-            InvalidOperationsWithOthers();//invalidar el la habilidad de movimiento a los otros Heroes
             UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
             seMovio = true;//si llamo al metodo es que hubo movimiento
         }
