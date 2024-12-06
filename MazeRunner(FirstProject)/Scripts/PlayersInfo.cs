@@ -30,28 +30,32 @@ public class PlayersInfo : MonoBehaviour
     }
     public void AddButton() //agregar el heroe seleccionada al player correspondiente
     {
-        string aux = selectedHero.text.ToString();
-        string limpio = aux.Trim();
-        if(limpio.Length == 6) return;
+        string aux = selectedHero.text.ToString();//guardar en un string el nombre del heroe seleccionado 
+        string limpio = aux.Trim();//elimnar espacios en blanco
+        if(limpio.Length == 6) return; //si consta solo de 6 caracteres luego de eliminar los espacios vacios se trata de ("NAME :")
+        
         //verificar q no contenga el mismo heroe y se le agrega al correspondiente jugador 
         if(currentPlayer == 1 && !player1Heros.Contains(selectedHero.text.ToString().Substring(5)) && !player2Heros.Contains(selectedHero.text.ToString().Substring(5)) && player1Heros.Count < 3)
         {
             player1Heros.Add(selectedHero.text.ToString().Substring(5));//agregar el heroe seleccionado a su lista correspondiente
-            string name = selectedHero.text.ToString().Substring(6);
-            string clearname = name.Trim();
-            GameObject.Find(clearname).SetActive(false);
+            string name = selectedHero.text.ToString().Substring(6);//obtener solo la parte que contiene el nombre del heroe
+            string clearname = name.Trim();//eliminar espacios vacios 
+            GameObject.Find(clearname).SetActive(false);//apagar el objeto correspondiente con su nombre ua vez fue agregado
         }
         //verificar que aun se le puedan agregar heroes al segundo jugador a partir de la primera cantidad de jugadores instanciados 
         else if(currentPlayer == 2 && player2Heros.Count < player1Heros.Count && !player2Heros.Contains(selectedHero.text.ToString().Substring(5)) && !player1Heros.Contains(selectedHero.text.ToString().Substring(5)) && player2Heros.Count < 3) 
         {
             player2Heros.Add(selectedHero.text.ToString().Substring(5));//agregar el heore seleccionador a su lista correspondiente
-            string name = selectedHero.text.ToString().Substring(6);
-            string clearname = name.Trim();
-            GameObject.Find(clearname).SetActive(false);
+            string name = selectedHero.text.ToString().Substring(6);//obtener solo la parte que contiene el nombre del heroe
+            string clearname = name.Trim();//eliminar espacios vacios
+            GameObject.Find(clearname).SetActive(false);//apagar el objeto correspondiente con su nombre ua vez fue agregado
         }
+        PlayerInfoAux.instancia.showHeroHabilityDescription.SetActive(false);//apagar el objeto contenedor de la descripcion de la habilidad del heroe 
     }
     public void AcceptButton() //on accept button is clicked 
     {
+        if(player1Heros.Count == 0) return; //verificar que se haya añadido al menos 1 heroe 
+        
         player1Name = player1.text.ToString(); //guardar el valor del jugador 1 
         player1.gameObject.SetActive(false); //apagar la entrada de texto de jugador 1
         player2.gameObject.SetActive(true); //enceder la entrada de texto del jugador 2

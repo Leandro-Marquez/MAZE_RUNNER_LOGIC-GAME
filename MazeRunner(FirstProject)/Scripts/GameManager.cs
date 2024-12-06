@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject trapPrefab; // prefabricado principal de las trampas
     public TextMeshProUGUI player1NameT,player1NameTs; //nombre del jugador 1, texto y sombra
     public TextMeshProUGUI player2NameT,player2NameTs; //nombre del jugador 2, texto y sombra
+    public static Sprite clikedObjectFija; // imagen de objeto clickeado fija para cuando se pase de turno
     public static string player1Name; //nombre del player 1 a montar en la escena 
     public static string player2Name; //nombre del player 2 a montar en la escena 
     public static List<string> player1Heros; //lista de heroes del player 1 
@@ -23,6 +24,11 @@ public class GameManager : MonoBehaviour
     public GameObject maze; //guardar el objeto padre de todos los objetos(Padre de la matriz)
     public UnityEngine.UI.Image currentPlayer1Image; //para mayor legibilidad a la hora de saber a quien le toca jugar 
     public UnityEngine.UI.Image currentPlayer2Image; // ...
+    public UnityEngine.UI.Image auxImageForDestruction; // imagen auxiliar 
+    public GameObject currentObjectClickedForMinhoEffect;//objeto clickeado para el efecto de minho
+    public GameObject sueloAuxForMinho; // prefabricado auxiliar de suelo para cuando Minho destruya la tierra
+    public Button applyEffectPlayer1; //boton de aplicar el efecto del jugador 1
+    public Button applyEffectPlayer2; //boton de aplicar el efecto del jugador 2
     public GameObject clickedHero; //objeto clickeado en la escena por si se activa el efecto
     public static GameManager instancia;//tener una instancia estatica para poder tener acceso a la clase desde cualquier script
     public bool currentPlayer;//valor booleano para representar los juadore(false para player 1) y (true para player 2)
@@ -43,12 +49,14 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject); // Destruir el duplicado
         }
-        herosPlayer1 = new List<GameObject>();
-        herosPlayer2 = new List<GameObject>();
+        herosPlayer1 = new List<GameObject>();//inicializar las listas para evitar errores de referencia
+        herosPlayer2 = new List<GameObject>();//...
     }
-    //ejecutar en el inicio de la escena 
-    void Start()
+   
+    void Start()  //ejecutar en el inicio de la escena 
     {
+        clikedObjectFija = null;
+        currentObjectClickedForMinhoEffect = null;
         currentPlayer = false; //inicia el primer jugador
         MazeGenerator.Starting();//inicializar el laberinto una vez se cargue la escena
         player1NameT.text = player1Name;//llevar el nombre del player 1 a la escena
@@ -60,11 +68,10 @@ public class GameManager : MonoBehaviour
         MazeGenerator.GenerateTeleports(0,1);//inicializar los teletransportadores al incio y final de laberinto 
         MazeGenerator.GenerateTeleports(16,17);//inicializar los teletransportadores al incio y final de laberinto 
         ObtainHeros(); //guardar los heroes en sus listas correspondientes para el sistema de turnos 
-        PrepareGame(); //prepar el primer turno para el jugador 1
-        MazeGenerator.PrepareTraps(21);
-
-
-
+        PrepareGame(); //prepar el laberinto para el jugador 1
+        
+        MazeGenerator.PrepareTraps(herosPlayer1.Count*12); //instanciar las trampas de manera random en el laberinto 
+        
         //iniciar los valores de enfriamiento de los respectivos heroes
         Effects.gallyEnfriando = 0;
         Effects.tommyenfriando = 0;
@@ -94,7 +101,7 @@ public class GameManager : MonoBehaviour
     }
     public void PrepareGame() //preparar el sistema de turnos al inicio del juego 
     {
-        Effects.RestTime();
+        Effects.RestTime();//restar el tiempo de enfriamiento de las habilidades de los heroes 
         if(!currentPlayer) //el caso de que le toca al jugador 1
         {
             for (int i = 0; i < herosPlayer2.Count ; i++) //desactivar la propiedad NPCMove de los objetos del jugador 2
@@ -106,8 +113,10 @@ public class GameManager : MonoBehaviour
                 herosPlayer1[i].GetComponent<NPCMove>().enabled = true;
             }
             NPCMove.seMovio = false; //restablecer el valor de movimiento para que cada jugador se pueda seguir moviendo
-            currentPlayer1Image.enabled = true;
-            currentPlayer2Image.enabled = false;
+            currentPlayer1Image.enabled = true; //activar el indicador de luz verde del jugador 1
+            applyEffectPlayer1.gameObject.SetActive(true);//activar el boton de aplicar efecto del jugador 1
+            currentPlayer2Image.enabled = false;//desactivar el indicador de luz verde del jugador 2
+            applyEffectPlayer2.gameObject.SetActive(false);//descativar el boton de aplicar efecto del jugador 2
         }
         else //el caso de que le toca al jugador 2
         {
@@ -120,8 +129,10 @@ public class GameManager : MonoBehaviour
                 herosPlayer2[i].GetComponent<NPCMove>().enabled = true;
             }
             NPCMove.seMovio = false; //restablecer el valor de movimiento para que cada jugador se pueda seguir moviendo
-            currentPlayer1Image.enabled = false;
-            currentPlayer2Image.enabled = true;
+            currentPlayer1Image.enabled = false;//desactivar el indicador de luz verde del jugador 1
+            applyEffectPlayer1.gameObject.SetActive(false);//desactivar el boton de aplicar efecto del juador 1
+            currentPlayer2Image.enabled = true;//activar el indicador de luz verde del jugador 2
+            applyEffectPlayer2.gameObject.SetActive(true);//activar el boton de aplicar efecto del jugador 2
         }
     }
 }

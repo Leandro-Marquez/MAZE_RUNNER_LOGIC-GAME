@@ -16,13 +16,14 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     public bool [,] maze; //guardar el laberinto completo de la escena
     private bool [,] posibleMoves; //guardar las posiciones accesibles acorde a cada heroe;
     public void Start() // inicializar los objetos en el primer momento del juego 
-    {
-        maze = new bool[17,19];
-        posibleMoves = new bool[17,19];
-        currentHero = null;
-        seMovio = false;
+    { 
+        maze = new bool[17,19]; //inicializar 
+        posibleMoves = new bool[17,19];//...
+        currentHero = null;//...
+        seMovio = false;//...
         UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
         clikedObjectImage = GameObject.Find("CliskedObjectImage").GetComponent<Image>(); //asignar la imagen que le corresponde en la escena ya que no tengo objeto alguno con este script hasta que se inicialicen los heroes
+        GameManager.clikedObjectFija = clikedObjectImage.sprite;//inicializar la imagen fija con la imagen asignada desde el inspector 
     }
     public void OnPointerDown(PointerEventData eventData) //cuando se hace click 
     {
@@ -63,7 +64,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             }
         }
     }
-    private void DetectPressedKeys()//detectar que tecla se presiona 
+    private void DetectPressedKeys()//detectar que tecla se presiona en cada frame
     {
         if (Input.GetKeyDown(KeyCode.W)) MoveW(); //Detectar si se presiona la tecla W
         if (Input.GetKeyDown(KeyCode.A)) MoveA(); // Detectar si se presiona la tecla A
@@ -75,6 +76,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
         if(!seMovio) //si no ha habido movimiento necesita actualizarce el laberinto e invalidad el componente a los demas heroes 
         {
+            UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
             seMovio = true;//si llamo al metodo es que hubo movimiento
         }
         if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
@@ -92,6 +94,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
         if(!seMovio)//si no ha habido movimiento necesita actualizarce el laberinto e invalidad el componente a los demas heroes 
         {
+            UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
             seMovio = true;//si llamo al metodo es que hubo movimiento
         }
         int currentIndex = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).childCount-1;//inidice del heroe actual en la gerarquia
@@ -108,6 +111,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
         if(!seMovio)//si no ha habido movimiento necesita actualizarce el laberinto e invalidad el componente a los demas heroes 
         {
+            UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
             seMovio = true;//si llamo al metodo es que hubo movimiento
         }
         int currentIndex = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).childCount-1;//inidice del heroe actual en la gerarquia
@@ -124,6 +128,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         if(currentHero is null) return; //verificar que no se haga nada si no hay heroe alguno seleccionado
         if(!seMovio) //si no ha habido movimiento necesita actualizarce el laberinto e invalidad el componente a los demas heroes 
         {
+            UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
             seMovio = true;//si llamo al metodo es que hubo movimiento
         }
         int currentIndex = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).childCount-1; //inidice del heroe actual en la gerarquia
@@ -167,9 +172,9 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     {
         //inicializr ambas matrices 
         maze = new bool[17,19];
-        for (int i = 0; i < 17; i++)
+        for (int i = 0; i < 17; i++) //iterar por las filas
         {
-            for (int j = 0; j < 19; j++)
+            for (int j = 0; j < 19; j++) //iterar por las columnas 
             {
                 //si tiene un solo hijo o bien es una hierba o es una pared y si el hijo tiene la tarjeta entonces solamente podria ser una pared 
                 if(GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(0).transform.tag == "wall")
@@ -183,7 +188,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     {
         if(!GameManager.instancia.currentPlayer) // en caso de que sea el jugador 1
         {
-            for (int i = 0; i < GameManager.instancia.herosPlayer1.Count ; i++)
+            for (int i = 0; i < GameManager.instancia.herosPlayer1.Count ; i++)//iterar por los heroes del jugador 1
             {
                 if(GameManager.instancia.herosPlayer1[i].GetComponent<HeroVisual>().hero.name != currentHero.name) // si tiene nombre distinto al current hero se le desactiva el componente
                 {
@@ -193,7 +198,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         }
         else // en caso de que sea el jugador 2
         {
-            for (int i = 0; i < GameManager.instancia.herosPlayer2.Count ; i++)
+            for (int i = 0; i < GameManager.instancia.herosPlayer2.Count ; i++) //iterar por los heroes del jugador 2
             {
                 if(GameManager.instancia.herosPlayer2[i].GetComponent<HeroVisual>().hero.name != currentHero.name) // si tiene nombre distinto al current hero se le desactiva el componente
                 {
@@ -204,6 +209,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     }
     public void OnPassButtonPressed()//cuando se presiona el boton de pasar turno
     {
+        clikedObjectImage.sprite = GameManager.clikedObjectFija; //cambiar la imagen a la imagen por default
         if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false; //cambiar el valor de current player 
         else GameManager.instancia.currentPlayer = true; //cambiar el valor de current player 
         GameManager.instancia.PrepareGame(); // se llama a preparar el laberinto respecto al jugador actual, osea apagar y encender los componentes de movimiento
@@ -212,6 +218,6 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     }
     void Update() //detectar teclas presionadas en cada frame
     {
-       DetectPressedKeys();
+       DetectPressedKeys(); //detectar las teclas presionadas en cada frame 
     }
 }

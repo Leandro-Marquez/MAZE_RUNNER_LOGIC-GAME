@@ -12511,7 +12511,7 @@ GameObject:
   - component: {fileID: 823599528}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: boton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15313,7 +15313,7 @@ GameObject:
   - component: {fileID: 977214585}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: boton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18334,6 +18334,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a82c3369bafa97f4b8cd26c5d9418ead, type: 2}
   - {fileID: 11400000, guid: 77e2666aaf4c54046bd20a12263a19f6, type: 2}
   - {fileID: 11400000, guid: f65c66b9b1d7f814a8caae752d078b93, type: 2}
+  - {fileID: 11400000, guid: 891f89a8249559346a49be046a63e086, type: 2}
   heros:
   - {fileID: 11400000, guid: 0ae998e984dd7d24a828d4b820847f06, type: 2}
   - {fileID: 11400000, guid: ab8552ada9e4f1048bb932bb1f38c944, type: 2}
@@ -18344,6 +18345,11 @@ MonoBehaviour:
   maze: {fileID: 74984457}
   currentPlayer1Image: {fileID: 2136494069}
   currentPlayer2Image: {fileID: 421788841}
+  auxImageForDestruction: {fileID: 0}
+  currentObjectClickedForMinhoEffect: {fileID: 0}
+  sueloAuxForMinho: {fileID: 5486625647835108120, guid: 9d6f387dae05cec4d8f5c5abcaaae5dd, type: 3}
+  applyEffectPlayer1: {fileID: 1938378585}
+  applyEffectPlayer2: {fileID: 1367034713}
   clickedHero: {fileID: 0}
   currentPlayer: 0
   herosPlayer1: []
@@ -20264,7 +20270,7 @@ GameObject:
   - component: {fileID: 1252074919}
   m_Layer: 5
   m_Name: Text (TMP) (1)
-  m_TagString: Untagged
+  m_TagString: boton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21360,19 +21366,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTeleport: 0
-  isBomb: 0
-  isBeer: 0
-  isCofre: 0
-  isFuego: 0
-  isHueco: 0
-  isMuerto: 0
-  isPizza: 0
-  isPosima: 0
-  isRock: 0
-  isVenum: 0
-  isLife: 0
-  isKey: 0
-  isDoor: 0
   targetImage: {fileID: 44406929}
   names: {fileID: 871354896}
   namess: {fileID: 607646447}
@@ -22373,7 +22366,7 @@ GameObject:
   - component: {fileID: 1367034716}
   m_Layer: 5
   m_Name: ApllyEffectButtonPlayer2
-  m_TagString: Untagged
+  m_TagString: boton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29886,7 +29879,7 @@ GameObject:
   - component: {fileID: 1918414407}
   m_Layer: 5
   m_Name: Text (TMP) (1)
-  m_TagString: Untagged
+  m_TagString: boton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30247,7 +30240,7 @@ GameObject:
   - component: {fileID: 1938378588}
   m_Layer: 5
   m_Name: ApllyEffectButtonPlayer1
-  m_TagString: Untagged
+  m_TagString: boton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31874,7 +31867,7 @@ GameObject:
   - component: {fileID: 2023981955}
   m_Layer: 0
   m_Name: AcctivateEffectButtons
-  m_TagString: Untagged
+  m_TagString: boton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

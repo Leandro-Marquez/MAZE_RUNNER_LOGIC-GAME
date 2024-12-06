@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HeroVisual : MonoBehaviour
+public class HeroVisual : MonoBehaviour //clase monobehavior para tratar los heroes de manera visual
 {
     public Hero hero;
     public Image heroImage;
@@ -12,7 +12,7 @@ public class HeroVisual : MonoBehaviour
     {
         //..
     }
-    public void InitializeHero()
+    public void InitializeHero() //inicializar la foto del heroe en el 
     {
         heroImage.sprite = hero.heroPhoto;
     }

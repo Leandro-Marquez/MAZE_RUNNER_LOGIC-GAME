@@ -9,14 +9,10 @@ public class MazeGenerator
     public static void Starting()//preparar la escena del juego(laberinto)
     {
         GenerateMaze();//generar el primer laberinto
-        maze[0,1] = false;
-        maze[16,17] = false;
         while(!IsValid()) //verificar si el laberinto es valido
         {
             maze = new bool[n,m];//volver a inicializar la matriz 
             GenerateMaze();//generar otro laberinto
-            maze[0,1] = false;
-            maze[16,17] = false;
         }
         PrintMaze();//una vez el laberinto esta listo se imprime en la escena 
     }
@@ -26,7 +22,7 @@ public class MazeGenerator
     public static int m = 19; //columnas
 
     // Método para generar el laberinto
-    private static void GenerateMaze()
+    private static void GenerateMaze() //generar el laberinto 
     {
         maze = new bool[n, m]; //inicializar la matriz 
         CreateMaze(1, 1); //crear el laberinto a partir de la posicion 1,1 para dar margen a las paredes
@@ -56,14 +52,14 @@ public class MazeGenerator
         //iterar por todas las direcciones
         foreach (Vector2Int direction in directions)
         {
-            int newX = x + direction.x * 2;
-            int newY = y + direction.y * 2;
+            int newX = x + direction.x * 2; //nueva fila
+            int newY = y + direction.y * 2; //nueva columna
 
             if (IsInBounds(newX, newY) && !maze[newX, newY]) //verificar si esta dentro de los rangos de la matriz y no esta visitada 
             {
                 // Marca la celda intermedia como visitada
-                maze[x + direction.x, y + direction.y] = true;
-                CreateMaze(newX, newY);
+                maze[x + direction.x, y + direction.y] = true; //marcar la celda como visitada
+                CreateMaze(newX, newY);//llamado recursivo
             }
         }
     }
@@ -112,13 +108,13 @@ public class MazeGenerator
         return x >= 0 && x < n && y >= 0 && y < m;
     }
     
-    private static void PrintMaze() //instancias los objetos en la escena a partir del laberinto guardado en maze
+    private static void PrintMaze() //instanciar los objetos en la escena a partir del laberinto guardado en maze
     {
-        for (int y = 0; y < n; y++)
+        for (int y = 0; y < n; y++) //iterar por las filas
         {
-            for (int x = 0; x < m; x++)
+            for (int x = 0; x < m; x++) //iterar por las columnas 
             {
-                if((y == 0 && x == 1 ) || (y == 16 && x == 17)) continue;
+                if((y == 0 && x == 1 ) || (y == 16 && x == 17)) continue; // si es la casilla inicial o final continuar
                 if(!maze[y,x]) //si esta en falso significa que es un obstaculo
                 {
                     //guardar en un objeto una instancia del prefab correspondiente guardado en el GameManager 
@@ -136,7 +132,7 @@ public class MazeGenerator
             }
         }
     }
-    public static void GenerateTeleports(int x , int y) //generar los teleports para elinicio y el final del laberinto 
+    public static void GenerateTeleports(int x , int y) //generar los teleports para el inicio y el final del laberinto 
     {
         //instanciar el teleport en su respectiva posicion
         GameObject teleport  = GameObject.Instantiate(GameManager.instancia.teleportPrefab,GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform);
@@ -165,8 +161,8 @@ public class MazeGenerator
             Scriptable1.InitializeHero();//inicializar el heroe en el visual 
         }
     }
-    //obtener el Scriptable Object a partir del nombre del heroe que se le pase 
-    private static Hero GetHero(string hero)
+  
+    private static Hero GetHero(string hero) //obtener el Scriptable Object a partir del nombre del heroe que se le pase 
     {
         string nuevo = hero.Trim(); //eliminar los caracteres vacios del inicio
         for (int i = 0; i < GameManager.instancia.heros.Count ; i++)
@@ -175,14 +171,13 @@ public class MazeGenerator
             if(GameManager.instancia.heros[i].name == nuevo) //si coincide con el que se quiere proceder a retornar 
             {
                 Hero hero1 = GameManager.instancia.heros[i]; //guardar una instancia del heroe para retornarlo 
-                return hero1;
+                return hero1; //retornar la instancia
             }
         }
         return null;
     }
 
-    //obtener los valores para la colocacion de los heroes
-    private static List<(int x , int y)> GetPositions(int cantidad, int currentPLayer)
+    private static List<(int x , int y)> GetPositions(int cantidad, int currentPLayer) //obtener los valores para la colocacion de los heroes
     {
         List<(int x , int y)> values = new List<(int x, int y)>(); //guardar las posiciones en las que se colocaran los lideres 
         if(currentPLayer == 1) //si llama para el jugador 1 
@@ -203,25 +198,25 @@ public class MazeGenerator
         }
         return values;
     }
-    public static void PrepareTraps(int k)
+    public static void PrepareTraps(int k) // instanciar las trampas de manera aleatoria 
     {
-        List<(int x, int y)> values = new List<(int x, int y)>();
-        System.Random random = new System.Random();
+        List<(int x, int y)> values = new List<(int x, int y)>(); //lista de tuplas para instanciar las trampas
+        System.Random random = new System.Random(); //intancia random para buscar valores random
         int n = 0;
-        while(n < k)
+        while(n < k)//mientras que n sea menor que la cantidad de trampas a instanciar, seguir generando posiciones
         {
-            int a = random.Next(2,16);
-            int b = random.Next(1,18);
-            if(maze[a,b])
+            int a = random.Next(2,15); //generar una coordenada x
+            int b = random.Next(1,18); //generar una coordenada y
+            if(maze[a,b]) //si esta en true no es un obstaculo se puede instanciar en dicha posicion
             {
-                maze[a,b] = false;
-                n++;
-                values.Add((a,b));
+                maze[a,b] = false; //marcar como un obstaculo ahora para evitar la colocacion de dos trampas en donde mismo 
+                n++; //incrementar el contador 
+                values.Add((a,b));//agregar las coordenadas 
             }
         }
-        for (int i = 0 ; i < values.Count ; i++)
+        for (int i = 0 ; i < values.Count ; i++) //iterar por la lista de coordenadas 
         {
-            int m = random.Next(0,13);
+            int m = random.Next(0,14); // buscar un indice random para buscar una trampa random en la respectiva lista de scriptables 
             GameObject game = GameObject.Instantiate(GameManager.instancia.trapPrefab, GameManager.instancia.maze.transform.GetChild(values[i].x).GetChild(values[i].y).transform);
             TrapVisual Scriptable = game.GetComponent<TrapVisual>();//obtener el componente visual del heroe para imprimirlo 
             Scriptable.trap = GameManager.instancia.traps[m];//obtener el scriptable object y asignarselo al visual

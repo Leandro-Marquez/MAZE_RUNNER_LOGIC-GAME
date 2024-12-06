@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "newTrap", menuName = "Trap", order = 0)]
-public class Trap : ScriptableObject
+public class Trap : ScriptableObject //escriptable object para tener trampas fisicas en unity 
 {
     public string Name;
     public int Penalty;

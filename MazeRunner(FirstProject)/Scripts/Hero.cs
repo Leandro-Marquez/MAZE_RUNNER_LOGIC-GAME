@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public enum Hability{Detruction , HighSpeed , HighVision , BigStrengh , Carefull}
 
 [CreateAssetMenu(fileName = "New Hero", menuName = "Hero")]
-public class Hero : ScriptableObject 
+public class Hero : ScriptableObject //clase scriptable object para tener objetos fisicos en unity
 {
     public new string name;
     public Sprite heroPhoto;

@@ -105,19 +105,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTeleport: 0
-  isBomb: 0
-  isBeer: 0
-  isCofre: 0
-  isFuego: 0
-  isHueco: 0
-  isMuerto: 0
-  isPizza: 0
-  isPosima: 0
-  isRock: 0
-  isVenum: 0
-  isLife: 0
-  isKey: 0
-  isDoor: 0
   targetImage: {fileID: 0}
   names: {fileID: 0}
   namess: {fileID: 0}

@@ -18,5 +18,5 @@ MonoBehaviour:
   coolingTime: 3
   speed: 5
   life: 12
-  habilityDescription: Corre tan veloz que tiene la capacidad de teletransportarse
-    3 casillas mas adelante de su posicion
+  habilityDescription: "Corre tan veloz que tiene la capacidad de teletransportarse
+    3 casillas m\xE1s adelante de su posicion"
