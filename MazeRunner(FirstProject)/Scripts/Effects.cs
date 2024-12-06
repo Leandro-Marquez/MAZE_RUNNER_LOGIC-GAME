@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -75,6 +76,9 @@ public class Effects : MonoBehaviour , IPointerDownHandler
     {
         //el caso de que el objeto objetivo sea nulo retornar 
         if(GameManager.instancia.currentObjectClickedForMinhoEffect is null || GameManager.instancia.currentObjectClickedForMinhoEffect.tag == "floor") return;
+        
+        GameManager.instancia.minhoSound.Play();//reproducir el audio de destruccion
+        
         if(GameManager.instancia.currentObjectClickedForMinhoEffect.tag == "extras") //si es un extra es una trampa
         {
             GameObject.Destroy(GameManager.instancia.currentObjectClickedForMinhoEffect); // destruir la trampa correspondiente
@@ -142,5 +146,32 @@ public class Effects : MonoBehaviour , IPointerDownHandler
         if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
         else GameManager.instancia.currentPlayer = true;
         GameManager.instancia.PrepareGame(); //volver a preparar la escena
+    }
+    public static void ColectObjects(int xpos , int ypos) //colectar objetos, sumar y restar la energia correspondiente 
+    {
+        if(!GameManager.instancia.currentPlayer) // si es el caso del jugador 1
+        {
+            int finalEnergy = 0; //entero para guardar la energia final 
+            finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
+            if(finalEnergy >= 0) GameManager.instancia.colectedSound.Play(); //si es un buen objeto reproducir un sonido positivo
+            // else GameManager.instancia.sufferSound.Play(); //si es un objeto malo  reproducir un sonido negativo
+            int actualEnergy = int.Parse(GameManager.instancia.player1Energy.text.ToString()); //tenrr la energia guardada en el texto en escena 
+            finalEnergy += actualEnergy; //calcular la energia final 
+            GameManager.instancia.player1Energy.text = finalEnergy.ToString();//modificar el texto en escena 
+            GameManager.instancia.player1Energys.text = finalEnergy.ToString();//sombra ...
+            GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+        }
+        else // si es el caso del jugador 2
+        {
+            int finalEnergy = 0;//entero para guardar la energia final 
+            finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
+            if(finalEnergy >= 0) GameManager.instancia.colectedSound.Play();//si es un buen objeto reproducir un sonido positivo
+            // else GameManager.instancia.sufferSound.Play(); //si es un objeto malo  reproducir un sonido negativo
+            int actualEnergy = int.Parse(GameManager.instancia.player2Energy.text.ToString());//tenrr la energia guardada en el texto en escena 
+            finalEnergy += actualEnergy;//calcular la energia final 
+            GameManager.instancia.player2Energy.text = finalEnergy.ToString();//modificar el texto en escena 
+            GameManager.instancia.player2Energys.text = finalEnergy.ToString();//sombra...
+            GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject);//destruir el objeto coleccionado 
+        }
     }
 }

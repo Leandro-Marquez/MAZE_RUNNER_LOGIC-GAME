@@ -87,6 +87,8 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x-1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
             x-=1;//actualizar la posicion
+            //manejar el caso de que el heroe haya caida en una casilla trampa u item
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
         }
     }
     private void MoveA()//mover a la izquierda
@@ -104,6 +106,9 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y-1).transform);//darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
             y-=1;//actualizar la posicion
+            //manejar el caso de que el heroe haya caida en una casilla trampa u item
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
+
         }
     }
     private void MoveS()//mover hacia abajo
@@ -121,6 +126,9 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x+1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
             x+=1;//actualizar la posicion
+            //manejar el caso de que el heroe haya caida en una casilla trampa u item
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
+        
         }
     }
     private void MoveD() //mover a la derecha
@@ -138,6 +146,8 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y+1).transform); //darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero; //colocarle lasc coordenadas 0,0,0 para evitar troques
             y += 1;//actualizar la posicion
+            //manejar el caso de que el heroe haya caida en una casilla trampa u item
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
         }
     }
     private void UpdatePosibleMoves() //marcar toda celda accesible para el heroe
@@ -180,6 +190,18 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                 if(GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(0).transform.tag == "wall")
                 {
                     maze[i,j] = true; //marcar la celda correspondiente en true en el laberinto booleano 
+                }
+                else if(GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.childCount == 2) //si tiene exactamente dos hijos verificar si uno de ellos es una roca para evitar el paso 
+                {
+                    int index = GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).childCount-1;//buscar el inidice del ultimo hijo 
+                    if(GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(index).tag == "extras") //verificar que tenga la tarjeta de extras
+                    {
+                        //verificar que sea una roca 
+                        if(GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(index).GetComponent<TrapVisual>().name == "Rock")
+                        {
+                            maze[i,j] = true; //en el caso de que sea una roca marcarla como obstaculo (true)
+                        }
+                    }
                 }
             }
         }

@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     public GameObject trapPrefab; // prefabricado principal de las trampas
     public TextMeshProUGUI player1NameT,player1NameTs; //nombre del jugador 1, texto y sombra
     public TextMeshProUGUI player2NameT,player2NameTs; //nombre del jugador 2, texto y sombra
+    public TextMeshProUGUI player1Energy,player1Energys; //energia del jugador 1, texto y sombra
+    public TextMeshProUGUI player2Energy,player2Energys; //energia del jugador 1, texto y sombra
+
     public static Sprite clikedObjectFija; // imagen de objeto clickeado fija para cuando se pase de turno
     public static string player1Name; //nombre del player 1 a montar en la escena 
     public static string player2Name; //nombre del player 2 a montar en la escena 
@@ -35,7 +38,11 @@ public class GameManager : MonoBehaviour
     public List<GameObject> herosPlayer1; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public List<GameObject> herosPlayer2; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public AudioSource tomySound;//guardar el audio source de tomy cuando aplique su habilidad 
-    
+    public AudioSource minhoSound;//guardar el audio source de minho cuando aplique su habilidad 
+    public AudioSource colectedSound;//guardar el audio source de objeto coleccionado para cuando se coleccione algo 
+    public AudioSource sufferSound;//guardar el audio source de objeto negativo recogido
+
+
     //ejecutar antes de cualquier frame en el juego 
     private void Awake()
     {
