@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d0607a2e07f684391ea5859b00d416, type: 3}
+  m_Name: life
+  m_EditorClassIdentifier: 
+  Name: Medicine Cabinet
+  Penalty: 3
+  TrapPhoto: {fileID: 21300000, guid: 367288a90d5bbc64ca72bb8aab655201, type: 3}
+  Description: "El h\xE9roe que coleccione este botiquin m\xE9dico es capaz de subir
+    su energ\xEDa en 3 unidades"

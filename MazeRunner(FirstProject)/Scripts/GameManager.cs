@@ -8,21 +8,27 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject wallPrefab,floorPrefab,teleportPrefab,heroPrefab;//guardar los prefabricados en la escena para su intanciacion desde codigo 
+    //guardar los prefabricados en la escena para su intanciacion desde codigo 
+    public GameObject wallPrefab,floorPrefab,teleportPrefab,heroPrefab;//... prefabricados principales
+    public GameObject doorPrefab,teleporPrefab,chestPrefab,keyPrefab,deadPrefab;//...prefabricados especiales
+    public GameObject trapPrefab; // prefabricado principal de las trampas
     public TextMeshProUGUI player1NameT,player1NameTs; //nombre del jugador 1, texto y sombra
     public TextMeshProUGUI player2NameT,player2NameTs; //nombre del jugador 2, texto y sombra
     public static string player1Name; //nombre del player 1 a montar en la escena 
     public static string player2Name; //nombre del player 2 a montar en la escena 
     public static List<string> player1Heros; //lista de heroes del player 1 
     public static List<string> player2Heros; //lista de heores del player 2
-    public List<Hero> heros; //guardar los scriptables para su puesta en escena
+    public List<Trap> traps; //guardar los scriptables para su puesta en escena(trampas)
+    public List<Hero> heros; //guardar los scriptables para su puesta en escena(heroes)
     public GameObject maze; //guardar el objeto padre de todos los objetos(Padre de la matriz)
     public UnityEngine.UI.Image currentPlayer1Image; //para mayor legibilidad a la hora de saber a quien le toca jugar 
     public UnityEngine.UI.Image currentPlayer2Image; // ...
+    public GameObject clickedHero; //objeto clickeado en la escena por si se activa el efecto
     public static GameManager instancia;//tener una instancia estatica para poder tener acceso a la clase desde cualquier script
     public bool currentPlayer;//valor booleano para representar los juadore(false para player 1) y (true para player 2)
     public List<GameObject> herosPlayer1; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public List<GameObject> herosPlayer2; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
+    public AudioSource tomySound;//guardar el audio source de tomy cuando aplique su habilidad 
     
     //ejecutar antes de cualquier frame en el juego 
     private void Awake()
@@ -55,7 +61,17 @@ public class GameManager : MonoBehaviour
         MazeGenerator.GenerateTeleports(16,17);//inicializar los teletransportadores al incio y final de laberinto 
         ObtainHeros(); //guardar los heroes en sus listas correspondientes para el sistema de turnos 
         PrepareGame(); //prepar el primer turno para el jugador 1
-    
+        MazeGenerator.PrepareTraps(21);
+
+
+
+        //iniciar los valores de enfriamiento de los respectivos heroes
+        Effects.gallyEnfriando = 0;
+        Effects.tommyenfriando = 0;
+        Effects.newtEnfriando = 0;
+        Effects.terezaEnfriando = 0;
+        Effects.minhoEnfriando = 0;
+        Effects.sartenEnfriando = 0;
     }
     private void ObtainHeros() //rellenar los objetos instanciados en la escena en el primer momento
     {
@@ -78,6 +94,7 @@ public class GameManager : MonoBehaviour
     }
     public void PrepareGame() //preparar el sistema de turnos al inicio del juego 
     {
+        Effects.RestTime();
         if(!currentPlayer) //el caso de que le toca al jugador 1
         {
             for (int i = 0; i < herosPlayer2.Count ; i++) //desactivar la propiedad NPCMove de los objetos del jugador 2

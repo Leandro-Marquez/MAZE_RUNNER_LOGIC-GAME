@@ -183,7 +183,7 @@ public class ShowObjects : MonoBehaviour, IPointerEnterHandler
     {
         names.text = "NAME: TELEPORT";
         namess.text = "NAME: TELEPORT";
-        hability.text = $"MAZE EXIT, {GameManager.player1Heros.Count * GameManager.player1Heros.Count} in total of energy is required ";
-        habilitys.text = $"MAZE EXIT, {GameManager.player1Heros.Count * GameManager.player1Heros.Count} in total of energy is required ";
+        hability.text = $"MAZE EXIT, {GameManager.player1Heros.Count * GameManager.player1Heros.Count} units of energy is required for using it";
+        habilitys.text = $"MAZE EXIT, {GameManager.player1Heros.Count * GameManager.player1Heros.Count} units of energy is required for using it";
     }
 }

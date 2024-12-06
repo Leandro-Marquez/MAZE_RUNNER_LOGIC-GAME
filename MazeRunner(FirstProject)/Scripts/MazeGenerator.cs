@@ -203,4 +203,29 @@ public class MazeGenerator
         }
         return values;
     }
+    public static void PrepareTraps(int k)
+    {
+        List<(int x, int y)> values = new List<(int x, int y)>();
+        System.Random random = new System.Random();
+        int n = 0;
+        while(n < k)
+        {
+            int a = random.Next(2,16);
+            int b = random.Next(1,18);
+            if(maze[a,b])
+            {
+                maze[a,b] = false;
+                n++;
+                values.Add((a,b));
+            }
+        }
+        for (int i = 0 ; i < values.Count ; i++)
+        {
+            int m = random.Next(0,13);
+            GameObject game = GameObject.Instantiate(GameManager.instancia.trapPrefab, GameManager.instancia.maze.transform.GetChild(values[i].x).GetChild(values[i].y).transform);
+            TrapVisual Scriptable = game.GetComponent<TrapVisual>();//obtener el componente visual del heroe para imprimirlo 
+            Scriptable.trap = GameManager.instancia.traps[m];//obtener el scriptable object y asignarselo al visual
+            Scriptable.InitializeTrap();//inicializar el heroe en el visual 
+        }
+    }
 }

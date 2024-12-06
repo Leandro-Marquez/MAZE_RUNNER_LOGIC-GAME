@@ -13,6 +13,9 @@ public class PlayerInfoAux : MonoBehaviour
     public TextMeshProUGUI heroCoolingTime,heroCoolingTimes;//enfriamiento del heroe en la Info(sombra)
     public TextMeshProUGUI heroLife,heroLifes;//vida del heroe en la Info(sombra)
     public List<Hero> heros; //lista de heroes para facilitar el trabajo 
+   public GameObject showHeroHabilityDescription; // para mostrar la habilidad del lider 
+    public TextMeshProUGUI heroHabilityDescriptionText;//texto de la descripcion del heroe
+    public TextMeshProUGUI heroHabilityDescriptionTexts;//... sombra
     public List<GameObject> lights; //lista de objetos contenedores con las imagenes verdes para indicar cual fue seleccionado
     public void OnClicked(GameObject clickedObject)
     {
@@ -43,6 +46,9 @@ public class PlayerInfoAux : MonoBehaviour
                 heroLifes.text += $"LIFE: {heros[i].life}";
                 clickedObject.gameObject.SetActive(true);
                 PowerOnLights(clickedObject.tag);
+                showHeroHabilityDescription.SetActive(true);
+                heroHabilityDescriptionText.text = heros[i].habilityDescription;
+                heroHabilityDescriptionTexts.text = heros[i].habilityDescription;
                 return;
             }
         }

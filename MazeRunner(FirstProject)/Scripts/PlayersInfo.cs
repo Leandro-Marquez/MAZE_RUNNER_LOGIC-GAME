@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -19,6 +21,7 @@ public class PlayersInfo : MonoBehaviour
     public List<string> player1Heros; //lista de heroes con los que jugara el jugador 1
     public List<string> player2Heros; //lista de heroes con los que jugara el jugador 2
     public int currentPlayer; //entero para saber quien es el jugador que esta seleccionando heroes
+ 
     public void Start() //inicializar las listas y el current player 
     {
         player1Heros = new List<string>(); //inicializar la lista de heroes del jugador 1
@@ -46,7 +49,6 @@ public class PlayersInfo : MonoBehaviour
             string clearname = name.Trim();
             GameObject.Find(clearname).SetActive(false);
         }
-        
     }
     public void AcceptButton() //on accept button is clicked 
     {

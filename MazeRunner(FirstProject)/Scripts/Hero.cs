@@ -16,4 +16,5 @@ public class Hero : ScriptableObject
     public int coolingTime;
     public int speed;
     public int life;
+    public string habilityDescription;
 }
