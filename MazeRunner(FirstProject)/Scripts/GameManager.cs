@@ -36,8 +36,6 @@ public class GameManager : MonoBehaviour
     public bool currentPlayer;//valor booleano para representar los juadore(false para player 1) y (true para player 2)
     public List<GameObject> herosPlayer1; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public List<GameObject> herosPlayer2; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
-    public AudioSource tomySound;//guardar el audio source de tomy cuando aplique su habilidad 
-    public AudioSource minhoSound;//guardar el audio source de minho cuando aplique su habilidad 
     public AudioSource colectedSound;//guardar el audio source de objeto coleccionado para cuando se coleccione algo 
     public static int tommyenfriando; //entero para controlar el tiempo que lleva enfriandose el heroe
     public static int gallyEnfriando; // ...

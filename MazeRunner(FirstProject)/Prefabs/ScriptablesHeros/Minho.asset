@@ -20,3 +20,4 @@ MonoBehaviour:
   life: 10
   habilityDescription: Tiene la habilidad de destruir cualquier trampa u objeto a
     su paso
+  audioClip: {fileID: 8300000, guid: ea2a1a5d0fe84b9408baa2489961a875, type: 3}

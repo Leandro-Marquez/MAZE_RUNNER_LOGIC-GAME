@@ -8,13 +8,13 @@ using UnityEngine.UI;
 
 public class NPCMove : MonoBehaviour , IPointerDownHandler
 {
-    private Hero currentHero; //guardar el heroe actual
+    public Hero currentHero; //guardar el heroe actual
     public static int n; //entero para controlar que una vez que se mueva un objeto no se pueda mover ningun otro 
     public static int x;//cordenada x del heroe actual
     public static int y;//coordenada y del heroe actual
     public static bool seMovio;//booleano para verificar si se movio un objeto o no 
     public static Image clikedObjectImage; //imagen del objeto clickeado en la escena 
-    public bool [,] maze; //guardar el laberinto completo de la escena
+    public static bool [,] maze; //guardar el laberinto completo de la escena
     private bool [,] posibleMoves; //guardar las posiciones accesibles acorde a cada heroe;
     public void Start() // inicializar los objetos en el primer momento del juego 
     { 

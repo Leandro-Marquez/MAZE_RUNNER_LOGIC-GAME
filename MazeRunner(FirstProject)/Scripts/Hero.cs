@@ -18,4 +18,5 @@ public class Hero : ScriptableObject //clase scriptable object para tener objeto
     public int speed;
     public int life;
     public string habilityDescription;
+    public AudioClip audioClip;
 }

@@ -21,3 +21,4 @@ MonoBehaviour:
   habilityDescription: Es tan fuerte que si coincide con un enemigo en el terreno
     tiene la habilidad de empujarlo hacia una esquina del laberinto alejandolo de
     la salida
+  audioClip: {fileID: 8300000, guid: fbd6b4b60baf13a45a78b146694d84ae, type: 3}

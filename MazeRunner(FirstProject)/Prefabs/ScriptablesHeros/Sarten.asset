@@ -20,3 +20,4 @@ MonoBehaviour:
   life: 8
   habilityDescription: 'Es tan cuidadoso que puede dejar dormido al oponente por
     un turno '
+  audioClip: {fileID: 8300000, guid: fb639b623534788418764382bfec0f2a, type: 3}

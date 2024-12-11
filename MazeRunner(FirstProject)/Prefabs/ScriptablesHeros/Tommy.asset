@@ -20,3 +20,4 @@ MonoBehaviour:
   life: 12
   habilityDescription: "Corre tan veloz que tiene la capacidad de teletransportarse
     3 casillas m\xE1s adelante de su posicion"
+  audioClip: {fileID: 8300000, guid: faf60a03ad3885344a4c1b21240a23df, type: 3}

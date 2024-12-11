@@ -70,7 +70,10 @@ public class Effects : MonoBehaviour , IPointerDownHandler
         //el caso de que el objeto objetivo sea nulo retornar 
         if(GameManager.instancia.currentObjectClickedForMinhoEffect is null || GameManager.instancia.currentObjectClickedForMinhoEffect.tag == "floor") return;
         
-        GameManager.instancia.minhoSound.Play();//reproducir el audio de destruccion
+        AudioSource audio = GameManager.instancia.colectedSound.GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
+        AudioClip leo = GameManager.instancia.clickedHero.GetComponent<HeroVisual>().hero.audioClip; //obtener al audio clip del escriptable
+        audio.clip = leo; //asiganr el audio del escriptable al objeto de audio creado
+        audio.Play();//reproducir el audio 
         
         if(GameManager.instancia.currentObjectClickedForMinhoEffect.tag == "extras") //si es un extra es una trampa
         {
@@ -99,6 +102,10 @@ public class Effects : MonoBehaviour , IPointerDownHandler
         if(GameManager.newtEnfriando != 0) return;//manejar el caso de que no este ennfriado totalmente
         else
         {
+            AudioSource audio = GameManager.instancia.colectedSound.GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
+            AudioClip leo = GameManager.instancia.clickedHero.GetComponent<HeroVisual>().hero.audioClip; //obtener al audio clip del escriptable
+            audio.clip = leo; //asiganr el audio del escriptable al objeto de audio creado
+            audio.Play();//reproducir el audio 
             GameObject toMove = GameManager.instancia.maze.transform.GetChild(NPCMove.x).transform.GetChild(NPCMove.y).transform.GetChild(1).gameObject;//heroe enemigo a mover
             if(GameManager.instancia.clickedHero.transform.GetComponent<HeroVisual>().owner == Owner.Player1)//verificar acorde a de quien sea a donde ponerlo estrategicamente 
             {
@@ -132,11 +139,28 @@ public class Effects : MonoBehaviour , IPointerDownHandler
     }
     public static void ActivateSartenEffect() //activar el efecto de Sarten
     {
-        //implementar 
+        AudioSource audio = GameManager.instancia.colectedSound.GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
+        AudioClip leo = GameManager.instancia.clickedHero.GetComponent<HeroVisual>().hero.audioClip; //obtener al audio clip del escriptable
+        audio.clip = leo; //asiganr el audio del escriptable al objeto de audio creado
+        audio.Play();//reproducir el audio 
+        
+        //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+        if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+        else GameManager.instancia.currentPlayer = true;
+        GameManager.instancia.PrepareGame(); //volver a preparar la escena
+
+        //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+        if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+        else GameManager.instancia.currentPlayer = true;
+        GameManager.instancia.PrepareGame(); //volver a preparar la escena
     }
     public static void ActivateTommyEffect() //activar el efecto de tommy
     {
-        GameManager.instancia.tomySound.Play();//reproducir el audio de teletransportacion
+        AudioSource audio = GameManager.instancia.colectedSound.GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
+        AudioClip leo = GameManager.instancia.clickedHero.GetComponent<HeroVisual>().hero.audioClip; //obtener al audio clip del escriptable
+        audio.clip = leo; //asiganr el audio del escriptable al objeto de audio creado
+        audio.Play();//reproducir el audio 
+
         int x = NPCMove.x; //guardar la posicion del heroe actual guardada en NPCMove
         int y = NPCMove.y; // ...
         if(!GameManager.instancia.currentPlayer)//verificar si es el jugador 1 quien aplica el efecto
@@ -185,35 +209,82 @@ public class Effects : MonoBehaviour , IPointerDownHandler
         {
             int finalEnergy = 0; //entero para guardar la energia final 
             finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
+            
             AudioSource audio = GameManager.instancia.colectedSound.GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
             AudioClip leo = GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.audioClip1; //obtener al audio clip del escriptable
             audio.clip = leo; //asiganr el audio del escriptable al objeto de audio creado
             audio.Play();//reproducir el audio 
+
             // Esperar a que termine el primer audio
             if (GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.audioClip2 != null) 
             {
                 // Usar una Coroutine para esperar la reproducción del primer audio
                 CoroutineRunner.instance.StartCoroutine(PlaySecondAudioAfterFirst(audio, GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.audioClip2));
             }
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "hollow") //en caso de que sea un hueco se acaba inmediatamente la capacidad de movimiento del equipo 
+            {
+                //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+                if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+                else GameManager.instancia.currentPlayer = true;
+                GameManager.instancia.PrepareGame(); //volver a preparar la escena
+            }
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "teleport") //en caso de que sea un teleport
+            {
+                System.Random random = new System.Random(); //crear una instancia random para generar posiciones aleatorias
+                int x = 0;
+                int y = 0;
+                while(NPCMove.maze[x,y] || GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).childCount > 1) //en caso de que sea un obstaculo o haya alguna trampa generar otra 
+                {
+                    x = random.Next(1,16);
+                    y = random.Next(1,18);
+                }
+                GameObject aux = GameManager.instancia.clickedHero; //guardar el Heroe con el que se juega
+                aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform); //darle el padre de que le corresponde generado de manera random 
+                aux.transform.localPosition = Vector3.zero; //situar al centro de la gerarquia para evitar troyes 
+            }
             int actualEnergy = int.Parse(GameManager.instancia.player1Energy.text.ToString()); //tenrr la energia guardada en el texto en escena 
             finalEnergy += actualEnergy; //calcular la energia final 
             GameManager.instancia.player1Energy.text = finalEnergy.ToString();//modificar el texto en escena 
             GameManager.instancia.player1Energys.text = finalEnergy.ToString();//sombra ...
             GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+
         }
         else // si es el caso del jugador 2
         {
             int finalEnergy = 0;//entero para guardar la energia final 
             finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
+            
             AudioSource audio = GameManager.instancia.colectedSound.GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
             AudioClip leo= GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.audioClip1;//obtener al audio clip del escriptable
             audio.clip = leo; //asiganr el audio del escriptable al objeto de audio creado
             audio.Play();//reproducir el audio 
+
             // Esperar a que termine el primer audio
             if (GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.audioClip2 != null)
             {
                 // Usar una Coroutine para esperar la reproducción del primer audio
                 CoroutineRunner.instance.StartCoroutine(PlaySecondAudioAfterFirst(audio, GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.audioClip2));
+            }
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "hollow") //en caso de que sea un hueco se acaba inmediatamente la capacidad de movimiento del equipo 
+            {
+                //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+                if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+                else GameManager.instancia.currentPlayer = true;
+                GameManager.instancia.PrepareGame(); //volver a preparar la escena
+            }
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "teleport") //en caso de que sea un teleport
+            {
+                System.Random random = new System.Random(); //crear una instancia random para generar posiciones aleatorias
+                int x = 0;
+                int y = 0;
+                while(NPCMove.maze[x,y] || GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).childCount > 1) //en caso de que sea un obstaculo o haya alguna trampa generar otra 
+                {
+                    x = random.Next(1,16);
+                    y = random.Next(1,18);
+                }
+                GameObject aux = GameManager.instancia.clickedHero; //guardar el Heroe con el que se juega
+                aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform); //darle el padre de que le corresponde generado de manera random 
+                aux.transform.localPosition = Vector3.zero; //situar al centro de la gerarquia para evitar troyes 
             }
             int actualEnergy = int.Parse(GameManager.instancia.player2Energy.text.ToString());//tenrr la energia guardada en el texto en escena 
             finalEnergy += actualEnergy;//calcular la energia final 
