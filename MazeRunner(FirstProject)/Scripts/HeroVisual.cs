@@ -8,6 +8,7 @@ public class HeroVisual : MonoBehaviour //clase monobehavior para tratar los her
 {
     public Hero hero;
     public Image heroImage;
+    public Owner owner;
     public void Start ()
     {
         //..

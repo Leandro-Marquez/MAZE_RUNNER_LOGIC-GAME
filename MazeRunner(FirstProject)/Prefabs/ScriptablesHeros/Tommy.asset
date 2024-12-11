@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Tommy
   heroPhoto: {fileID: 21300000, guid: 5e5b1e4816b5b9648bf9d01acbe83b45, type: 3}
   hability: 1
-  coolingTime: 3
+  coolingTime: 6
   speed: 5
   life: 12
   habilityDescription: "Corre tan veloz que tiene la capacidad de teletransportarse

@@ -152,12 +152,14 @@ public class MazeGenerator
             GameObject game = GameObject.Instantiate(GameManager.instancia.heroPrefab, GameManager.instancia.maze.transform.GetChild(position1[i].x).GetChild(position1[i].y).transform);
             HeroVisual Scriptable = game.GetComponent<HeroVisual>();//obtener el componente visual del heroe para imprimirlo 
             Scriptable.hero = GetHero(GameManager.player1Heros[i]);//obtener el scriptable object y asignarselo al visual
+            Scriptable.owner = Owner.Player1;
             Scriptable.InitializeHero();//inicializar el heroe en el visual 
 
             //instanciar el heroe en su respectiva posicion 
             GameObject game1 = GameObject.Instantiate(GameManager.instancia.heroPrefab, GameManager.instancia.maze.transform.GetChild(position2[i].x).GetChild(position2[i].y).transform);
             HeroVisual Scriptable1 = game1.GetComponent<HeroVisual>();
             Scriptable1.hero = GetHero(GameManager.player2Heros[i]);//obtener el componente visual del heroe para imprimirlo 
+            Scriptable1.owner = Owner.Player2;
             Scriptable1.InitializeHero();//inicializar el heroe en el visual 
         }
     }

@@ -17,3 +17,5 @@ MonoBehaviour:
   TrapPhoto: {fileID: 21300000, guid: b5484abd33ebd4e42b92e66fb070b626, type: 3}
   Description: "Esta p\xF3sima magica es capaz de aumentar el nivel de adrenalina
     de un heroe, aumentado la energ\xEDa 1 unidad "
+  audioClip1: {fileID: 8300000, guid: 08661ae95560d834dbf41687b494679c, type: 3}
+  audioClip2: {fileID: 0}

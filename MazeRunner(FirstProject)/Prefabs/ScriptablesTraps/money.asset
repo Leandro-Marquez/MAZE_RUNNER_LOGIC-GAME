@@ -16,3 +16,5 @@ MonoBehaviour:
   Penalty: 0
   TrapPhoto: {fileID: 21300000, guid: d675291174f2e2e4e95a442f791d9a86, type: 3}
   Description: 'Nunca viene mal un poco de dinero ah '
+  audioClip1: {fileID: 8300000, guid: 08661ae95560d834dbf41687b494679c, type: 3}
+  audioClip2: {fileID: 0}

@@ -9,15 +9,17 @@ using UnityEngine.UI;
 public class NPCMove : MonoBehaviour , IPointerDownHandler
 {
     private Hero currentHero; //guardar el heroe actual
+    public static int n; //entero para controlar que una vez que se mueva un objeto no se pueda mover ningun otro 
     public static int x;//cordenada x del heroe actual
     public static int y;//coordenada y del heroe actual
     public static bool seMovio;//booleano para verificar si se movio un objeto o no 
-    public Image clikedObjectImage; //imagen del objeto clickeado en la escena 
+    public static Image clikedObjectImage; //imagen del objeto clickeado en la escena 
     public bool [,] maze; //guardar el laberinto completo de la escena
     private bool [,] posibleMoves; //guardar las posiciones accesibles acorde a cada heroe;
     public void Start() // inicializar los objetos en el primer momento del juego 
     { 
-        maze = new bool[17,19]; //inicializar 
+        n = 0;//inicializar
+        maze = new bool[17,19]; //...
         posibleMoves = new bool[17,19];//...
         currentHero = null;//...
         seMovio = false;//...
@@ -27,6 +29,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     }
     public void OnPointerDown(PointerEventData eventData) //cuando se hace click 
     {
+        if(n != 0) return; // si ya se movio no se puede seleccionar ningun otro heroe
         GameObject objetoClickeado = eventData.pointerCurrentRaycast.gameObject; //guardar el objeto clickeado
         Hero clickedHero = objetoClickeado.GetComponent<HeroVisual>().hero; //guardar el componente hero 
         if(clickedHero is not null ) //verificar si el componente hero no es nulo osea que es un heroe
@@ -35,6 +38,8 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             GameManager.instancia.clickedHero = objetoClickeado; //guardar una instancia del heroe clickeado a nivel de game anager 
             clikedObjectImage.sprite = currentHero.heroPhoto; //actualizar la imagen del clicked object de la escena!!!
             seMovio = false; //restablecer el valor ya que np ha habido movimiento 
+            n += 1; //aumentar el valor una vez se hace click 
+            UpdateMatrix();//actualizar la el laberinto por si se destruyo algun objeto(pared_roca)
             UpdatePosition();//actualizar la posicion con la posicion del heroe clickeado
             UpdatePosibleMoves(); // marcar las celdas accesibles 
             InvalidOperationsWithOthers();//invalidar el la habilidad de movimiento a los otros Heroes
@@ -87,6 +92,20 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x-1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
             x-=1;//actualizar la posicion
+            //manejar el caso de que el heroe actual sea Gally
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
+            {
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
+                {
+                    //si hay otro en la casilla de Newt
+                    if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(1).transform.GetComponent<HeroVisual>() != null)
+                    {
+                        //activar el efecto
+                        Effects.ActivateNewtEffect();
+                        return;
+                    }
+                }
+            }
             //manejar el caso de que el heroe haya caida en una casilla trampa u item
             if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
         }
@@ -106,6 +125,20 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y-1).transform);//darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
             y-=1;//actualizar la posicion
+
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
+            {
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
+                {
+                    //si hay otro en la casilla de Newt
+                    if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(1).transform.GetComponent<HeroVisual>() != null)
+                    {
+                        //activar el efecto
+                        Effects.ActivateNewtEffect();
+                        return;
+                    }
+                }
+            }
             //manejar el caso de que el heroe haya caida en una casilla trampa u item
             if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
 
@@ -126,9 +159,22 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x+1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
             x+=1;//actualizar la posicion
+
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
+            {
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
+                {
+                    //si hay otro en la casilla de Newtly
+                    if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(1).transform.GetComponent<HeroVisual>() != null)
+                    {
+                        //activar el efecto
+                        Effects.ActivateNewtEffect();
+                        return;
+                    }
+                }
+            }
             //manejar el caso de que el heroe haya caida en una casilla trampa u item
             if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
-        
         }
     }
     private void MoveD() //mover a la derecha
@@ -146,6 +192,20 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y+1).transform); //darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero; //colocarle lasc coordenadas 0,0,0 para evitar troques
             y += 1;//actualizar la posicion
+
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
+            {
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
+                {
+                    //si hay otro en la casilla de Newt
+                    if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(1).transform.GetComponent<HeroVisual>() != null)
+                    {
+                        //activar el efecto
+                        Effects.ActivateNewtEffect();
+                        return;
+                    }
+                }
+            }
             //manejar el caso de que el heroe haya caida en una casilla trampa u item
             if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
         }
@@ -234,6 +294,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         clikedObjectImage.sprite = GameManager.clikedObjectFija; //cambiar la imagen a la imagen por default
         if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false; //cambiar el valor de current player 
         else GameManager.instancia.currentPlayer = true; //cambiar el valor de current player 
+        n = 0;
         GameManager.instancia.PrepareGame(); // se llama a preparar el laberinto respecto al jugador actual, osea apagar y encender los componentes de movimiento
         currentHero = null; //restablecer el current hero 
         seMovio = false; //restablecer el valor de si ha habido movimiento o no ya que se va a cambiar de jugador

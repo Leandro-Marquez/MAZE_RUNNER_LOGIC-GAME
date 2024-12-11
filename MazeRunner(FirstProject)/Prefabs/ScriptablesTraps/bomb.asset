@@ -17,3 +17,5 @@ MonoBehaviour:
   TrapPhoto: {fileID: 21300000, guid: 9ead84daf52434d428452728b47da826, type: 3}
   Description: "Esta bomba es capaz de desgastar la energ\xEDa de un equipo en 3
     unidades"
+  audioClip1: {fileID: 8300000, guid: 174bc2a89dd5e5541844c79b286a206a, type: 3}
+  audioClip2: {fileID: 0}

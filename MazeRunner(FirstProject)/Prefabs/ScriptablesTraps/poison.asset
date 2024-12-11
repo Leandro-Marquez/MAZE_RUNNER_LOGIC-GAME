@@ -17,3 +17,5 @@ MonoBehaviour:
   TrapPhoto: {fileID: 21300000, guid: 880eafbdee1c55e4fb4ffbbb505cdf43, type: 3}
   Description: "Este veneno muy peligroso, invalida la habilidad especial de un h\xE9roe
     y resta 2 unidades de energ\xEDa "
+  audioClip1: {fileID: 8300000, guid: 08661ae95560d834dbf41687b494679c, type: 3}
+  audioClip2: {fileID: 0}

@@ -16,3 +16,5 @@ MonoBehaviour:
   Penalty: 1
   TrapPhoto: {fileID: 21300000, guid: f22e8d0c0dcafc94aa1efb0adc5eeec4, type: 3}
   Description: "Muy rica en nutrientes, aumenta 1 unidad de energ\xEDa"
+  audioClip1: {fileID: 8300000, guid: 4804354aaaa39ec4f9d3ea6dc8395e0b, type: 3}
+  audioClip2: {fileID: 0}

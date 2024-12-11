@@ -15,8 +15,9 @@ MonoBehaviour:
   name: Newt
   heroPhoto: {fileID: 21300000, guid: f7d298fc4b4dfcb499e165546fbc58ee, type: 3}
   hability: 3
-  coolingTime: 3
+  coolingTime: 4
   speed: 4
   life: 10
-  habilityDescription: 'Es tan fuerte que si coincide con un enemigo en el terreno
-    tiene la habilidad de empujarlo hacia el inicio '
+  habilityDescription: Es tan fuerte que si coincide con un enemigo en el terreno
+    tiene la habilidad de empujarlo hacia una esquina del laberinto alejandolo de
+    la salida

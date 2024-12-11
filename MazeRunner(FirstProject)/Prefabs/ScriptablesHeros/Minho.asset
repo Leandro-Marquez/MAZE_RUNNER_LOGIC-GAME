@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Minho
   heroPhoto: {fileID: 21300000, guid: 0e3c61d7f7437d042af4706c7ed9c2fd, type: 3}
   hability: 0
-  coolingTime: 3
+  coolingTime: 6
   speed: 3
   life: 10
   habilityDescription: Tiene la habilidad de destruir cualquier trampa u objeto a

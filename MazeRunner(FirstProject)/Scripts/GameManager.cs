@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI player2NameT,player2NameTs; //nombre del jugador 2, texto y sombra
     public TextMeshProUGUI player1Energy,player1Energys; //energia del jugador 1, texto y sombra
     public TextMeshProUGUI player2Energy,player2Energys; //energia del jugador 1, texto y sombra
-
     public static Sprite clikedObjectFija; // imagen de objeto clickeado fija para cuando se pase de turno
     public static string player1Name; //nombre del player 1 a montar en la escena 
     public static string player2Name; //nombre del player 2 a montar en la escena 
@@ -28,10 +27,10 @@ public class GameManager : MonoBehaviour
     public UnityEngine.UI.Image currentPlayer1Image; //para mayor legibilidad a la hora de saber a quien le toca jugar 
     public UnityEngine.UI.Image currentPlayer2Image; // ...
     public UnityEngine.UI.Image auxImageForDestruction; // imagen auxiliar 
-    public GameObject currentObjectClickedForMinhoEffect;//objeto clickeado para el efecto de minho
     public GameObject sueloAuxForMinho; // prefabricado auxiliar de suelo para cuando Minho destruya la tierra
     public Button applyEffectPlayer1; //boton de aplicar el efecto del jugador 1
     public Button applyEffectPlayer2; //boton de aplicar el efecto del jugador 2
+    public GameObject currentObjectClickedForMinhoEffect;//guardar el objeto clickeado para el efecto de minho
     public GameObject clickedHero; //objeto clickeado en la escena por si se activa el efecto
     public static GameManager instancia;//tener una instancia estatica para poder tener acceso a la clase desde cualquier script
     public bool currentPlayer;//valor booleano para representar los juadore(false para player 1) y (true para player 2)
@@ -40,8 +39,12 @@ public class GameManager : MonoBehaviour
     public AudioSource tomySound;//guardar el audio source de tomy cuando aplique su habilidad 
     public AudioSource minhoSound;//guardar el audio source de minho cuando aplique su habilidad 
     public AudioSource colectedSound;//guardar el audio source de objeto coleccionado para cuando se coleccione algo 
-    public AudioSource sufferSound;//guardar el audio source de objeto negativo recogido
-
+    public static int tommyenfriando; //entero para controlar el tiempo que lleva enfriandose el heroe
+    public static int gallyEnfriando; // ...
+    public static int terezaEnfriando; // ... 
+    public static int sartenEnfriando; //...
+    public static int minhoEnfriando; //...
+    public static int newtEnfriando; //...
 
     //ejecutar antes de cualquier frame en el juego 
     private void Awake()
@@ -63,8 +66,8 @@ public class GameManager : MonoBehaviour
     void Start()  //ejecutar en el inicio de la escena 
     {
         clikedObjectFija = null;
-        currentObjectClickedForMinhoEffect = null;
         currentPlayer = false; //inicia el primer jugador
+        currentObjectClickedForMinhoEffect = null;
         MazeGenerator.Starting();//inicializar el laberinto una vez se cargue la escena
         player1NameT.text = player1Name;//llevar el nombre del player 1 a la escena
         player1NameTs.text = player1Name;//..sombra
@@ -80,12 +83,12 @@ public class GameManager : MonoBehaviour
         MazeGenerator.PrepareTraps(herosPlayer1.Count*12); //instanciar las trampas de manera random en el laberinto 
         
         //iniciar los valores de enfriamiento de los respectivos heroes
-        Effects.gallyEnfriando = 0;
-        Effects.tommyenfriando = 0;
-        Effects.newtEnfriando = 0;
-        Effects.terezaEnfriando = 0;
-        Effects.minhoEnfriando = 0;
-        Effects.sartenEnfriando = 0;
+        gallyEnfriando = 0;
+        tommyenfriando = 0;
+        newtEnfriando = 0;
+        terezaEnfriando = 0;
+        minhoEnfriando = 0;
+        sartenEnfriando = 0;
     }
     private void ObtainHeros() //rellenar los objetos instanciados en la escena en el primer momento
     {
@@ -141,5 +144,8 @@ public class GameManager : MonoBehaviour
             currentPlayer2Image.enabled = true;//activar el indicador de luz verde del jugador 2
             applyEffectPlayer2.gameObject.SetActive(true);//activar el boton de aplicar efecto del jugador 2
         }
+        NPCMove.n = 0;//restablecer el valor a cero para que el otro jugador tambien se pueda mover 
+        if(NPCMove.clikedObjectImage is null) return; //evitar errores de referencia con la imagen de clicked objet de la escena
+        NPCMove.clikedObjectImage.sprite = GameManager.clikedObjectFija; //cambiar la imagen a la imagen por default
     }
 }

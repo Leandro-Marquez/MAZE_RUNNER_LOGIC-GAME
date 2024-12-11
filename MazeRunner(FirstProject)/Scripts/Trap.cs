@@ -9,4 +9,6 @@ public class Trap : ScriptableObject //escriptable object para tener trampas fis
     public int Penalty;
     public Sprite TrapPhoto;
     public string Description;
+    public AudioClip audioClip1;
+    public AudioClip audioClip2;
 }

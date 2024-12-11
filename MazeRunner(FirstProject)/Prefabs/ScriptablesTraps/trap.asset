@@ -17,3 +17,5 @@ MonoBehaviour:
   TrapPhoto: {fileID: 21300000, guid: e10164a445bf6c243b6e04ac416b33f4, type: 3}
   Description: "Estos pinchos son capaces de hacer sangrar a cualquier h\xE9roe haciendolo
     perder 1 unidad de energ\xEDa "
+  audioClip1: {fileID: 8300000, guid: 2ac2739fea9c60340b654ee243d96bce, type: 3}
+  audioClip2: {fileID: 0}

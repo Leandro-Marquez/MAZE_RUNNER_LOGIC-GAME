@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Sarten
   heroPhoto: {fileID: 21300000, guid: 71348d956ab8a874ebd08e4a14cf2eaf, type: 3}
   hability: 4
-  coolingTime: 4
+  coolingTime: 5
   speed: 3
   life: 8
   habilityDescription: 'Es tan cuidadoso que puede dejar dormido al oponente por

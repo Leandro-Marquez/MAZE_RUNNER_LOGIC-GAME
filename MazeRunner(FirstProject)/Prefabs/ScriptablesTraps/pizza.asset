@@ -16,3 +16,5 @@ MonoBehaviour:
   Penalty: 2
   TrapPhoto: {fileID: 21300000, guid: 68e9c69705794e34e97ef7b7c15c6525, type: 3}
   Description: "Rica en calor\xEDas, aumenta 2 unidades de energ\xEDa "
+  audioClip1: {fileID: 8300000, guid: 70c5608a7d9bbbd47b444e407871a1af, type: 3}
+  audioClip2: {fileID: 0}

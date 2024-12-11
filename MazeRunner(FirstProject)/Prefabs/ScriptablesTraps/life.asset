@@ -17,3 +17,5 @@ MonoBehaviour:
   TrapPhoto: {fileID: 21300000, guid: 367288a90d5bbc64ca72bb8aab655201, type: 3}
   Description: "El h\xE9roe que coleccione este botiquin m\xE9dico es capaz de subir
     su energ\xEDa en 3 unidades"
+  audioClip1: {fileID: 8300000, guid: 08661ae95560d834dbf41687b494679c, type: 3}
+  audioClip2: {fileID: 0}

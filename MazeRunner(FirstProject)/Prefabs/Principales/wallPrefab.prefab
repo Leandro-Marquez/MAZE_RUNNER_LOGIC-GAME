@@ -88,4 +88,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e61d6a1ddad1b46a10854932731430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentObjectClicked: {fileID: 0}

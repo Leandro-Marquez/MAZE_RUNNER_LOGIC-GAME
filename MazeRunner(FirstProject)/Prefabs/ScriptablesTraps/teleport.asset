@@ -17,3 +17,5 @@ MonoBehaviour:
   TrapPhoto: {fileID: 21300000, guid: b1fbf907dd344864cb53a9f499722ec6, type: 3}
   Description: "Es capaz de teletransportar a un h\xE9roe a una posicion random del
     tablero"
+  audioClip1: {fileID: 8300000, guid: 5c74e2f2d2c1b264faeff14c2a6f49e5, type: 3}
+  audioClip2: {fileID: 0}
