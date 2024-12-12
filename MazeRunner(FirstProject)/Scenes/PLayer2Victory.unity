@@ -568,7 +568,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PLAYER 1 WIN !!!
+  m_text: PLAYER 2 WIN !!!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5f28c734426c6074181b2dac7dd23cb9, type: 2}
   m_sharedMaterial: {fileID: -2446111084271149819, guid: 5f28c734426c6074181b2dac7dd23cb9, type: 2}
@@ -849,7 +849,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PLAYER 1 WIN !!!
+  m_text: PLAYER 2 WIN !!!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5f28c734426c6074181b2dac7dd23cb9, type: 2}
   m_sharedMaterial: {fileID: -2446111084271149819, guid: 5f28c734426c6074181b2dac7dd23cb9, type: 2}

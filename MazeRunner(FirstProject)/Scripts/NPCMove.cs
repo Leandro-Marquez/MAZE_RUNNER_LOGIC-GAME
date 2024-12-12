@@ -293,6 +293,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         clikedObjectImage.sprite = GameManager.clikedObjectFija; //cambiar la imagen a la imagen por default
         if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false; //cambiar el valor de current player 
         else GameManager.instancia.currentPlayer = true; //cambiar el valor de current player 
+        GameManager.haveHability = true; //restablecer que se puede utilizar la habilidad del 
         n = 0;
         GameManager.instancia.PrepareGame(); // se llama a preparar el laberinto respecto al jugador actual, osea apagar y encender los componentes de movimiento
         currentHero = null; //restablecer el current hero 

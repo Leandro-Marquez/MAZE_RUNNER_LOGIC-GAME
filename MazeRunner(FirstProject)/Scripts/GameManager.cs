@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI player2NameT,player2NameTs; //nombre del jugador 2, texto y sombra
     public TextMeshProUGUI player1Energy,player1Energys; //energia del jugador 1, texto y sombra
     public TextMeshProUGUI player2Energy,player2Energys; //energia del jugador 1, texto y sombra
+    public TextMeshProUGUI player1Money,player1Moneys; //dinero acumulado del jugador 1 y su sombra
+    public TextMeshProUGUI player2Money,player2Moneys; //dinero acumulado del jugador 2 y su sombra
     public static Sprite clikedObjectFija; // imagen de objeto clickeado fija para cuando se pase de turno
     public static string player1Name; //nombre del player 1 a montar en la escena 
     public static string player2Name; //nombre del player 2 a montar en la escena 
@@ -37,6 +39,8 @@ public class GameManager : MonoBehaviour
     public List<GameObject> herosPlayer1; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public List<GameObject> herosPlayer2; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public AudioSource colectedSound;//guardar el audio source de objeto coleccionado para cuando se coleccione algo 
+    public static bool haveHability; //booleano para verificar si se puede activar la habilidad de un lider o si esta muy drogado producto al veneno
+
     public static int tommyenfriando; //entero para controlar el tiempo que lleva enfriandose el heroe
     public static int gallyEnfriando; // ...
     public static int terezaEnfriando; // ... 
@@ -64,7 +68,7 @@ public class GameManager : MonoBehaviour
    
     void Start()  //ejecutar en el inicio de la escena 
     {
-        winConditionForPLayers = 0;
+        winConditionForPLayers = player1Heros.Count * player1Heros.Count * 2;
         clikedObjectFija = null;
         currentPlayer = false; //inicia el primer jugador
         currentObjectClickedForMinhoEffect = null;
@@ -112,6 +116,7 @@ public class GameManager : MonoBehaviour
     public void PrepareGame() //preparar el sistema de turnos al inicio del juego 
     {
         Effects.RestTime();//restar el tiempo de enfriamiento de las habilidades de los heroes 
+        haveHability = true;
         if(!currentPlayer) //el caso de que le toca al jugador 1
         {
             for (int i = 0; i < herosPlayer2.Count ; i++) //desactivar la propiedad NPCMove de los objetos del jugador 2

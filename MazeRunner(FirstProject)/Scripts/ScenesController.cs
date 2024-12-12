@@ -16,10 +16,10 @@ public class ScenesController : MonoBehaviour
     }
     public static void LoadPlayer1VictoryScene()
     {
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene(4); //escena de victoria del jugador 1
     }
     public static void LoadPlayer2VictoryScene()
     {
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene(5); //escena de viscotoria del jugador 2
     }
 }

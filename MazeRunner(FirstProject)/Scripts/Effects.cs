@@ -16,7 +16,8 @@ public class Effects : MonoBehaviour , IPointerDownHandler
     }
     public void OnApplyEffectButtonClicked() //cuando se hace click en el boton de activar efecto 
     {
-        ActivateEffect(GameManager.instancia.clickedHero.GetComponent<HeroVisual>().hero);
+        if(!GameManager.haveHability) return; //si el heroe actual no tiene habilidad debido al veneno retornar
+        ActivateEffect(GameManager.instancia.clickedHero.GetComponent<HeroVisual>().hero);//activar el efecto acorde al heroe con el que se esta jugando
     }
     public void OnPointerDown(PointerEventData eventData) //cuando se hace click actualizar el objeto objetivo
     {
@@ -207,26 +208,29 @@ public class Effects : MonoBehaviour , IPointerDownHandler
 
         if(!GameManager.instancia.currentPlayer) // si es el caso del jugador 1
         {
+            //verificar el caso de que el heroe se encuentre en una celda que no sea hierba
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).tag != "floor")
             {
-                Debug.Log("no es una trampa");
+                //si no es hierba verificar que tenga el componente dueno de teleport
                 if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).GetComponent<TeleportOwner>() != null)
                 {
-                    Debug.Log("es un teleport");
+                    //verificar que no se encuentre sobre su propio teleport 
                     if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).GetComponent<TeleportOwner>().owner == Owner.Player2)
                     {
-                        Debug.Log("es del jugador 2");
+                        //energia acumulada por el jugador correspondiente 
                         int aux = int.Parse(GameManager.instancia.player1Energy.text.ToString());
-                        if(aux >= GameManager.winConditionForPLayers)
+                        if(aux >= GameManager.winConditionForPLayers) //si la energia acumulada es mayor que la necesaria para entrar en el teleport se ha ganado el juego
                         {
-                            ScenesController.LoadPlayer1VictoryScene();
+                            ScenesController.LoadPlayer1VictoryScene(); //cargar la escena correspondiente a la victoria del jugador 1
                             return;
                         }
                     }
                 }
                 return;
             }
-            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2) return;
+
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2) return; //el caso de que solo alberga dos objetos retornar, no hay que colectar item alguno
+            
             int finalEnergy = 0; //entero para guardar la energia final 
             finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
             
@@ -261,36 +265,65 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameObject aux = GameManager.instancia.clickedHero; //guardar el Heroe con el que se juega
                 aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform); //darle el padre de que le corresponde generado de manera random 
                 aux.transform.localPosition = Vector3.zero; //situar al centro de la gerarquia para evitar troyes 
+            
+                //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+                if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+                else GameManager.instancia.currentPlayer = true;
+                GameManager.instancia.PrepareGame(); //volver a preparar la escena
+
             }
+
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "money") //si es dinero
+            {
+                int parcialMoney = int.Parse(GameManager.instancia.player1Money.text.ToString()); //guardar el dinero ya coleccionado 
+                parcialMoney += 1; //sumarle una unidad de dinero
+                GameManager.instancia.player1Money.text = parcialMoney.ToString();//modificar el texto en escena 
+                GameManager.instancia.player1Moneys.text = parcialMoney.ToString();//sombra ...
+                GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+                return;
+            }
+
             int actualEnergy = int.Parse(GameManager.instancia.player1Energy.text.ToString()); //tenrr la energia guardada en el texto en escena 
             finalEnergy += actualEnergy; //calcular la energia final 
             GameManager.instancia.player1Energy.text = finalEnergy.ToString();//modificar el texto en escena 
             GameManager.instancia.player1Energys.text = finalEnergy.ToString();//sombra ...
+            
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "Mortal Poison")//el caso de que sea veneno
+            {
+                GameManager.haveHability = false; //deshabilitar la habilidad especial del heroe actual 
+            }
+            else if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "Beer")//el caso de que sea una cerveza 
+            {
+                GameManager.haveHability = true; //habilitar la habilidad especial del heroe actual
+            }
             GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
 
         }
         else // si es el caso del jugador 2
         {
+            //si no es hierba verificar que tenga el componente dueno de teleport
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).tag != "floor")
             {
-                    Debug.Log("es un teleport");
-
+                //si no es hierba verificar que tenga el componente dueno de teleport
                 if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).GetComponent<TeleportOwner>() != null)
                 {
-                        Debug.Log("es del jugador 1");
-                    if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).GetComponent<TeleportOwner>().owner == Owner.Player2)
+                    //verificar que no se encuentre sobre su propio teleport 
+                    if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).GetComponent<TeleportOwner>().owner == Owner.Player1)
                     {
+                        //energia acumulada por el jugador correspondiente 
                         int aux = int.Parse(GameManager.instancia.player2Energy.text.ToString());
-                        if(aux >= GameManager.winConditionForPLayers)
+                        if(aux >= GameManager.winConditionForPLayers)//si la energia acumulada es mayor que la necesaria para entrar en el teleport se ha ganado el juego
                         {
-                            ScenesController.LoadPlayer2VictoryScene();
+                            ScenesController.LoadPlayer2VictoryScene();//cargar la escena correspondiente a la victoria del jugador 2
                             return;
                         }
                     }
                 }
                 return;
             }
-            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2) return;
+
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2) return; //el caso de que solo alberga dos objetos retornar, no hay que colectar item alguno
+            
             int finalEnergy = 0;//entero para guardar la energia final 
             finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
             
@@ -325,11 +358,36 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameObject aux = GameManager.instancia.clickedHero; //guardar el Heroe con el que se juega
                 aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform); //darle el padre de que le corresponde generado de manera random 
                 aux.transform.localPosition = Vector3.zero; //situar al centro de la gerarquia para evitar troyes 
+            
+                //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+                if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+                else GameManager.instancia.currentPlayer = true;
+                GameManager.instancia.PrepareGame(); //volver a preparar la escena
             }
+
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "money") //si es dinero
+            {
+                int parcialMoney = int.Parse(GameManager.instancia.player2Money.text.ToString()); //guardar el dinero ya coleccionado 
+                parcialMoney += 1; //sumarle una unidad de energia
+                GameManager.instancia.player2Money.text = parcialMoney.ToString();//modificar el texto en escena 
+                GameManager.instancia.player2Moneys.text = parcialMoney.ToString();//sombra ...
+                GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+                return;
+            }
+
             int actualEnergy = int.Parse(GameManager.instancia.player2Energy.text.ToString());//tenrr la energia guardada en el texto en escena 
             finalEnergy += actualEnergy;//calcular la energia final 
             GameManager.instancia.player2Energy.text = finalEnergy.ToString();//modificar el texto en escena 
             GameManager.instancia.player2Energys.text = finalEnergy.ToString();//sombra...
+
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "Mortal Poison") //el caso de que sea veneno
+            {
+                GameManager.haveHability = false; //deshabilitar la habilidad especial del heroe actual 
+            }
+            else if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "Beer") //el caso de que sea una cerveza
+            {
+                GameManager.haveHability = true; //habilitar la habilidad especial del heroe actual
+            }
             GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject);//destruir el objeto coleccionado 
         }
     }

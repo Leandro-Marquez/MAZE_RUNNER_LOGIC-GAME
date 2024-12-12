@@ -17,5 +17,5 @@ MonoBehaviour:
   TrapPhoto: {fileID: 21300000, guid: 8aa41687340b06d4082453d9c1976d4e, type: 3}
   Description: Este hueco, invalida la capacidad de movimiento de un equipo durante
     inmediatamente
-  audioClip1: {fileID: 8300000, guid: 2ac2739fea9c60340b654ee243d96bce, type: 3}
+  audioClip1: {fileID: 8300000, guid: 0f8eb69f909ce734ba85d3f771ee5c75, type: 3}
   audioClip2: {fileID: 0}

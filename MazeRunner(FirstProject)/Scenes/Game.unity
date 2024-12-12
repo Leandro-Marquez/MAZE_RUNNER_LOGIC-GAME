@@ -18245,6 +18245,10 @@ MonoBehaviour:
   player1Energys: {fileID: 1619742047}
   player2Energy: {fileID: 1199996090}
   player2Energys: {fileID: 1972572696}
+  player1Money: {fileID: 1517907906}
+  player1Moneys: {fileID: 1058117360}
+  player2Money: {fileID: 1589119440}
+  player2Moneys: {fileID: 1328445574}
   traps:
   - {fileID: 11400000, guid: e8502bbdaf34a6846925a51dc6e0444a, type: 2}
   - {fileID: 11400000, guid: 01b4ddd56c8f1fc4e8758713506f7cfc, type: 2}
@@ -18279,8 +18283,6 @@ MonoBehaviour:
   currentPlayer: 0
   herosPlayer1: []
   herosPlayer2: []
-  tomySound: {fileID: 0}
-  minhoSound: {fileID: 0}
   colectedSound: {fileID: 1813590523}
 --- !u!1 &1173143494
 GameObject:
@@ -28257,6 +28259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad67b36e8f7874a449dcadce218ce39f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHero: {fileID: 0}
 --- !u!4 &1790550574
 Transform:
   m_ObjectHideFlags: 0
