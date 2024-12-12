@@ -116,7 +116,9 @@ public class GameManager : MonoBehaviour
     public void PrepareGame() //preparar el sistema de turnos al inicio del juego 
     {
         Effects.RestTime();//restar el tiempo de enfriamiento de las habilidades de los heroes 
-        haveHability = true;
+        haveHability = true;//tiene la habilidad siempre que se pasa de turno
+        NPCMove.Newt = false;
+
         if(!currentPlayer) //el caso de que le toca al jugador 1
         {
             for (int i = 0; i < herosPlayer2.Count ; i++) //desactivar la propiedad NPCMove de los objetos del jugador 2
@@ -127,7 +129,6 @@ public class GameManager : MonoBehaviour
             {
                 herosPlayer1[i].GetComponent<NPCMove>().enabled = true;
             }
-            NPCMove.seMovio = false; //restablecer el valor de movimiento para que cada jugador se pueda seguir moviendo
             currentPlayer1Image.enabled = true; //activar el indicador de luz verde del jugador 1
             applyEffectPlayer1.gameObject.SetActive(true);//activar el boton de aplicar efecto del jugador 1
             currentPlayer2Image.enabled = false;//desactivar el indicador de luz verde del jugador 2
@@ -143,7 +144,6 @@ public class GameManager : MonoBehaviour
             {
                 herosPlayer2[i].GetComponent<NPCMove>().enabled = true;
             }
-            NPCMove.seMovio = false; //restablecer el valor de movimiento para que cada jugador se pueda seguir moviendo
             currentPlayer1Image.enabled = false;//desactivar el indicador de luz verde del jugador 1
             applyEffectPlayer1.gameObject.SetActive(false);//desactivar el boton de aplicar efecto del juador 1
             currentPlayer2Image.enabled = true;//activar el indicador de luz verde del jugador 2

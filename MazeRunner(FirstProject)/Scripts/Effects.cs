@@ -9,9 +9,12 @@ using UnityEngine.EventSystems;
 
 public class Effects : MonoBehaviour , IPointerDownHandler
 {
+    private static Trap fire;
     private static bool [,] aux; //matriz auxiliar para veirifcar acorde el efecto que se teletranportara o destruira un objeto en su rango de alcance
     public void Start() //instanciar el valor del objeto clikeado para con minho o tommy
     {
+        fire = null;
+        GetFire();
         aux = new bool[17,19];
     }
     public void OnApplyEffectButtonClicked() //cuando se hace click en el boton de activar efecto 
@@ -296,6 +299,44 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             {
                 GameManager.haveHability = true; //habilitar la habilidad especial del heroe actual
             }
+            else if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "Bomb") //el caso de que sea una bomba
+            {
+                //detruir la bomba
+                GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject);//destruir el objeto coleccionado 
+                if(xpos + 1 < 17 && !NPCMove.maze[xpos+1,ypos] && GameManager.instancia.maze.transform.GetChild(xpos+1).transform.GetChild(ypos).childCount == 1) //verificar si esta en rangos y si se puede colocar un fuego 
+                {
+                    //guardar una instancia del prefabricado de trampa en el escena
+                    GameObject aux = GameObject.Instantiate(GameManager.instancia.trapPrefab,GameManager.instancia.maze.transform.GetChild(xpos+1).transform.GetChild(ypos).transform);
+                    TrapVisual trapVisual = aux.GetComponent<TrapVisual>();//obtener su componente trap visual
+                    trapVisual.trap = fire; //asiganarle el escriptable objet de fuego
+                    trapVisual.InitializeTrap();//inicializar la trampa
+                }
+                if(xpos - 1 >= 0 && !NPCMove.maze[xpos-1,ypos] && GameManager.instancia.maze.transform.GetChild(xpos-1).transform.GetChild(ypos).childCount == 1)
+                {
+                    //guardar una instancia del prefabricado de trampa en el escena
+                    GameObject aux = GameObject.Instantiate(GameManager.instancia.trapPrefab,GameManager.instancia.maze.transform.GetChild(xpos-1).transform.GetChild(ypos).transform);
+                    TrapVisual trapVisual = aux.GetComponent<TrapVisual>();//obtener su componente trap visual
+                    trapVisual.trap=  fire;//asiganarle el escriptable objet de fuego
+                    trapVisual.InitializeTrap();//inicializar la trampa
+                }
+                if(ypos + 1 < 19 && !NPCMove.maze[xpos,ypos+1] && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos+1).childCount == 1)
+                {
+                    //guardar una instancia del prefabricado de trampa en el escena
+                    GameObject aux = GameObject.Instantiate(GameManager.instancia.trapPrefab,GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos+1).transform);
+                    TrapVisual trapVisual = aux.GetComponent<TrapVisual>();//obtener su componente trap visual
+                    trapVisual.trap = fire;//asiganarle el escriptable objet de fuego
+                    trapVisual.InitializeTrap();//inicializar la trampa
+                }
+                if(ypos - 1 >= 0 && !NPCMove.maze[xpos,ypos-1] && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos-1).childCount == 1)
+                {
+                    //guardar una instancia del prefabricado de trampa en el escena
+                    GameObject aux = GameObject.Instantiate(GameManager.instancia.trapPrefab,GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos-1).transform);
+                    TrapVisual trapVisual = aux.GetComponent<TrapVisual>();//obtener su componente trap visual
+                    trapVisual.trap = fire;//asiganarle el escriptable objet de fuego
+                    trapVisual.InitializeTrap();//inicializar la trampa
+                }
+                return;
+            }
             GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
 
         }
@@ -388,7 +429,55 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             {
                 GameManager.haveHability = true; //habilitar la habilidad especial del heroe actual
             }
+            else if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "Bomb") //el caso de que sea una bomba
+            {
+                GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject);//destruir el objeto coleccionado 
+                if(xpos + 1 < 17 && !NPCMove.maze[xpos+1,ypos] && GameManager.instancia.maze.transform.GetChild(xpos+1).transform.GetChild(ypos).childCount == 1)
+                {
+                    //guardar una instancia del prefabricado de trampa en el escena
+                    GameObject aux = GameObject.Instantiate(GameManager.instancia.trapPrefab,GameManager.instancia.maze.transform.GetChild(xpos+1).transform.GetChild(ypos).transform);
+                    TrapVisual trapVisual = aux.GetComponent<TrapVisual>();//obtener su componente trap visual
+                    trapVisual.trap = fire;//asiganarle el escriptable objet de fuego
+                    trapVisual.InitializeTrap();//inicializar la trampa
+                }
+                if(xpos - 1 >= 0 && !NPCMove.maze[xpos-1,ypos] && GameManager.instancia.maze.transform.GetChild(xpos-1).transform.GetChild(ypos).childCount == 1)
+                {
+                    //guardar una instancia del prefabricado de trampa en el escena
+                    GameObject aux = GameObject.Instantiate(GameManager.instancia.trapPrefab,GameManager.instancia.maze.transform.GetChild(xpos-1).transform.GetChild(ypos).transform);
+                    TrapVisual trapVisual = aux.GetComponent<TrapVisual>();//obtener su componente trap visual
+                    trapVisual.trap = fire;//asiganarle el escriptable objet de fuego
+                    trapVisual.InitializeTrap();//inicializar la trampa
+                }
+                if(ypos + 1 < 19 && !NPCMove.maze[xpos,ypos+1] && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos+1).childCount == 1)
+                {
+                    //guardar una instancia del prefabricado de trampa en el escena
+                    GameObject aux = GameObject.Instantiate(GameManager.instancia.trapPrefab,GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos+1).transform);
+                    TrapVisual trapVisual = aux.GetComponent<TrapVisual>();//obtener su componente trap visual
+                    trapVisual.trap = fire;//asiganarle el escriptable objet de fuego
+                    trapVisual.InitializeTrap();//inicializar la trampa
+                }
+                if(ypos - 1 >= 0 && !NPCMove.maze[xpos,ypos-1] && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos-1).childCount == 1)
+                {
+                    //guardar una instancia del prefabricado de trampa en el escena
+                    GameObject aux = GameObject.Instantiate(GameManager.instancia.trapPrefab,GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos-1).transform);
+                    TrapVisual trapVisual = aux.GetComponent<TrapVisual>();//obtener su componente trap visual
+                    trapVisual.trap = fire;//asiganarle el escriptable objet de fuego
+                    trapVisual.InitializeTrap();//inicializar la trampa
+                }
+                return;
+            }
             GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject);//destruir el objeto coleccionado 
+        }
+    }
+    private void GetFire()
+    {
+        for (int i = 0 ; i < GameManager.instancia.traps.Count ; i++) //iterar por la lista de trampas
+        {
+            if(GameManager.instancia.traps[i].name == "fire")
+            {
+                fire = GameManager.instancia.traps[i];
+                break;
+            }
         }
     }
     private static IEnumerator PlaySecondAudioAfterFirst(AudioSource audio, AudioClip clip2) //verificar si aun se reproduce el primer audio 
