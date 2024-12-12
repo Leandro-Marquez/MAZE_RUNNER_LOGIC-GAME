@@ -92,7 +92,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x-1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
             x-=1;//actualizar la posicion
-            //manejar el caso de que el heroe actual sea Gally
+            //manejar el caso de que el heroe actual sea Newt
             if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
             {
                 if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
@@ -107,7 +107,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                 }
             }
             //manejar el caso de que el heroe haya caida en una casilla trampa u item
-            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount >= 2) Effects.ColectObjects(x,y);
         }
     }
     private void MoveA()//mover a la izquierda
@@ -125,7 +125,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y-1).transform);//darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
             y-=1;//actualizar la posicion
-
+            //manejar el caso de que el heroe actual sea Newt
             if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
             {
                 if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
@@ -140,8 +140,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                 }
             }
             //manejar el caso de que el heroe haya caida en una casilla trampa u item
-            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
-
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount >= 2) Effects.ColectObjects(x,y);
         }
     }
     private void MoveS()//mover hacia abajo
@@ -159,7 +158,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x+1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
             x+=1;//actualizar la posicion
-
+            //manejar el caso de que el heroe actual sea Newt
             if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
             {
                 if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
@@ -174,7 +173,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                 }
             }
             //manejar el caso de que el heroe haya caida en una casilla trampa u item
-            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount >= 2) Effects.ColectObjects(x,y);
         }
     }
     private void MoveD() //mover a la derecha
@@ -192,7 +191,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y+1).transform); //darle su padre correspondiente en la gerarquia 
             aux.transform.localPosition = Vector3.zero; //colocarle lasc coordenadas 0,0,0 para evitar troques
             y += 1;//actualizar la posicion
-
+            //manejar el caso de que el heroe actual sea Newt
             if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
             {
                 if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
@@ -207,7 +206,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                 }
             }
             //manejar el caso de que el heroe haya caida en una casilla trampa u item
-            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3) Effects.ColectObjects(x,y);
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount >= 2) Effects.ColectObjects(x,y);
         }
     }
     private void UpdatePosibleMoves() //marcar toda celda accesible para el heroe

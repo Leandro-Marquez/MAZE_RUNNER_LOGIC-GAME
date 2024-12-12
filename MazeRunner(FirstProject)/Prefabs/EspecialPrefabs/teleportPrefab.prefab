@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5065460092100444406}
   - component: {fileID: 6888808358383599256}
   - component: {fileID: -4105529876645737759}
+  - component: {fileID: -407096743798737771}
   m_Layer: 0
   m_Name: teleportPrefab
   m_TagString: extras
@@ -89,17 +90,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTeleport: 1
-  isBomb: 0
-  isBeer: 0
-  isCofre: 0
-  isFuego: 0
-  isHueco: 0
-  isMuerto: 0
-  isPizza: 0
-  isPosima: 0
-  isRock: 0
-  isVenum: 0
-  isLife: 0
   targetImage: {fileID: 0}
   names: {fileID: 0}
   namess: {fileID: 0}
@@ -111,3 +101,16 @@ MonoBehaviour:
   speeds: {fileID: 0}
   life: {fileID: 0}
   lifes: {fileID: 0}
+--- !u!114 &-407096743798737771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676706056491644596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74291f5998f83fa498239d9a3305c6a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: 0

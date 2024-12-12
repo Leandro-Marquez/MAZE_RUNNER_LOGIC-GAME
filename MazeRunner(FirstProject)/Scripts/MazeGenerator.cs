@@ -132,12 +132,13 @@ public class MazeGenerator
             }
         }
     }
-    public static void GenerateTeleports(int x , int y) //generar los teleports para el inicio y el final del laberinto 
+    public static void GenerateTeleports(int x , int y , bool current) //generar los teleports para el inicio y el final del laberinto 
     {
         //instanciar el teleport en su respectiva posicion
         GameObject teleport  = GameObject.Instantiate(GameManager.instancia.teleportPrefab,GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform);
         teleport.transform.localPosition = new Vector3(0,0,0);//reescribir las nuevas coordenadas del teleport
         teleport.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform);//darle el padre correspondiente al teleport coprrespondiente
+        if(current) teleport.transform.GetComponent<TeleportOwner>().owner = Owner.Player2;
     }
     public static void GenerateHeros() // Genera los héroes correspondientes a cada uno en sus respectivas casillas 
     {

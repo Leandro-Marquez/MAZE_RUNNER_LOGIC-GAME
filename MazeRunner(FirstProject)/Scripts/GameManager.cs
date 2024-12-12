@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     public static int sartenEnfriando; //...
     public static int minhoEnfriando; //...
     public static int newtEnfriando; //...
+    public static int winConditionForPLayers; //condicion de vistoria para los jugadores 
 
     //ejecutar antes de cualquier frame en el juego 
     private void Awake()
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
    
     void Start()  //ejecutar en el inicio de la escena 
     {
+        winConditionForPLayers = 0;
         clikedObjectFija = null;
         currentPlayer = false; //inicia el primer jugador
         currentObjectClickedForMinhoEffect = null;
@@ -73,8 +75,8 @@ public class GameManager : MonoBehaviour
         player2NameTs.text = player2Name;//..sombra
 
         MazeGenerator.GenerateHeros();//inicializar los heroes correspondientes a cada jugador 
-        MazeGenerator.GenerateTeleports(0,1);//inicializar los teletransportadores al incio y final de laberinto 
-        MazeGenerator.GenerateTeleports(16,17);//inicializar los teletransportadores al incio y final de laberinto 
+        MazeGenerator.GenerateTeleports(0,1,false);//inicializar los teletransportadores al incio y final de laberinto 
+        MazeGenerator.GenerateTeleports(16,17,true);//inicializar los teletransportadores al incio y final de laberinto 
         ObtainHeros(); //guardar los heroes en sus listas correspondientes para el sistema de turnos 
         PrepareGame(); //prepar el laberinto para el jugador 1
         

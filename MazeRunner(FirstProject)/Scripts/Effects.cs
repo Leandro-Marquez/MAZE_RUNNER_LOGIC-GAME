@@ -67,7 +67,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
     } 
     public static void ActivateMinhoEffect() //activar el efecto de minho
     {
-        //el caso de que el objeto objetivo sea nulo retornar 
+        //el caso de que el objeto objetivo sea nulo o sea e suelo retornar 
         if(GameManager.instancia.currentObjectClickedForMinhoEffect is null || GameManager.instancia.currentObjectClickedForMinhoEffect.tag == "floor") return;
         
         AudioSource audio = GameManager.instancia.colectedSound.GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
@@ -207,6 +207,26 @@ public class Effects : MonoBehaviour , IPointerDownHandler
 
         if(!GameManager.instancia.currentPlayer) // si es el caso del jugador 1
         {
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).tag != "floor")
+            {
+                Debug.Log("no es una trampa");
+                if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).GetComponent<TeleportOwner>() != null)
+                {
+                    Debug.Log("es un teleport");
+                    if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).GetComponent<TeleportOwner>().owner == Owner.Player2)
+                    {
+                        Debug.Log("es del jugador 2");
+                        int aux = int.Parse(GameManager.instancia.player1Energy.text.ToString());
+                        if(aux >= GameManager.winConditionForPLayers)
+                        {
+                            ScenesController.LoadPlayer1VictoryScene();
+                            return;
+                        }
+                    }
+                }
+                return;
+            }
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2) return;
             int finalEnergy = 0; //entero para guardar la energia final 
             finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
             
@@ -251,6 +271,26 @@ public class Effects : MonoBehaviour , IPointerDownHandler
         }
         else // si es el caso del jugador 2
         {
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).tag != "floor")
+            {
+                    Debug.Log("es un teleport");
+
+                if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).GetComponent<TeleportOwner>() != null)
+                {
+                        Debug.Log("es del jugador 1");
+                    if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).GetComponent<TeleportOwner>().owner == Owner.Player2)
+                    {
+                        int aux = int.Parse(GameManager.instancia.player2Energy.text.ToString());
+                        if(aux >= GameManager.winConditionForPLayers)
+                        {
+                            ScenesController.LoadPlayer2VictoryScene();
+                            return;
+                        }
+                    }
+                }
+                return;
+            }
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2) return;
             int finalEnergy = 0;//entero para guardar la energia final 
             finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
             

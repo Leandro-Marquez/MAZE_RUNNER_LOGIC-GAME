@@ -14,4 +14,12 @@ public class ScenesController : MonoBehaviour
     {
         SceneManager.LoadScene(3); //escena del juego
     }
+    public static void LoadPlayer1VictoryScene()
+    {
+        SceneManager.LoadScene(4);
+    }
+    public static void LoadPlayer2VictoryScene()
+    {
+        SceneManager.LoadScene(4);
+    }
 }
