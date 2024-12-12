@@ -40,7 +40,6 @@ public class GameManager : MonoBehaviour
     public List<GameObject> herosPlayer2; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public AudioSource colectedSound;//guardar el audio source de objeto coleccionado para cuando se coleccione algo 
     public static bool haveHability; //booleano para verificar si se puede activar la habilidad de un lider o si esta muy drogado producto al veneno
-
     public static int tommyenfriando; //entero para controlar el tiempo que lleva enfriandose el heroe
     public static int gallyEnfriando; // ...
     public static int terezaEnfriando; // ... 
@@ -48,6 +47,7 @@ public class GameManager : MonoBehaviour
     public static int minhoEnfriando; //...
     public static int newtEnfriando; //...
     public static int winConditionForPLayers; //condicion de vistoria para los jugadores 
+    public static int counterOfRounds; //entero para llevar la cantidad de turnos que han jugado los jugadores para instanciar trampas y comidas en un momento determinado
 
     //ejecutar antes de cualquier frame en el juego 
     private void Awake()
@@ -68,8 +68,9 @@ public class GameManager : MonoBehaviour
    
     void Start()  //ejecutar en el inicio de la escena 
     {
-        winConditionForPLayers = player1Heros.Count * player1Heros.Count * 2;
-        clikedObjectFija = null;
+        winConditionForPLayers = player1Heros.Count * player1Heros.Count * 2;//inicializar la condicion de victoria
+        clikedObjectFija = null; //inicializar la imagen de objeto clickeado
+        counterOfRounds = 0; //inicializar la cantidad de turnos jugados en el pimer momento del juego
         currentPlayer = false; //inicia el primer jugador
         currentObjectClickedForMinhoEffect = null;
         MazeGenerator.Starting();//inicializar el laberinto una vez se cargue la escena
@@ -84,7 +85,7 @@ public class GameManager : MonoBehaviour
         ObtainHeros(); //guardar los heroes en sus listas correspondientes para el sistema de turnos 
         PrepareGame(); //prepar el laberinto para el jugador 1
         
-        MazeGenerator.PrepareTraps(herosPlayer1.Count*12); //instanciar las trampas de manera random en el laberinto 
+        MazeGenerator.PrepareTraps(herosPlayer1.Count*12,true); //instanciar las trampas de manera random en el laberinto 
         
         //iniciar los valores de enfriamiento de los respectivos heroes
         gallyEnfriando = 0;
@@ -118,6 +119,7 @@ public class GameManager : MonoBehaviour
         Effects.RestTime();//restar el tiempo de enfriamiento de las habilidades de los heroes 
         haveHability = true;//tiene la habilidad siempre que se pasa de turno
         NPCMove.Newt = false;
+        counterOfRounds += 1;
 
         if(!currentPlayer) //el caso de que le toca al jugador 1
         {
@@ -152,5 +154,12 @@ public class GameManager : MonoBehaviour
         NPCMove.n = 0;//restablecer el valor a cero para que el otro jugador tambien se pueda mover 
         if(NPCMove.clikedObjectImage is null) return; //evitar errores de referencia con la imagen de clicked objet de la escena
         NPCMove.clikedObjectImage.sprite = GameManager.clikedObjectFija; //cambiar la imagen a la imagen por default
+    }
+    private void Update() //verificar en cada frame la cantidad de turnos jugados 
+    {
+        if(counterOfRounds == 10) //si se tienen 10 turnos jugados se prepararan 10 nuevos objetos en la escena(trampas e items)
+        {
+            MazeGenerator.PrepareTraps(10,false); //si se llego a 10 turnos crear 10 trampas e items
+        }
     }
 }

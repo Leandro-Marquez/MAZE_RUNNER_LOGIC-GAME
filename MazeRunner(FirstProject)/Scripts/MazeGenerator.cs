@@ -201,7 +201,7 @@ public class MazeGenerator
         }
         return values;
     }
-    public static void PrepareTraps(int k) // instanciar las trampas de manera aleatoria 
+    public static void PrepareTraps(int k, bool init) // instanciar las trampas de manera aleatoria 
     {
         List<(int x, int y)> values = new List<(int x, int y)>(); //lista de tuplas para instanciar las trampas
         System.Random random = new System.Random(); //intancia random para buscar valores random
@@ -224,6 +224,14 @@ public class MazeGenerator
             TrapVisual Scriptable = game.GetComponent<TrapVisual>();//obtener el componente visual del heroe para imprimirlo 
             Scriptable.trap = GameManager.instancia.traps[m];//obtener el scriptable object y asignarselo al visual
             Scriptable.InitializeTrap();//inicializar el heroe en el visual 
+        }
+        GameManager.counterOfRounds = 0; //reiniciar el valor del contador de turnos
+        if(!init)
+        {
+            //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+            if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+            else GameManager.instancia.currentPlayer = true;
+            GameManager.instancia.PrepareGame(); //volver a preparar la escena
         }
     }
 }
