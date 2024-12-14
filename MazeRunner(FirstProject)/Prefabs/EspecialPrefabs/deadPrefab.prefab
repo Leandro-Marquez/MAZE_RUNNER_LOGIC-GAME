@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7327387874522386265}
   - component: {fileID: 2098830992275931181}
   - component: {fileID: 4872184479312424340}
+  - component: {fileID: 7185144254284913660}
   m_Layer: 0
   m_Name: deadPrefab
-  m_TagString: extras
+  m_TagString: zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -89,19 +90,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTeleport: 0
-  isBomb: 0
-  isBeer: 0
-  isCofre: 0
-  isFuego: 0
-  isHueco: 0
-  isMuerto: 1
-  isPizza: 0
-  isPosima: 0
-  isRock: 0
-  isVenum: 0
-  isLife: 0
-  isKey: 0
-  isDoor: 0
   targetImage: {fileID: 0}
   names: {fileID: 0}
   namess: {fileID: 0}
@@ -113,3 +101,15 @@ MonoBehaviour:
   speeds: {fileID: 0}
   life: {fileID: 0}
   lifes: {fileID: 0}
+--- !u!114 &7185144254284913660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529636345285323727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e2d1092e5a0a564d92829430a307b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

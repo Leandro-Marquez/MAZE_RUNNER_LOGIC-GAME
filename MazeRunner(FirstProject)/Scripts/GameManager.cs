@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
 {
     //guardar los prefabricados en la escena para su intanciacion desde codigo 
     public GameObject wallPrefab,floorPrefab,teleportPrefab,heroPrefab;//... prefabricados principales
-    public GameObject doorPrefab,teleporPrefab,chestPrefab,keyPrefab,deadPrefab;//...prefabricados especiales
+    public GameObject doorPrefab,chestPrefab,keyPrefab,deadPrefab;//...prefabricados especiales
+    public GameObject zombiePrefab;//prefab del NPC
     public GameObject trapPrefab; // prefabricado principal de las trampas
     public TextMeshProUGUI player1NameT,player1NameTs; //nombre del jugador 1, texto y sombra
     public TextMeshProUGUI player2NameT,player2NameTs; //nombre del jugador 2, texto y sombra
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     public UnityEngine.UI.Image currentPlayer2Image; // ...
     public UnityEngine.UI.Image auxImageForDestruction; // imagen auxiliar 
     public GameObject sueloAuxForMinho; // prefabricado auxiliar de suelo para cuando Minho destruya la tierra
+    public GameObject hollowAux;// prefabricado auxiliar de tapa de alcantarilla
     public Button applyEffectPlayer1; //boton de aplicar el efecto del jugador 1
     public Button applyEffectPlayer2; //boton de aplicar el efecto del jugador 2
     public GameObject currentObjectClickedForMinhoEffect;//guardar el objeto clickeado para el efecto de minho
@@ -48,7 +50,8 @@ public class GameManager : MonoBehaviour
     public static int newtEnfriando; //...
     public static int winConditionForPLayers; //condicion de vistoria para los jugadores 
     public static int counterOfRounds; //entero para llevar la cantidad de turnos que han jugado los jugadores para instanciar trampas y comidas en un momento determinado
-
+    private static int numberOfRounds;//entero para guardar la cantidad de turnos que se jugaran hasta la nueva instanciacion de trampas e items
+    
     //ejecutar antes de cualquier frame en el juego 
     private void Awake()
     {
@@ -69,6 +72,7 @@ public class GameManager : MonoBehaviour
     void Start()  //ejecutar en el inicio de la escena 
     {
         winConditionForPLayers = player1Heros.Count * player1Heros.Count * 2;//inicializar la condicion de victoria
+        numberOfRounds = player1Heros.Count * 5;//inicializar la variable de actulaizacion de tablero acrode la cantidad de hereos que se tengan
         clikedObjectFija = null; //inicializar la imagen de objeto clickeado
         counterOfRounds = 0; //inicializar la cantidad de turnos jugados en el pimer momento del juego
         currentPlayer = false; //inicia el primer jugador
@@ -86,7 +90,7 @@ public class GameManager : MonoBehaviour
         PrepareGame(); //prepar el laberinto para el jugador 1
         
         MazeGenerator.PrepareTraps(herosPlayer1.Count*12,true); //instanciar las trampas de manera random en el laberinto 
-        
+        // DeadMove.GenerateZombie();/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //iniciar los valores de enfriamiento de los respectivos heroes
         gallyEnfriando = 0;
         tommyenfriando = 0;
@@ -119,6 +123,7 @@ public class GameManager : MonoBehaviour
         Effects.RestTime();//restar el tiempo de enfriamiento de las habilidades de los heroes 
         haveHability = true;//tiene la habilidad siempre que se pasa de turno
         NPCMove.Newt = false;
+        NPCMove.Gally = false;
         counterOfRounds += 1;
 
         if(!currentPlayer) //el caso de que le toca al jugador 1
@@ -157,7 +162,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update() //verificar en cada frame la cantidad de turnos jugados 
     {
-        if(counterOfRounds == 10) //si se tienen 10 turnos jugados se prepararan 10 nuevos objetos en la escena(trampas e items)
+        if(counterOfRounds == 16) //si se tienen 10 turnos jugados se prepararan 10 nuevos objetos en la escena(trampas e items)
         {
             MazeGenerator.PrepareTraps(10,false); //si se llego a 10 turnos crear 10 trampas e items
         }

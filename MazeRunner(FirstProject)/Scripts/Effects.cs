@@ -14,7 +14,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
     public void Start() //instanciar el valor del objeto clikeado para con minho o tommy
     {
         fire = null;
-        GetFire();
+        GetFire(); //obtener el scriptable del fuego y tenerlo listo para una vez explote la bomba
         aux = new bool[17,19];
     }
     public void OnApplyEffectButtonClicked() //cuando se hace click en el boton de activar efecto 
@@ -48,12 +48,12 @@ public class Effects : MonoBehaviour , IPointerDownHandler
         else if(currentHero.name == "Minho" && GameManager.minhoEnfriando == 0)
         {
             GameManager.minhoEnfriando = currentHero.coolingTime;//reiniciar el valor de enfriamiento
-            ActivateMinhoEffect();//llamar a metodo especifico para el
+            ActivateDestructionEffect();//llamar a metodo especifico para el
         }
         else if(currentHero.name == "Tereza" && GameManager.terezaEnfriando == 0)
         {
             GameManager.terezaEnfriando = currentHero.coolingTime;//reiniciar el valor de enfriamiento
-            ActivateTerezaEffect();//llamar a metodo especifico para ella
+            ActivateDestructionEffect();//llamar a metodo especifico para ella
         }
     }
     public static void RestTime() //restar el tiempo de enfriamiento de todo heroe una vez se pase de turno
@@ -65,11 +65,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
         if(GameManager.terezaEnfriando > 0) GameManager.terezaEnfriando -= 1; //...
         if(GameManager.newtEnfriando > 0 ) GameManager.newtEnfriando -= 1; //...
     }
-    private void ActivateTerezaEffect() //activar el efecto de tereza
-    {
-        //implentar 
-    } 
-    public static void ActivateMinhoEffect() //activar el efecto de minho
+    public static void ActivateDestructionEffect() //activar el efecto de minho
     {
         //el caso de que el objeto objetivo sea nulo o sea e suelo retornar 
         if(GameManager.instancia.currentObjectClickedForMinhoEffect is null || GameManager.instancia.currentObjectClickedForMinhoEffect.tag == "floor") return;
@@ -97,7 +93,34 @@ public class Effects : MonoBehaviour , IPointerDownHandler
     }
     public static void ActivateGallyEffect() //activar el efecto de Gally
     {
-        //implementar
+        NPCMove.Gally = true; //hacer la propiedad de gally true para una actualizacion de la matriz de su alcance correcta
+        for (int i = 0; i < 17; i++) //iterar por las filas 
+        {
+            for (int j = 0; j < 19; j++) //iterar por las columnas 
+            {
+                int index = GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).childCount -1; //tomar el indicie del ultimo hijo del objeto en el cuel se esta
+                //si el objeto no tiene nulo el compinente hero visual y tiene el componente NPCMove activado, se tiene garantia de que se accedera a la instancia correcta de la la clase NPCMove para ctualizar la matriz de celdas alcanzables 
+                if(GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(index).GetComponent<HeroVisual>() is not null && GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(index).GetComponent<NPCMove>().enabled)
+                {
+                    GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(index).GetComponent<NPCMove>().UpdatePosibleMoves(); //acceder al metodo a traves de la instancia correcta
+                    return;
+                }
+            }
+        }
+        if(!GameManager.instancia.currentPlayer) //en caso de que sea el jugador 1, modificar el valor de energia, ya que el efecto de gally deteriora al equipo en una unidad 
+        {
+            int energy = int.Parse(GameManager.instancia.player1Energy.text.ToString()); //obtener la energia que hay en el texto de la escena
+            energy -= 1; //restar ua unidad
+            GameManager.instancia.player1Energy.text = energy.ToString(); //asignarla al texto en la escena ya modificada 
+            GameManager.instancia.player1Energys.text = energy.ToString(); //...sombra
+        }
+        else//en caso de que sea el jugador 2, modificar el valor de energia, ya que el efecto de gally deteriora al equipo en una unidad 
+        {
+            int energy = int.Parse(GameManager.instancia.player2Energy.text.ToString()); //obtener la energia que hay en el texto de la escena
+            energy -= 1;//restar ua unidad
+            GameManager.instancia.player2Energy.text = energy.ToString();//asignarla al texto en la escena ya modificada 
+            GameManager.instancia.player2Energys.text = energy.ToString();//...sombra
+        }
     }
     public static void ActivateNewtEffect() //activar el efecto de Newt
     {
@@ -469,13 +492,13 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject);//destruir el objeto coleccionado 
         }
     }
-    private void GetFire()
+    private void GetFire()//obtener el escriptable object de fuego para cuando se explote alguna bomba
     {
         for (int i = 0 ; i < GameManager.instancia.traps.Count ; i++) //iterar por la lista de trampas
         {
-            if(GameManager.instancia.traps[i].name == "fire")
+            if(GameManager.instancia.traps[i].name == "fire") //si tiene como nombre fuego 
             {
-                fire = GameManager.instancia.traps[i];
+                fire = GameManager.instancia.traps[i]; //guardarla en el campo de la clase y terminar la iteracion del ciclo 
                 break;
             }
         }

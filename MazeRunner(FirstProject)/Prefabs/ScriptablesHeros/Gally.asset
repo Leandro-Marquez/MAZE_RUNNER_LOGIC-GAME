@@ -18,5 +18,6 @@ MonoBehaviour:
   coolingTime: 4
   speed: 4
   life: 8
-  habilityDescription: "Tiene la habilidad de ver m\xE1s all\xE1 de la oscuridad
-    del laberinto "
+  habilityDescription: "Tiene la habilidad de atravesar las paredes debido a su transl\xFAcidez,
+    sufre mucho desgaste con esta habilidad pierde 1 unidad de energ\xEDa"
+  audioClip: {fileID: 0}

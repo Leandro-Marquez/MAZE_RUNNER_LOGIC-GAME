@@ -18232,10 +18232,10 @@ MonoBehaviour:
   teleportPrefab: {fileID: 676706056491644596, guid: 6c4887d51d89f224587791e0cbc8093c, type: 3}
   heroPrefab: {fileID: 3224225455615583403, guid: 5ad8b5f0d6c889e46a232325b0fb11fc, type: 3}
   doorPrefab: {fileID: 0}
-  teleporPrefab: {fileID: 0}
   chestPrefab: {fileID: 0}
   keyPrefab: {fileID: 0}
   deadPrefab: {fileID: 0}
+  zombiePrefab: {fileID: 1529636345285323727, guid: d133a66ae8c0ee546a616336742d80fd, type: 3}
   trapPrefab: {fileID: 3699422186829645249, guid: b08ba7521e005a64081b8b87144f5f3b, type: 3}
   player1NameT: {fileID: 972475077}
   player1NameTs: {fileID: 1874384311}
@@ -18276,6 +18276,7 @@ MonoBehaviour:
   currentPlayer2Image: {fileID: 421788841}
   auxImageForDestruction: {fileID: 0}
   sueloAuxForMinho: {fileID: 5486625647835108120, guid: 9d6f387dae05cec4d8f5c5abcaaae5dd, type: 3}
+  hollowAux: {fileID: 5712628235699457605, guid: 0d70285d9a0b2e44ca48fa5e7330fde8, type: 3}
   applyEffectPlayer1: {fileID: 1938378585}
   applyEffectPlayer2: {fileID: 1367034713}
   currentObjectClickedForMinhoEffect: {fileID: 0}
@@ -24697,8 +24698,8 @@ Camera:
   m_GameObject: {fileID: 1524706526}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

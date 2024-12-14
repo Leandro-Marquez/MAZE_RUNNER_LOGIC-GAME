@@ -14,15 +14,19 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     public static int y;//coordenada y del heroe actual
     public static Image clikedObjectImage; //imagen del objeto clickeado en la escena 
     public static bool [,] maze; //guardar el laberinto completo de la escena
-    private bool [,] posibleMoves; //guardar las posiciones accesibles acorde a cada heroe;
+    private static bool [,] posibleMoves; //guardar las posiciones accesibles acorde a cada heroe;
+    private static bool [,] heros;
     public static bool Newt;
+    public static bool Gally;
     public void Start() // inicializar los objetos en el primer momento del juego 
     { 
         n = 0;//inicializar
         maze = new bool[17,19]; //...
         posibleMoves = new bool[17,19];//...
+        heros = new bool[17,19]; //...
         currentHero = null;//...
         Newt = false;
+        Gally = false;
         UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
         clikedObjectImage = GameObject.Find("CliskedObjectImage").GetComponent<Image>(); //asignar la imagen que le corresponde en la escena ya que no tengo objeto alguno con este script hasta que se inicialicen los heroes
         GameManager.clikedObjectFija = clikedObjectImage.sprite;//inicializar la imagen fija con la imagen asignada desde el inspector 
@@ -34,10 +38,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         Hero clickedHero = objetoClickeado.GetComponent<HeroVisual>().hero; //guardar el componente hero 
         if(clickedHero is not null ) //verificar si el componente hero no es nulo osea que es un heroe
         {
-            if(clickedHero.name == "Newt")
-            {
-                Newt = true;
-            }
+            if(clickedHero.name == "Newt") Newt = true;
             currentHero = clickedHero;//actualizar el heroe actual con el heroe clickeado
             GameManager.instancia.clickedHero = objetoClickeado; //guardar una instancia del heroe clickeado a nivel de game anager 
             clikedObjectImage.sprite = currentHero.heroPhoto; //actualizar la imagen del clicked object de la escena!!!
@@ -87,7 +88,34 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
 
         if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
         int currentIndex = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).childCount-1;//inidice del heroe actual en la gerarquia
-        if(x-1 >= 0 && !maze[x-1,y] && posibleMoves[x-1,y])//si esta en los rangos de la matriz y si se puede mover hacia alli
+        if(Gally) //verificar el caso en que se haya llamado a aplicar el efecto de gally
+        {
+            UpdateHeros(); //actualizar la matriz donde se guardan los heroes para que gally no les pase por encima 
+            if(x-1 >= 0 && !heros[x-1,y] && posibleMoves[x-1,y])//si esta en los rangos de la matriz y si se puede mover hacia alli
+            {
+                GameObject aux = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).GetChild(currentIndex).gameObject;//guardar el heroe para moverlo despues
+                aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x-1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
+                aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
+                x-=1;//actualizar la posicion
+                //manejar el caso de que el heroe actual sea Newt
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
+                {
+                    if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
+                    {
+                        //si hay otro en la casilla de Newt
+                        if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(1).transform.GetComponent<HeroVisual>() != null)
+                        {
+                            //activar el efecto
+                            Effects.ActivateNewtEffect();
+                            return;
+                        }
+                    }
+                }
+                //manejar el caso de que el heroe haya caida en una casilla trampa u item
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount >= 2) Effects.ColectObjects(x,y);
+            }
+        }
+        else if(x-1 >= 0 && !maze[x-1,y] && posibleMoves[x-1,y])//si esta en los rangos de la matriz y si se puede mover hacia alli
         {
             GameObject aux = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).GetChild(currentIndex).gameObject;//guardar el heroe para moverlo despues
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x-1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
@@ -118,7 +146,34 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
 
         int currentIndex = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).childCount-1;//inidice del heroe actual en la gerarquia
-        if(y-1 >= 0 && !maze[x,y-1] && posibleMoves[x,y-1])//si esta en los rangos de la matriz y si se puede mover hacia alli
+        if(Gally) //verificar el caso en que se haya llamado a aplicar el efecto de gally
+        {
+            UpdateHeros(); //actualizar la matriz donde se guardan los heroes para que gally no les pase por encima 
+            if(y-1 >= 0 && !heros[x,y-1] && posibleMoves[x,y-1])//si esta en los rangos de la matriz y si se puede mover hacia alli
+            {
+                GameObject aux = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).GetChild(currentIndex).gameObject;//guardar el heroe para moverlo despues
+                aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y-1).transform);//darle su padre correspondiente en la gerarquia 
+                aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
+                y-=1;//actualizar la posicion
+                //manejar el caso de que el heroe actual sea Newt
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
+                {
+                    if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
+                    {
+                        //si hay otro en la casilla de Newt
+                        if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(1).transform.GetComponent<HeroVisual>() != null)
+                        {
+                            //activar el efecto
+                            Effects.ActivateNewtEffect();
+                            return;
+                        }
+                    }
+                }
+                //manejar el caso de que el heroe haya caida en una casilla trampa u item
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount >= 2) Effects.ColectObjects(x,y);
+            }
+        }
+        else if(y-1 >= 0 && !maze[x,y-1] && posibleMoves[x,y-1])//si esta en los rangos de la matriz y si se puede mover hacia alli
         {
             GameObject aux = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).GetChild(currentIndex).gameObject;//guardar el heroe para moverlo despues
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y-1).transform);//darle su padre correspondiente en la gerarquia 
@@ -149,7 +204,34 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
 
         int currentIndex = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).childCount-1;//inidice del heroe actual en la gerarquia
-        if(x+1 < 17 && !maze[x+1,y] && posibleMoves[x+1,y]) //si esta en los rangos de la matriz y si se puede mover hacia alli
+        if(Gally) //verificar el caso en que se haya llamado a aplicar el efecto de gally
+        {
+            UpdateHeros(); //actualizar la matriz donde se guardan los heroes para que gally no les pase por encima 
+            if(x+1 < 17 && !heros[x+1,y] && posibleMoves[x+1,y]) //si esta en los rangos de la matriz y si se puede mover hacia alli
+            {
+                GameObject aux = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).GetChild(currentIndex).gameObject;//guardar el heroe para moverlo despues
+                aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x+1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
+                aux.transform.localPosition = Vector3.zero;//colocarle lasc coordenadas 0,0,0 para evitar troques
+                x+=1;//actualizar la posicion
+                //manejar el caso de que el heroe actual sea Newt
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
+                {
+                    if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
+                    {
+                        //si hay otro en la casilla de Newtly
+                        if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(1).transform.GetComponent<HeroVisual>() != null)
+                        {
+                            //activar el efecto
+                            Effects.ActivateNewtEffect();
+                            return;
+                        }
+                    }
+                }
+                //manejar el caso de que el heroe haya caida en una casilla trampa u item
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount >= 2) Effects.ColectObjects(x,y);
+            }
+        }
+        else if(x+1 < 17 && !maze[x+1,y] && posibleMoves[x+1,y]) //si esta en los rangos de la matriz y si se puede mover hacia alli
         {
             GameObject aux = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).GetChild(currentIndex).gameObject;//guardar el heroe para moverlo despues
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x+1).transform.GetChild(y).transform);//darle su padre correspondiente en la gerarquia 
@@ -180,7 +262,34 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo
 
         int currentIndex = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).childCount-1; //inidice del heroe actual en la gerarquia
-        if(y+1 < 19 && !maze[x,y+1] && posibleMoves[x,y+1]) //si esta en los rangos de la matriz y si se puede mover hacia alli
+        if(Gally) //verificar el caso en que se haya llamado a aplicar el efecto de gally
+        {
+            UpdateHeros(); //actualizar la matriz donde se guardan los heroes para que gally no les pase por encima 
+            if(y+1 < 19 && !heros[x,y+1] && posibleMoves[x,y+1]) //si esta en los rangos de la matriz y si se puede mover hacia alli
+            {
+                GameObject aux = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).GetChild(currentIndex).gameObject; //guardar el heroe para moverlo despues
+                aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y+1).transform); //darle su padre correspondiente en la gerarquia 
+                aux.transform.localPosition = Vector3.zero; //colocarle lasc coordenadas 0,0,0 para evitar troques
+                y += 1;//actualizar la posicion
+                //manejar el caso de que el heroe actual sea Newt
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount == 3)
+                {
+                    if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(2).transform.GetComponent<HeroVisual>().hero.name == "Newt")//si es newt 
+                    {
+                        //si hay otro en la casilla de Newt
+                        if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(1).transform.GetComponent<HeroVisual>() != null)
+                        {
+                            //activar el efecto
+                            Effects.ActivateNewtEffect();
+                            return;
+                        }
+                    }
+                }
+                //manejar el caso de que el heroe haya caida en una casilla trampa u item
+                if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount >= 2) Effects.ColectObjects(x,y);
+            }
+        }
+        else if(y+1 < 19 && !maze[x,y+1] && posibleMoves[x,y+1]) //si esta en los rangos de la matriz y si se puede mover hacia alli
         {
             GameObject aux = GameManager.instancia.maze.transform.GetChild(x).GetChild(y).GetChild(currentIndex).gameObject; //guardar el heroe para moverlo despues
             aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y+1).transform); //darle su padre correspondiente en la gerarquia 
@@ -204,14 +313,14 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.childCount >= 2) Effects.ColectObjects(x,y);
         }
     }
-    private void UpdatePosibleMoves() //marcar toda celda accesible para el heroe
+    public void UpdatePosibleMoves() //marcar toda celda accesible para el heroe
     {
         posibleMoves = new bool[17,19]; //reiniciar los valores de la matriz para evitar confusiones
         int xpos = x; //guardar la posicion incial para evitar trabajar con los campos de la clase
         int ypos = y; // ...
         DFS(xpos,ypos,currentHero.speed); //lamar a marcar cada ceda alcanzable por el current hero
     }
-    private void DFS(int xpos , int ypos , int moves) //visitar todas las casillas accesibles desde la posicion del heroe
+    public void DFS(int xpos , int ypos , int moves) //visitar todas las casillas accesibles desde la posicion del heroe
     {
         if(moves == 0) return; //el caso de que no pueda seguir caminando debido a la velocidad
         posibleMoves[xpos,ypos] = true; //marcar la posicion pertinente
@@ -224,15 +333,20 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
             int nuevacolumna = ypos + dcolus[i]; //nuevacolumna columna
             if(nuevafila >= 0 && nuevafila < 17 && nuevacolumna >= 0 && nuevacolumna < 19) //verificar que este en los rangos de la matriz
             {
-                if(!maze[nuevafila,nuevacolumna])//verificar que no sea una pared y no se haya visitado
+                if(!maze[nuevafila,nuevacolumna] && !Gally)//verificar que no sea una pared y no se haya visitado
                 {
                     posibleMoves[nuevafila,nuevacolumna] = true; //marcar los valores
                     DFS(nuevafila,nuevacolumna, moves - 1);//llamar con la nueva posicion 
                 }
+                else if(Gally)
+                {
+                    posibleMoves[nuevafila,nuevacolumna] = true;
+                    DFS(nuevafila,nuevacolumna,moves - 1);
+                }
             }
         }
     }
-    private void UpdateMatrix()//guardar en maze el laberinto de la escena en el frame exacto!!
+    public void UpdateMatrix()//guardar en maze el laberinto de la escena en el frame exacto!!
     {
         //inicializr ambas matrices 
         maze = new bool[17,19];
@@ -260,6 +374,20 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                     {
                         maze[i,j] = true;
                     }
+                }
+            }
+        }
+    }
+    private void UpdateHeros()
+    {
+        heros = new bool[17,19];
+        for (int i = 0; i < 17; i++)
+        {
+            for (int j = 0; j < 19; j++)
+            {
+                if(GameManager.instancia.maze.transform.GetChild(i).GetChild(j).childCount == 2 /*&& GameManager.instancia.transform.GetChild(i).transform.GetChild(j).transform.GetChild(1).GetComponent<HeroVisual>() is not null*/ )
+                {
+                    heros[i,j] = true;
                 }
             }
         }
@@ -297,6 +425,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
         GameManager.instancia.PrepareGame(); // se llama a preparar el laberinto respecto al jugador actual, osea apagar y encender los componentes de movimiento
         currentHero = null; //restablecer el current hero 
         Newt = false;
+        Gally = false;
     }
     void Update() //detectar teclas presionadas en cada frame
     {

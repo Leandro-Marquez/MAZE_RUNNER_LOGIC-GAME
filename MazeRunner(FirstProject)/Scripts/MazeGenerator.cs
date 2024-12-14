@@ -210,7 +210,7 @@ public class MazeGenerator
         {
             int a = random.Next(2,15); //generar una coordenada x
             int b = random.Next(1,18); //generar una coordenada y
-            if(maze[a,b]) //si esta en true no es un obstaculo se puede instanciar en dicha posicion
+            if(maze[a,b] && GameManager.instancia.maze.transform.GetChild(a).transform.GetChild(b).transform.childCount == 1) //si esta en true no es un obstaculo se puede instanciar en dicha posicion
             {
                 maze[a,b] = false; //marcar como un obstaculo ahora para evitar la colocacion de dos trampas en donde mismo 
                 n++; //incrementar el contador 
