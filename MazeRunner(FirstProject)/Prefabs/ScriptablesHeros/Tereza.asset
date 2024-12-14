@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Tereza
   heroPhoto: {fileID: 21300000, guid: 17f05b11e2ff295479c582140f4330ee, type: 3}
-  hability: 0
-  coolingTime: 2
+  hability: 5
+  coolingTime: 0
   speed: 3
   life: 7
-  habilityDescription: Tiene la habilidad de destruir cualquier trampa u objeto a
-    su paso
+  habilityDescription: 'Es inmune, nada que tenga que ver con venenos le afecta,
+    no tiene control sobre ello '
   audioClip: {fileID: 8300000, guid: ea2a1a5d0fe84b9408baa2489961a875, type: 3}

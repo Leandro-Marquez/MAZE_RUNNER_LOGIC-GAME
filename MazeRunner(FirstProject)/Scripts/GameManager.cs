@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     //guardar los prefabricados en la escena para su intanciacion desde codigo 
     public GameObject wallPrefab,floorPrefab,teleportPrefab,heroPrefab;//... prefabricados principales
-    public GameObject doorPrefab,chestPrefab,keyPrefab,deadPrefab;//...prefabricados especiales
+    public GameObject doorPrefab,chestPrefab,keyPrefab;//...prefabricados especiales
     public GameObject zombiePrefab;//prefab del NPC
     public GameObject trapPrefab; // prefabricado principal de las trampas
     public TextMeshProUGUI player1NameT,player1NameTs; //nombre del jugador 1, texto y sombra

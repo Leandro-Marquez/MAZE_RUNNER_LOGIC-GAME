@@ -50,11 +50,6 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             GameManager.minhoEnfriando = currentHero.coolingTime;//reiniciar el valor de enfriamiento
             ActivateDestructionEffect();//llamar a metodo especifico para el
         }
-        else if(currentHero.name == "Tereza" && GameManager.terezaEnfriando == 0)
-        {
-            GameManager.terezaEnfriando = currentHero.coolingTime;//reiniciar el valor de enfriamiento
-            ActivateDestructionEffect();//llamar a metodo especifico para ella
-        }
     }
     public static void RestTime() //restar el tiempo de enfriamiento de todo heroe una vez se pase de turno
     {
@@ -231,7 +226,6 @@ public class Effects : MonoBehaviour , IPointerDownHandler
     }
     public static void ColectObjects(int xpos , int ypos) //colectar objetos, sumar y restar la energia correspondiente 
     {
-
         if(!GameManager.instancia.currentPlayer) // si es el caso del jugador 1
         {
             //verificar el caso de que el heroe se encuentre en una celda que no sea hierba
@@ -259,7 +253,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             
             int finalEnergy = 0; //entero para guardar la energia final 
             finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
-            
+
             AudioSource audio = GameManager.instancia.colectedSound.GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
             AudioClip leo = GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.audioClip1; //obtener al audio clip del escriptable
             audio.clip = leo; //asiganr el audio del escriptable al objeto de audio creado
@@ -308,13 +302,20 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
                 return;
             }
-
+            //verificar el caso en que sea un veneno y el heroe actual sea tereza como es inmune no la afecta por tanto no llegar a modificar la energia en el visual
+           
+            if(finalEnergy < 0 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "poison" && GameManager.instancia.clickedHero.GetComponent<HeroVisual>().hero.name == "Tereza")
+            {
+                GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+                return;
+            }
+            
             int actualEnergy = int.Parse(GameManager.instancia.player1Energy.text.ToString()); //tenrr la energia guardada en el texto en escena 
             finalEnergy += actualEnergy; //calcular la energia final 
             GameManager.instancia.player1Energy.text = finalEnergy.ToString();//modificar el texto en escena 
             GameManager.instancia.player1Energys.text = finalEnergy.ToString();//sombra ...
             
-            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "Mortal Poison")//el caso de que sea veneno
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "poison")//el caso de que sea veneno
             {
                 GameManager.haveHability = false; //deshabilitar la habilidad especial del heroe actual 
             }
@@ -438,13 +439,19 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
                 return;
             }
-
+            //verificar el caso en que sea un veneno y el heroe actual sea tereza como es inmune no la afecta por tanto no llegar a modificar la energia en el visual
+            if(finalEnergy < 0 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "poison" && GameManager.instancia.clickedHero.GetComponent<HeroVisual>().hero.name == "Tereza")
+            {
+                GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+                return;
+            }
+            
             int actualEnergy = int.Parse(GameManager.instancia.player2Energy.text.ToString());//tenrr la energia guardada en el texto en escena 
             finalEnergy += actualEnergy;//calcular la energia final 
             GameManager.instancia.player2Energy.text = finalEnergy.ToString();//modificar el texto en escena 
             GameManager.instancia.player2Energys.text = finalEnergy.ToString();//sombra...
 
-            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "Mortal Poison") //el caso de que sea veneno
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().name == "poison") //el caso de que sea veneno
             {
                 GameManager.haveHability = false; //deshabilitar la habilidad especial del heroe actual 
             }
