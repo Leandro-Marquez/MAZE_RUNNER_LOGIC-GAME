@@ -45,7 +45,7 @@ public class PlayerInfoAux : MonoBehaviour
         heroLife.text = "";
         heroLifes.text = "";
         for (int i = 0; i < heros.Count ; i++)//buscar un heroe que coincida con el que se le hizo click para mostrar su info
-        { 
+        {
             if(heros[i].name == clickedObject.tag) //si tenemos el heroe buscado, acorde a la tarjeta
             {
                 //imprimir los valores de name, hability, speed , cooling time , life

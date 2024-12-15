@@ -300,6 +300,9 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameManager.instancia.player1Money.text = parcialMoney.ToString();//modificar el texto en escena 
                 GameManager.instancia.player1Moneys.text = parcialMoney.ToString();//sombra ...
                 GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+               UnityEngine.UI.Image aux = GameObject.Find("Money1").GetComponent<UnityEngine.UI.Image>();
+                aux.enabled = true;
+                // Debug.Log(aux); 
                 return;
             }
             //verificar el caso en que sea un veneno y el heroe actual sea tereza como es inmune no la afecta por tanto no llegar a modificar la energia en el visual
@@ -437,6 +440,9 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameManager.instancia.player2Money.text = parcialMoney.ToString();//modificar el texto en escena 
                 GameManager.instancia.player2Moneys.text = parcialMoney.ToString();//sombra ...
                 GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+                UnityEngine.UI.Image aux = GameObject.Find("Money2").GetComponent<UnityEngine.UI.Image>();
+                aux.enabled = true;
+                // Debug.Log(aux); 
                 return;
             }
             //verificar el caso en que sea un veneno y el heroe actual sea tereza como es inmune no la afecta por tanto no llegar a modificar la energia en el visual
