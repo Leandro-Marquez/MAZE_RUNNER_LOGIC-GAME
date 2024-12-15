@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 714247173201108451}
   - component: {fileID: -1015640253951362195}
   - component: {fileID: -8528351916705251495}
+  - component: {fileID: -1756141578594885569}
   m_Layer: 0
   m_Name: trapPrefab
   m_TagString: extras
@@ -117,3 +118,15 @@ MonoBehaviour:
   speeds: {fileID: 0}
   life: {fileID: 0}
   lifes: {fileID: 0}
+--- !u!114 &-1756141578594885569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3699422186829645249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 914c7a1fb23785741964bc1f2135d287, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
