@@ -59,6 +59,27 @@ public class ShowObjects : MonoBehaviour, IPointerEnterHandler
                 ShowObjectInformation(eventData);//se muestra la informacion pertinente del correspondiente objeto 
             }
         }
+        else if(tag == "puerta") //si tiene la tarjeta de extras no es un heroe se maneja aparte 
+        {
+            Sprite temporalImage = GetComponent<Image>().sprite; //guardar el sprite del objeto a nivel de codigo
+            if(temporalImage is not null) //verificar que el compoente sprite no sea nulo para evitar errores de referencia 
+            {
+                targetImage.sprite = temporalImage; //se asigna la imagen del objeto correspondiente 
+                Encender(1); //se encienden los correspondientes componentes de texto y se apagan los pertinentes 
+                PrintDoor();//se muestra la informacion pertinente del correspondiente objeto 
+            }
+        }
+        else if(tag == "llave") //si tiene la tarjeta de extras no es un heroe se maneja aparte 
+        {
+            Sprite temporalImage = GetComponent<Image>().sprite; //guardar el sprite del objeto a nivel de codigo
+            if(temporalImage is not null) //verificar que el compoente sprite no sea nulo para evitar errores de referencia 
+            {
+                targetImage.sprite = temporalImage; //se asigna la imagen del objeto correspondiente 
+                Encender(1); //se encienden los correspondientes componentes de texto y se apagan los pertinentes 
+                PrintKey();//se muestra la informacion pertinente del correspondiente objeto 
+            }
+        }
+        
     }
     public void Encender(int current) //apagar y encender los componentes de texto segun sea necesario
     {
@@ -140,5 +161,21 @@ public class ShowObjects : MonoBehaviour, IPointerEnterHandler
         //impirmir lo que hace y su sombra
         hability.text = $"MAZE EXIT, {GameManager.player1Heros.Count * GameManager.player1Heros.Count * 2} units of energy is required for using it";//...
         habilitys.text = $"MAZE EXIT, {GameManager.player1Heros.Count * GameManager.player1Heros.Count * 2} units of energy is required for using it";//...
+    }
+    private void PrintDoor() //el caso de que represente un teleport de inicio y salida 
+    {
+        names.text = "NAME: MAGIC DOOR"; //impirmir el nombre de teleport 
+        namess.text = "NAME: MAGIC DOOR"; //sombra
+        //impirmir lo que hace y su sombra
+        hability.text = $"If you don't have a magical key you cant pass through it";//...
+        habilitys.text = $"If you don't have a magical key you cant pass through it";//...
+    }
+    private void PrintKey() //el caso de que represente un teleport de inicio y salida 
+    {
+        names.text = "NAME: MAGIC KEY"; //impirmir el nombre de teleport 
+        namess.text = "NAME: MAGIC KEY"; //sombra
+        //impirmir lo que hace y su sombra
+        hability.text = $"This key can open any magical door if you have it ";//...
+        habilitys.text = $"This key can open any magical door if you have it ";//...
     }
 }

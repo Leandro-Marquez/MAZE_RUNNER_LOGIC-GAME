@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -119,14 +120,14 @@ public class MazeGenerator
                 {
                     //guardar en un objeto una instancia del prefab correspondiente guardado en el GameManager 
                     GameObject pared = GameObject.Instantiate(GameManager.instancia.wallPrefab,GameManager.instancia.maze.transform.GetChild(y).GetChild(x).transform);
-                    pared.transform.localPosition = new Vector3(0,0,0);//reescribir la posicion del objeto al centro de la escena
+                    pared.transform.localPosition = new UnityEngine.Vector3(0,0,0);//reescribir la posicion del objeto al centro de la escena
                     pared.transform.SetParent(GameManager.instancia.maze.transform.GetChild(y).GetChild(x).transform); //llevarlo a su respectiva posicion
                 }
                 else //si esta en true es una celda valida
                 {
                     //guardar en un objeto una instancia del prefab correspondiente guardado en el GameManager 
                     GameObject pared = GameObject.Instantiate(GameManager.instancia.floorPrefab,GameManager.instancia.maze.transform.GetChild(y).GetChild(x).transform);
-                    pared.transform.localPosition = new Vector3(0,0,0); //reescribir la posicion del objeto al centro de la escena 
+                    pared.transform.localPosition = new UnityEngine.Vector3(0,0,0); //reescribir la posicion del objeto al centro de la escena 
                     pared.transform.SetParent(GameManager.instancia.maze.transform.GetChild(y).GetChild(x).transform); //llevarlo a su respectiva posicion 
                 }
             }
@@ -136,7 +137,7 @@ public class MazeGenerator
     {
         //instanciar el teleport en su respectiva posicion
         GameObject teleport  = GameObject.Instantiate(GameManager.instancia.teleportPrefab,GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform);
-        teleport.transform.localPosition = new Vector3(0,0,0);//reescribir las nuevas coordenadas del teleport
+        teleport.transform.localPosition = new UnityEngine.Vector3(0,0,0);//reescribir las nuevas coordenadas del teleport
         teleport.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform);//darle el padre correspondiente al teleport coprrespondiente
         if(current) teleport.transform.GetComponent<TeleportOwner>().owner = Owner.Player2;
     }
@@ -219,7 +220,7 @@ public class MazeGenerator
         }
         for (int i = 0 ; i < values.Count ; i++) //iterar por la lista de coordenadas 
         {
-            int m = random.Next(0,14); // buscar un indice random para buscar una trampa random en la respectiva lista de scriptables 
+            int m = random.Next(0,15); // buscar un indice random para buscar una trampa random en la respectiva lista de scriptables 
             GameObject game = GameObject.Instantiate(GameManager.instancia.trapPrefab, GameManager.instancia.maze.transform.GetChild(values[i].x).GetChild(values[i].y).transform);
             TrapVisual Scriptable = game.GetComponent<TrapVisual>();//obtener el componente visual del heroe para imprimirlo 
             Scriptable.trap = GameManager.instancia.traps[m];//obtener el scriptable object y asignarselo al visual
@@ -263,6 +264,36 @@ public class MazeGenerator
                 Scriptable.InitializeTrap();//inicializar el heroe en el visual 
                 counter += 1; //aumentar el contador para evitar generar mas trampas de la cuenta***(ciclos infinitos)
             }
+        }
+    }
+    public static void PrepareDoorsAndKeys(int cantidad)
+    {
+        List<(int , int)> values = new List<(int, int)>();
+        int counter = 0;
+        int x = 0; //posicion x donde se inicializara 
+        int y = 0; //posicion y donde se inicializara
+        System.Random random = new System.Random(); //instancia random para generar las posiciones lo mas aleatorias posibles 
+        while(counter < cantidad) //mientras que la cantidad generada sea menor que la cantidad a generar seguir iterando
+        {
+            x = random.Next(0,17); //posicion x(fila)
+            y = random.Next(0,19); //posicion y (columna)
+            //si tiene u solo hjo el objeto actual y si tiene la tarjeta de piso entinces se puede inicializar el dinero en esta casilla
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).childCount == 1 && GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(0).tag == "floor")
+            {
+                values.Add((x,y));
+                counter += 1;
+            }
+        }
+        for (int i = 0; i < values.Count/2 ; i++)
+        {
+            GameObject game = GameObject.Instantiate(GameManager.instancia.doorPrefab, GameManager.instancia.maze.transform.GetChild(values[i].Item1).GetChild(values[i].Item2).transform);
+            game.transform.localPosition = UnityEngine.Vector3.zero;
+        }
+        for (int i = values.Count/2 ; i < values.Count; i++)
+        {
+            GameObject game = GameObject.Instantiate(GameManager.instancia.keyPrefab, GameManager.instancia.maze.transform.GetChild(values[i].Item1).GetChild(values[i].Item2).transform);
+            game.transform.localPosition = UnityEngine.Vector3.zero;
+
         }
     }
 }

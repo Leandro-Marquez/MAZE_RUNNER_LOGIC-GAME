@@ -370,6 +370,23 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                             maze[i,j] = true; //en el caso de que sea una roca marcarla como obstaculo (true)
                         }
                     }
+                    if(GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(index).tag == "puerta") //verificar que tenga la tarjeta de extras
+                    {
+                        if(!GameManager.instancia.currentPlayer)
+                        {
+                            if(GameManager.keysColectedPlayer1.Count == 0)
+                            {
+                                maze[i,j] = true;
+                            }
+                        }
+                        else
+                        {
+                            if(GameManager.keysColectedPlayer2.Count == 0)
+                            {
+                                maze[i,j] = true;
+                            }
+                        }
+                    }
                     else if(!Newt && GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(index).GetComponent<HeroVisual>() is not null)
                     {
                         maze[i,j] = true;

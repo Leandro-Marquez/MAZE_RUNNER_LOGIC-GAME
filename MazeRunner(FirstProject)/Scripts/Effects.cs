@@ -228,6 +228,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
     {
         if(!GameManager.instancia.currentPlayer) // si es el caso del jugador 1
         {
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "puerta") return;
             //verificar el caso de que el heroe se encuentre en una celda que no sea hierba
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).tag != "floor")
             {
@@ -250,7 +251,16 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             }
 
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2) return; //el caso de que solo alberga dos objetos retornar, no hay que colectar item alguno
-            
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "llave")
+            {
+                GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+                GameManager.keysColectedPlayer1.Add(0);
+                UnityEngine.UI.Image aux = GameObject.Find("Key1").GetComponent<UnityEngine.UI.Image>(); //obtener el objeto(imagen) que le corresponde a dinero del jugador
+                aux.enabled = true; //encender
+                AudioSource auudio = GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
+                auudio.Play();//reproducir el audio 
+                return;
+            }
             int finalEnergy = 0; //entero para guardar la energia final 
             finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
 
@@ -369,6 +379,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
         }
         else // si es el caso del jugador 2
         {
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "puerta") return;
             //si no es hierba verificar que tenga el componente dueno de teleport
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).tag != "floor")
             {
@@ -391,7 +402,17 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             }
 
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2) return; //el caso de que solo alberga dos objetos retornar, no hay que colectar item alguno
-            
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "llave")
+            {
+                GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
+                GameManager.keysColectedPlayer2.Add(0);
+                UnityEngine.UI.Image aux = GameObject.Find("Key2").GetComponent<UnityEngine.UI.Image>(); //obtener el objeto(imagen) que le corresponde a dinero del jugador
+                aux.enabled = true; //encender
+                AudioSource auudio = GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
+                auudio.Play();//reproducir el audio 
+                return;
+            }
+
             int finalEnergy = 0;//entero para guardar la energia final 
             finalEnergy += GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.Penalty;//sumar la energia del objeto colectado 
             

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4943251022686993571}
   m_Layer: 0
   m_Name: doorPrefab
-  m_TagString: Untagged
+  m_TagString: puerta
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1138.1738, y: 555.7338}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 75, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3545924725473939250
 CanvasRenderer:
@@ -89,19 +89,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTeleport: 0
-  isBomb: 0
-  isBeer: 0
-  isCofre: 0
-  isFuego: 0
-  isHueco: 0
-  isMuerto: 0
-  isPizza: 0
-  isPosima: 0
-  isRock: 0
-  isVenum: 0
-  isLife: 0
-  isKey: 0
-  isDoor: 1
   targetImage: {fileID: 0}
   names: {fileID: 0}
   namess: {fileID: 0}

@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     //guardar los prefabricados en la escena para su intanciacion desde codigo 
     public GameObject wallPrefab,floorPrefab,teleportPrefab,heroPrefab;//... prefabricados principales
     public GameObject doorPrefab,chestPrefab,keyPrefab;//...prefabricados especiales
-    public GameObject zombiePrefab;//prefab del NPC
     public GameObject trapPrefab; // prefabricado principal de las trampas
     public TextMeshProUGUI player1NameT,player1NameTs; //nombre del jugador 1, texto y sombra
     public TextMeshProUGUI player2NameT,player2NameTs; //nombre del jugador 2, texto y sombra
@@ -41,6 +40,8 @@ public class GameManager : MonoBehaviour
     public List<GameObject> herosPlayer1; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public List<GameObject> herosPlayer2; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public AudioSource colectedSound;//guardar el audio source de objeto coleccionado para cuando se coleccione algo 
+    public static List<int> keysColectedPlayer1;//guardar la cantidad de llaver que tenga el jugador 1
+    public static List<int> keysColectedPlayer2;//guardar la cantidad de llaver que tenga el jugador 2
     public static bool haveHability; //booleano para verificar si se puede activar la habilidad de un lider o si esta muy drogado producto al veneno
     public static int tommyenfriando; //entero para controlar el tiempo que lleva enfriandose el heroe
     public static int gallyEnfriando; // ...
@@ -82,6 +83,8 @@ public class GameManager : MonoBehaviour
         player1NameTs.text = player1Name;//..sombra
         player2NameT.text = player2Name;//llevar el nombre del player 2 a la escena 
         player2NameTs.text = player2Name;//..sombra
+        keysColectedPlayer1 = new List<int>(); //inicializar las listas de llaves colectadas
+        keysColectedPlayer2 = new List<int>(); // ...
 
         MazeGenerator.GenerateHeros();//inicializar los heroes correspondientes a cada jugador 
         MazeGenerator.GenerateTeleports(0,1,false);//inicializar los teletransportadores al incio y final de laberinto 
@@ -89,6 +92,7 @@ public class GameManager : MonoBehaviour
         ObtainHeros(); //guardar los heroes en sus listas correspondientes para el sistema de turnos 
         PrepareGame(); //prepar el laberinto para el jugador 1
         MazeGenerator.PrepareMoney(6);
+        MazeGenerator.PrepareDoorsAndKeys(6);
 
         MazeGenerator.PrepareTraps(herosPlayer1.Count*12,true); //instanciar las trampas de manera random en el laberinto 
         // DeadMove.GenerateZombie();/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

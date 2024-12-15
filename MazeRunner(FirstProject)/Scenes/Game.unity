@@ -22208,10 +22208,9 @@ MonoBehaviour:
   floorPrefab: {fileID: 4185888912044904624, guid: 444376f5c56cd4e4c8e5122138a49b0a, type: 3}
   teleportPrefab: {fileID: 676706056491644596, guid: 6c4887d51d89f224587791e0cbc8093c, type: 3}
   heroPrefab: {fileID: 3224225455615583403, guid: 5ad8b5f0d6c889e46a232325b0fb11fc, type: 3}
-  doorPrefab: {fileID: 0}
-  chestPrefab: {fileID: 0}
-  keyPrefab: {fileID: 0}
-  zombiePrefab: {fileID: 1529636345285323727, guid: d133a66ae8c0ee546a616336742d80fd, type: 3}
+  doorPrefab: {fileID: 3628026581996995302, guid: 63a16dfcab1602148bbdc74ab4a6b726, type: 3}
+  chestPrefab: {fileID: 1617616892623524723, guid: 9488b415f68256c458118cb3311e7c60, type: 3}
+  keyPrefab: {fileID: 3167209200424694791, guid: e83b08ae673256046b88861bbf34c6aa, type: 3}
   trapPrefab: {fileID: 3699422186829645249, guid: b08ba7521e005a64081b8b87144f5f3b, type: 3}
   player1NameT: {fileID: 972475077}
   player1NameTs: {fileID: 1874384311}
@@ -22240,6 +22239,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 77e2666aaf4c54046bd20a12263a19f6, type: 2}
   - {fileID: 11400000, guid: f65c66b9b1d7f814a8caae752d078b93, type: 2}
   - {fileID: 11400000, guid: 891f89a8249559346a49be046a63e086, type: 2}
+  - {fileID: 11400000, guid: 9ac91a538cd6edc4b8515cb187d29389, type: 2}
   heros:
   - {fileID: 11400000, guid: 0ae998e984dd7d24a828d4b820847f06, type: 2}
   - {fileID: 11400000, guid: ab8552ada9e4f1048bb932bb1f38c944, type: 2}
