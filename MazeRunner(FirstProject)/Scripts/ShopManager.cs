@@ -45,6 +45,30 @@ public class ShopManager : MonoBehaviour , IPointerDownHandler
             actualMoney -= int.Parse(clickedObject.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text.ToString().Substring(0,1)); //restar el precio al dinero actual 
             if(!GameManager.instancia.currentPlayer) //el caso de que sea el jugador 1
             {
+                if(clickedObject.tag == "puerta" && GameManager.instancia.clickedHero is not null)
+                {
+                    System.Random random = new System.Random(); //crear una instancia random para generar posiciones aleatorias
+                    int x = 0;
+                    int y = 0;
+                    while(NPCMove.maze[x,y] || GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).childCount > 1) //en caso de que sea un obstaculo o haya alguna trampa generar otra 
+                    {
+                        x = random.Next(1,16);
+                        y = random.Next(1,18);
+                    }
+                    GameObject aux = GameManager.instancia.clickedHero; //guardar el Heroe con el que se juega
+                    aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform); //darle el padre de que le corresponde generado de manera random 
+                    aux.transform.localPosition = Vector3.zero; //situar al centro de la gerarquia para evitar troyes 
+
+                    //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+                    if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+                    else GameManager.instancia.currentPlayer = true;
+                    GameManager.instancia.PrepareGame(); //volver a preparar la escena
+                    //restar el dinero por la puerta
+                    GameManager.instancia.player1Money.text = actualMoney.ToString();
+                    GameManager.instancia.player1Moneys.text = actualMoney.ToString();
+                }
+                else if(clickedObject.tag == "puerta") return;
+
                 int actualEnergy = int.Parse(GameManager.instancia.player1Energy.text.ToString()); //guardar la energia que posee el jugador 
                 actualEnergy += energy; //modificar la energia final del jugador
                 GameManager.instancia.player1Money.text = actualMoney.ToString();
@@ -59,6 +83,30 @@ public class ShopManager : MonoBehaviour , IPointerDownHandler
             }
             else
             {
+                if(clickedObject.tag == "puerta" && GameManager.instancia.clickedHero is not null)
+                {
+                    System.Random random = new System.Random(); //crear una instancia random para generar posiciones aleatorias
+                    int x = 0;
+                    int y = 0;
+                    while(NPCMove.maze[x,y] || GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).childCount > 1) //en caso de que sea un obstaculo o haya alguna trampa generar otra 
+                    {
+                        x = random.Next(1,16);
+                        y = random.Next(1,18);
+                    }
+                    GameObject aux = GameManager.instancia.clickedHero; //guardar el Heroe con el que se juega
+                    aux.transform.SetParent(GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform); //darle el padre de que le corresponde generado de manera random 
+                    aux.transform.localPosition = Vector3.zero; //situar al centro de la gerarquia para evitar troyes 
+
+                    //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+                    if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+                    else GameManager.instancia.currentPlayer = true;
+                    GameManager.instancia.PrepareGame(); //volver a preparar la escena
+                    //resyar el dinero por la puerta
+                    GameManager.instancia.player2Money.text = actualMoney.ToString();
+                    GameManager.instancia.player2Moneys.text = actualMoney.ToString();
+                }
+                else if(clickedObject.tag == "puerta") return;
+
                 int actualEnergy = int.Parse(GameManager.instancia.player2Energy.text.ToString()); //guardar la energia que posee el jugador 
                 actualEnergy += energy;
                 GameManager.instancia.player2Money.text = actualMoney.ToString();
