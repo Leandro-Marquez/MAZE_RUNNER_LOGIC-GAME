@@ -338,7 +338,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                     posibleMoves[nuevafila,nuevacolumna] = true; //marcar los valores
                     DFS(nuevafila,nuevacolumna, moves - 1);//llamar con la nueva posicion 
                 }
-                else if(Gally)
+                else if(Gally) //si Es Gally quien juega //nada es obstaculo parra gally
                 {
                     posibleMoves[nuevafila,nuevacolumna] = true;
                     DFS(nuevafila,nuevacolumna,moves - 1);
@@ -372,16 +372,16 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                     }
                     if(GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(index).tag == "puerta") //verificar que tenga la tarjeta de extras
                     {
-                        if(!GameManager.instancia.currentPlayer)
+                        if(!GameManager.instancia.currentPlayer) //si es el jugador 1
                         {
-                            if(GameManager.keysColectedPlayer1.Count == 0)
+                            if(GameManager.keysColectedPlayer1.Count == 0) //si no tiene llave magica marcar la puerta como un obstaculo 
                             {
                                 maze[i,j] = true;
                             }
                         }
-                        else
+                        else //si es el jugador 2
                         {
-                            if(GameManager.keysColectedPlayer2.Count == 0)
+                            if(GameManager.keysColectedPlayer2.Count == 0)//si no tiene llave magica marcar la puerta como un obstaculo 
                             {
                                 maze[i,j] = true;
                             }
@@ -389,7 +389,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
                     }
                     else if(!Newt && GameManager.instancia.maze.transform.GetChild(i).transform.GetChild(j).transform.GetChild(index).GetComponent<HeroVisual>() is not null)
                     {
-                        maze[i,j] = true;
+                        maze[i,j] = true; //en el caso de que no sea Newt todo heroe es obstaculo
                     }
                 }
             }

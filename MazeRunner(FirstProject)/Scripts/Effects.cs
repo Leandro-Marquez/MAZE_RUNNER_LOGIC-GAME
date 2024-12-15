@@ -228,7 +228,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
     {
         if(!GameManager.instancia.currentPlayer) // si es el caso del jugador 1
         {
-            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "puerta") return;
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "puerta") return; //verificar el caso en que se haya llegado a la puerta, solo pasar por arriba de ella
             //verificar el caso de que el heroe se encuentre en una celda que no sea hierba
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).tag != "floor")
             {
@@ -254,7 +254,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "llave")
             {
                 GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
-                GameManager.keysColectedPlayer1.Add(0);
+                GameManager.keysColectedPlayer1.Add(0); //anadir una llave al jugador 1
                 UnityEngine.UI.Image aux = GameObject.Find("Key1").GetComponent<UnityEngine.UI.Image>(); //obtener el objeto(imagen) que le corresponde a dinero del jugador
                 aux.enabled = true; //encender
                 AudioSource auudio = GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
@@ -379,7 +379,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
         }
         else // si es el caso del jugador 2
         {
-            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "puerta") return;
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "puerta") return;//verificar el caso en que se haya llegado a la puerta, solo pasar por arriba de ella
             //si no es hierba verificar que tenga el componente dueno de teleport
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).childCount == 2 && GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(0).tag != "floor")
             {
@@ -405,7 +405,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).tag == "llave")
             {
                 GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
-                GameManager.keysColectedPlayer2.Add(0);
+                GameManager.keysColectedPlayer2.Add(0);//anadir una llave al jugador 2
                 UnityEngine.UI.Image aux = GameObject.Find("Key2").GetComponent<UnityEngine.UI.Image>(); //obtener el objeto(imagen) que le corresponde a dinero del jugador
                 aux.enabled = true; //encender
                 AudioSource auudio = GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
