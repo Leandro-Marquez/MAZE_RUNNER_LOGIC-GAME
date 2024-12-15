@@ -300,7 +300,7 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameManager.instancia.player1Money.text = parcialMoney.ToString();//modificar el texto en escena 
                 GameManager.instancia.player1Moneys.text = parcialMoney.ToString();//sombra ...
                 GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
-               UnityEngine.UI.Image aux = GameObject.Find("Money1").GetComponent<UnityEngine.UI.Image>();
+                UnityEngine.UI.Image aux = GameObject.Find("Money1").GetComponent<UnityEngine.UI.Image>();
                 aux.enabled = true;
                 // Debug.Log(aux); 
                 return;

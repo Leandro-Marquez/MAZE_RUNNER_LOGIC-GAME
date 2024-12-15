@@ -88,7 +88,8 @@ public class GameManager : MonoBehaviour
         MazeGenerator.GenerateTeleports(16,17,true);//inicializar los teletransportadores al incio y final de laberinto 
         ObtainHeros(); //guardar los heroes en sus listas correspondientes para el sistema de turnos 
         PrepareGame(); //prepar el laberinto para el jugador 1
-        
+        MazeGenerator.PrepareMoney(6);
+
         MazeGenerator.PrepareTraps(herosPlayer1.Count*12,true); //instanciar las trampas de manera random en el laberinto 
         // DeadMove.GenerateZombie();/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //iniciar los valores de enfriamiento de los respectivos heroes
@@ -165,6 +166,7 @@ public class GameManager : MonoBehaviour
         if(counterOfRounds == 16) //si se tienen 10 turnos jugados se prepararan 10 nuevos objetos en la escena(trampas e items)
         {
             MazeGenerator.PrepareTraps(10,false); //si se llego a 10 turnos crear 10 trampas e items
+            MazeGenerator.PrepareMoney(4); //preparar 4 dolares mas para que haya mas juego
         }
     }
 }

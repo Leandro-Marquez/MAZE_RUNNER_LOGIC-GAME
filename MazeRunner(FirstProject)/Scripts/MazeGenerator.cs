@@ -234,4 +234,35 @@ public class MazeGenerator
             GameManager.instancia.PrepareGame(); //volver a preparar la escena
         }
     }
+    public static void PrepareMoney(int cantidad)//inicizlizar unos dolarillos en el tablero para que haya mas jugabilidad en el campo, para que se pueda comprar y tal 
+    {
+        Trap dolar = null; //inicializar el scriptable donde se guardara el dolar
+        int counter = 0; //contador para llevar la cantidad de dolares que se han puesto en el tablero 
+        for (int i = 0 ; i < GameManager.instancia.traps.Count ; i++) //iterar por las trampas
+        {
+            if(GameManager.instancia.traps[i].name == "money") //cuando tengamos el dinero
+            {
+                dolar = GameManager.instancia.traps[i]; //guardamos el objeto
+                break; //rompemos el flujo del ciclo
+            }
+        }
+        int x = 0; //posicion x donde se inicializara 
+        int y = 0; //posicion y donde se inicializara
+        System.Random random = new System.Random(); //instancia random para generar las posiciones lo mas aleatorias posibles 
+        while(counter < cantidad) //mientras que la cantidad generada sea menor que la cantidad a generar seguir iterando
+        {
+            x = random.Next(0,17); //posicion x(fila)
+            y = random.Next(0,19); //posicion y (columna)
+            //si tiene u solo hjo el objeto actual y si tiene la tarjeta de piso entinces se puede inicializar el dinero en esta casilla
+            if(GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).childCount == 1 && GameManager.instancia.maze.transform.GetChild(x).transform.GetChild(y).transform.GetChild(0).tag == "floor")
+            {
+                //guardar la instancia del prefabricado en la escena
+                GameObject game = GameObject.Instantiate(GameManager.instancia.trapPrefab, GameManager.instancia.maze.transform.GetChild(x).GetChild(y).transform);
+                TrapVisual Scriptable = game.GetComponent<TrapVisual>();//obtener el componente visual de la trampa para imprimirlo 
+                Scriptable.trap = dolar;//obtener el scriptable object y asignarselo al visual
+                Scriptable.InitializeTrap();//inicializar el heroe en el visual 
+                counter += 1; //aumentar el contador para evitar generar mas trampas de la cuenta***(ciclos infinitos)
+            }
+        }
+    }
 }
