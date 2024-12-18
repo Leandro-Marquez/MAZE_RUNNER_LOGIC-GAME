@@ -3418,7 +3418,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 393, y: -105}
+  m_AnchoredPosition: {x: 381, y: -105}
   m_SizeDelta: {x: 445.515, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1190155409
@@ -3441,7 +3441,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'HABILITY :'
+  m_text: 'ABILITY :'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5f28c734426c6074181b2dac7dd23cb9, type: 2}
   m_sharedMaterial: {fileID: -2446111084271149819, guid: 5f28c734426c6074181b2dac7dd23cb9, type: 2}
@@ -6311,7 +6311,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 390, y: -108}
+  m_AnchoredPosition: {x: 378, y: -108}
   m_SizeDelta: {x: 445.515, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724373700
@@ -6334,7 +6334,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'HABILITY :'
+  m_text: 'ABILITY :'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5f28c734426c6074181b2dac7dd23cb9, type: 2}
   m_sharedMaterial: {fileID: -2446111084271149819, guid: 5f28c734426c6074181b2dac7dd23cb9, type: 2}

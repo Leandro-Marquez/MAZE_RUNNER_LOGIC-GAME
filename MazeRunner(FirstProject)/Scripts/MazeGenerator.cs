@@ -220,7 +220,7 @@ public class MazeGenerator
         }
         for (int i = 0 ; i < values.Count ; i++) //iterar por la lista de coordenadas 
         {
-            int m = random.Next(0,15); // buscar un indice random para buscar una trampa random en la respectiva lista de scriptables 
+            int m = random.Next(0,16); // buscar un indice random para buscar una trampa random en la respectiva lista de scriptables 
             GameObject game = GameObject.Instantiate(GameManager.instancia.trapPrefab, GameManager.instancia.maze.transform.GetChild(values[i].x).GetChild(values[i].y).transform);
             TrapVisual Scriptable = game.GetComponent<TrapVisual>();//obtener el componente visual del heroe para imprimirlo 
             Scriptable.trap = GameManager.instancia.traps[m];//obtener el scriptable object y asignarselo al visual

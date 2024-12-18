@@ -82,7 +82,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     }
     private void MoveW() //mover hacia arriba 
     {
-        if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
+        if(currentHero is null || GameManager.instancia.clickedHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
 
         UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
 
@@ -141,7 +141,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     }
     private void MoveA()//mover a la izquierda
     {
-        if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
+        if(currentHero is null || GameManager.instancia.clickedHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
 
         UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
 
@@ -199,7 +199,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     }
     private void MoveS()//mover hacia abajo
     {
-        if(currentHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
+        if(currentHero is null || GameManager.instancia.clickedHero is null) return;//verificar que no se haga nada si no hay heroe alguno seleccionado
  
         UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo 
 
@@ -257,7 +257,7 @@ public class NPCMove : MonoBehaviour , IPointerDownHandler
     }
     private void MoveD() //mover a la derecha
     {
-        if(currentHero is null) return; //verificar que no se haga nada si no hay heroe alguno seleccionado
+        if(currentHero is null || GameManager.instancia.clickedHero is null ) return; //verificar que no se haga nada si no hay heroe alguno seleccionado
 
         UpdateMatrix();//actualizar el laberinto de la escena en la mascara booleana para tenerlo a nivel de codigo
 

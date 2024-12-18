@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
+// using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,5 +21,9 @@ public class ScenesController : MonoBehaviour
     public static void LoadPlayer2VictoryScene()
     {
         SceneManager.LoadScene(5); //escena de viscotoria del jugador 2
+    }
+    public void ExitGame()// Esto cerrará el juego cuando se ejecute el ejecutable
+    {
+        Application.Quit();
     }
 }

@@ -14906,7 +14906,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'HABILITY :
+  m_text: 'ABILITY :
 
 '
   m_isRightToLeft: 0
@@ -22209,9 +22209,9 @@ MonoBehaviour:
   teleportPrefab: {fileID: 676706056491644596, guid: 6c4887d51d89f224587791e0cbc8093c, type: 3}
   heroPrefab: {fileID: 3224225455615583403, guid: 5ad8b5f0d6c889e46a232325b0fb11fc, type: 3}
   doorPrefab: {fileID: 3628026581996995302, guid: 63a16dfcab1602148bbdc74ab4a6b726, type: 3}
-  chestPrefab: {fileID: 1617616892623524723, guid: 9488b415f68256c458118cb3311e7c60, type: 3}
   keyPrefab: {fileID: 3167209200424694791, guid: e83b08ae673256046b88861bbf34c6aa, type: 3}
   trapPrefab: {fileID: 3699422186829645249, guid: b08ba7521e005a64081b8b87144f5f3b, type: 3}
+  sueloAuxForMinho: {fileID: 5486625647835108120, guid: 9d6f387dae05cec4d8f5c5abcaaae5dd, type: 3}
   player1NameT: {fileID: 972475077}
   player1NameTs: {fileID: 1874384311}
   player2NameT: {fileID: 557636238}
@@ -22240,6 +22240,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f65c66b9b1d7f814a8caae752d078b93, type: 2}
   - {fileID: 11400000, guid: 891f89a8249559346a49be046a63e086, type: 2}
   - {fileID: 11400000, guid: 9ac91a538cd6edc4b8515cb187d29389, type: 2}
+  - {fileID: 11400000, guid: 90ed45da19f59ac4b970665dddad825b, type: 2}
   heros:
   - {fileID: 11400000, guid: 0ae998e984dd7d24a828d4b820847f06, type: 2}
   - {fileID: 11400000, guid: ab8552ada9e4f1048bb932bb1f38c944, type: 2}
@@ -22250,17 +22251,15 @@ MonoBehaviour:
   maze: {fileID: 74984457}
   currentPlayer1Image: {fileID: 2136494069}
   currentPlayer2Image: {fileID: 421788841}
-  auxImageForDestruction: {fileID: 0}
-  sueloAuxForMinho: {fileID: 5486625647835108120, guid: 9d6f387dae05cec4d8f5c5abcaaae5dd, type: 3}
-  hollowAux: {fileID: 5712628235699457605, guid: 0d70285d9a0b2e44ca48fa5e7330fde8, type: 3}
   applyEffectPlayer1: {fileID: 1938378585}
   applyEffectPlayer2: {fileID: 1367034713}
   currentObjectClickedForMinhoEffect: {fileID: 0}
-  clickedHero: {fileID: 0}
+  clickedHero: {fileID: 1443506518}
   currentPlayer: 0
   herosPlayer1: []
   herosPlayer2: []
   colectedSound: {fileID: 1813590523}
+  itemPickedup: {fileID: 1443506519}
 --- !u!1 &1173143494
 GameObject:
   m_ObjectHideFlags: 0
@@ -28523,6 +28522,134 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1440758950}
   m_CullTransparentMesh: 1
+--- !u!1 &1443506518
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1443506520}
+  - component: {fileID: 1443506519}
+  m_Layer: 0
+  m_Name: ItemPickedUp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1443506519
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1443506518}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1443506520
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1443506518}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1310.5297, y: 417.0717, z: 19.887815}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1447888760
 GameObject:
   m_ObjectHideFlags: 0
@@ -31329,7 +31456,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'HABILITY :
+  m_text: 'ABILITY :
 
 '
   m_isRightToLeft: 0
@@ -41296,3 +41423,4 @@ SceneRoots:
   - {fileID: 369074260}
   - {fileID: 554499621}
   - {fileID: 1813590524}
+  - {fileID: 1443506520}

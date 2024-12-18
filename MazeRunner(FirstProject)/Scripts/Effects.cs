@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
+// using Microsoft.Unity.VisualStudio.Editor;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -257,8 +257,6 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameManager.keysColectedPlayer1.Add(0); //anadir una llave al jugador 1
                 UnityEngine.UI.Image aux = GameObject.Find("Key1").GetComponent<UnityEngine.UI.Image>(); //obtener el objeto(imagen) que le corresponde a dinero del jugador
                 aux.enabled = true; //encender
-                AudioSource auudio = GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
-                auudio.Play();//reproducir el audio 
                 return;
             }
             int finalEnergy = 0; //entero para guardar la energia final 
@@ -276,6 +274,13 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 CoroutineRunner.instance.StartCoroutine(PlaySecondAudioAfterFirst(audio, GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.audioClip2));
             }
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "hollow") //en caso de que sea un hueco se acaba inmediatamente la capacidad de movimiento del equipo 
+            {
+                //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+                if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+                else GameManager.instancia.currentPlayer = true;
+                GameManager.instancia.PrepareGame(); //volver a preparar la escena
+            }
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "handcuffs") //en caso de que sea unjuego de esposas se acaba inmediatamente la capacidad de movimiento del equipo 
             {
                 //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
                 if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
@@ -312,7 +317,6 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
                 UnityEngine.UI.Image aux = GameObject.Find("Money1").GetComponent<UnityEngine.UI.Image>();
                 aux.enabled = true;
-                // Debug.Log(aux); 
                 return;
             }
             //verificar el caso en que sea un veneno y el heroe actual sea tereza como es inmune no la afecta por tanto no llegar a modificar la energia en el visual
@@ -408,8 +412,6 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameManager.keysColectedPlayer2.Add(0);//anadir una llave al jugador 2
                 UnityEngine.UI.Image aux = GameObject.Find("Key2").GetComponent<UnityEngine.UI.Image>(); //obtener el objeto(imagen) que le corresponde a dinero del jugador
                 aux.enabled = true; //encender
-                AudioSource auudio = GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<AudioSource>();//crear un componente audio source para reproducir el audio correspondiente con el objeto u trampa colectada 
-                auudio.Play();//reproducir el audio 
                 return;
             }
 
@@ -430,6 +432,12 @@ public class Effects : MonoBehaviour , IPointerDownHandler
             if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "hollow") //en caso de que sea un hueco se acaba inmediatamente la capacidad de movimiento del equipo 
             {
                 //actualizar el booleano y terminar la ronda con la aplicacion del efecto 
+                if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
+                else GameManager.instancia.currentPlayer = true;
+                GameManager.instancia.PrepareGame(); //volver a preparar la escena
+            }
+            if(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).GetComponent<TrapVisual>().trap.name == "handcuffs") //en caso de que sea unjuego de esposas se acaba inmediatamente la capacidad de movimiento del equipo 
+            {
                 if(GameManager.instancia.currentPlayer) GameManager.instancia.currentPlayer = false;
                 else GameManager.instancia.currentPlayer = true;
                 GameManager.instancia.PrepareGame(); //volver a preparar la escena
@@ -463,7 +471,6 @@ public class Effects : MonoBehaviour , IPointerDownHandler
                 GameObject.Destroy(GameManager.instancia.maze.transform.GetChild(xpos).transform.GetChild(ypos).GetChild(1).gameObject); //destruir el objeto coleccionado 
                 UnityEngine.UI.Image aux = GameObject.Find("Money2").GetComponent<UnityEngine.UI.Image>();
                 aux.enabled = true;
-                // Debug.Log(aux); 
                 return;
             }
             //verificar el caso en que sea un veneno y el heroe actual sea tereza como es inmune no la afecta por tanto no llegar a modificar la energia en el visual

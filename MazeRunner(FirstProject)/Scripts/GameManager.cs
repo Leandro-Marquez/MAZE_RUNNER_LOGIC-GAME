@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Microsoft.Unity.VisualStudio.Editor;
+// using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instancia;//tener una instancia estatica para poder tener acceso a la clase desde cualquier script
     //guardar los prefabricados en la escena para su intanciacion desde codigo 
     public GameObject wallPrefab,floorPrefab,teleportPrefab,heroPrefab;//... prefabricados principales
-    public GameObject doorPrefab,chestPrefab,keyPrefab;//...prefabricados especiales
+    public GameObject doorPrefab,keyPrefab;//...prefabricados especiales
     public GameObject trapPrefab; // prefabricado principal de las trampas
+    public GameObject sueloAuxForMinho; // prefabricado auxiliar de suelo para cuando Minho destruya la tierra
     public TextMeshProUGUI player1NameT,player1NameTs; //nombre del jugador 1, texto y sombra
     public TextMeshProUGUI player2NameT,player2NameTs; //nombre del jugador 2, texto y sombra
     public TextMeshProUGUI player1Energy,player1Energys; //energia del jugador 1, texto y sombra
@@ -28,18 +30,16 @@ public class GameManager : MonoBehaviour
     public GameObject maze; //guardar el objeto padre de todos los objetos(Padre de la matriz)
     public UnityEngine.UI.Image currentPlayer1Image; //para mayor legibilidad a la hora de saber a quien le toca jugar 
     public UnityEngine.UI.Image currentPlayer2Image; // ...
-    public UnityEngine.UI.Image auxImageForDestruction; // imagen auxiliar 
-    public GameObject sueloAuxForMinho; // prefabricado auxiliar de suelo para cuando Minho destruya la tierra
-    public GameObject hollowAux;// prefabricado auxiliar de tapa de alcantarilla
+    // public UnityEngine.UI.Image auxImageForDestruction; // imagen auxiliar 
     public Button applyEffectPlayer1; //boton de aplicar el efecto del jugador 1
     public Button applyEffectPlayer2; //boton de aplicar el efecto del jugador 2
     public GameObject currentObjectClickedForMinhoEffect;//guardar el objeto clickeado para el efecto de minho
     public GameObject clickedHero; //objeto clickeado en la escena por si se activa el efecto
-    public static GameManager instancia;//tener una instancia estatica para poder tener acceso a la clase desde cualquier script
     public bool currentPlayer;//valor booleano para representar los juadore(false para player 1) y (true para player 2)
     public List<GameObject> herosPlayer1; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public List<GameObject> herosPlayer2; //rellenar una vez instanciados los heroes en la escena para el sistema de turnos
     public AudioSource colectedSound;//guardar el audio source de objeto coleccionado para cuando se coleccione algo 
+    public AudioSource itemPickedup; //guardar el audio source de objeto coleccionado para las llaves
     public static List<int> keysColectedPlayer1;//guardar la cantidad de llaver que tenga el jugador 1
     public static List<int> keysColectedPlayer2;//guardar la cantidad de llaver que tenga el jugador 2
     public static bool haveHability; //booleano para verificar si se puede activar la habilidad de un lider o si esta muy drogado producto al veneno
@@ -130,6 +130,7 @@ public class GameManager : MonoBehaviour
         NPCMove.Newt = false;
         NPCMove.Gally = false;
         counterOfRounds += 1;
+        this.clickedHero = null;
 
         if(!currentPlayer) //el caso de que le toca al jugador 1
         {
