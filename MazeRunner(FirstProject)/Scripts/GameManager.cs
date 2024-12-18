@@ -5,6 +5,7 @@ using System;
 // using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -173,5 +174,6 @@ public class GameManager : MonoBehaviour
             MazeGenerator.PrepareTraps(10,false); //si se llego a 10 turnos crear 10 trampas e items
             MazeGenerator.PrepareMoney(4); //preparar 4 dolares mas para que haya mas juego
         }
+        if(Input.GetKeyDown(KeyCode.Escape)) SceneManager.LoadScene(1);
     }
 }

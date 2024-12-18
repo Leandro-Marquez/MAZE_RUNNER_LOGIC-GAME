@@ -3,6 +3,7 @@ using System.Collections.Generic;
 // using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerInfoAux : MonoBehaviour
@@ -79,5 +80,9 @@ public class PlayerInfoAux : MonoBehaviour
                 lights[i].SetActive(false); //activar la luz 
             }
         }
+    }
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape)) SceneManager.LoadScene(1);
     }
 }
