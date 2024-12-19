@@ -25,4 +25,8 @@ public class VideoController : MonoBehaviour
     {
         SceneManager.LoadScene(1); //cargar la escena del menu del juego 
     }
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.O)) SceneManager.LoadScene(1);
+    }
 }

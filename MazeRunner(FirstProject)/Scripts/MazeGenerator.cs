@@ -100,7 +100,7 @@ public class MazeGenerator
             }
         }
         while(marlon); //mientras se llegue a una celda valida en cada iteracion del while, se sigue ejecutando 
-        if(costos[16,17] != 0) return true; //el caso de q tenga un costo llegar a dicha casilla es q se pudo llegar 
+        if(costos[16,17] != 0) return true; //el caso de q tenga un costo llegar a dicha casilla es q no se pudo llegar 
         return false; // no hay costo en la casilla de salida por tanto no hay salida 
     }
 
@@ -266,7 +266,7 @@ public class MazeGenerator
             }
         }
     }
-    public static void PrepareDoorsAndKeys(int cantidad)
+    public static void PrepareDoorsAndKeys(int cantidad) //inicializar puertas y ventanas
     {
         List<(int , int)> values = new List<(int, int)>();
         int counter = 0;
@@ -284,12 +284,12 @@ public class MazeGenerator
                 counter += 1;
             }
         }
-        for (int i = 0; i < values.Count/2 ; i++)
+        for (int i = 0; i < values.Count/2 ; i++) //iterar hasta la mitad de elementos para solo instanciar mitad puertas y mitad llaves
         {
             GameObject game = GameObject.Instantiate(GameManager.instancia.doorPrefab, GameManager.instancia.maze.transform.GetChild(values[i].Item1).GetChild(values[i].Item2).transform);
             game.transform.localPosition = UnityEngine.Vector3.zero;
         }
-        for (int i = values.Count/2 ; i < values.Count; i++)
+        for (int i = values.Count/2 ; i < values.Count; i++) //iterar hasta la mitad de elementos para solo instanciar mitad puertas y mitad llaves
         {
             GameObject game = GameObject.Instantiate(GameManager.instancia.keyPrefab, GameManager.instancia.maze.transform.GetChild(values[i].Item1).GetChild(values[i].Item2).transform);
             game.transform.localPosition = UnityEngine.Vector3.zero;
